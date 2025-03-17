@@ -129,8 +129,24 @@ class QuickbooksProfile < ApplicationRecord
         # Parse company info into profile attributes
         profile.parse_company_info
         
-        Rails.logger.info "Updated profile with company info for #{profile.company_name}"
-        return true
+        # Save the updated profile
+        if profile.save
+          Rails.logger.info "Updated and saved profile with company info for #{profile.company_name}"
+          
+          # Log company details
+          address_details = [
+            profile.address.presence, 
+            profile.city.presence, 
+            profile.region.presence, 
+            profile.postal_code.presence
+          ].compact.join(", ")
+          
+          Rails.logger.info "Company details: #{profile.company_name}, #{address_details}"
+          return true
+        else
+          Rails.logger.error "Failed to save profile with company info: #{profile.errors.full_messages.join(', ')}"
+          return false
+        end
       else
         Rails.logger.warn "No company info returned from QuickBooks API"
       end
