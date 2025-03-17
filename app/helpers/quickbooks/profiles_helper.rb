@@ -1,0 +1,2 @@
+module Quickbooks::ProfilesHelper
+end

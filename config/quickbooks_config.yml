@@ -1,0 +1,41 @@
+defaults: &defaultOAuth2
+  client_id: <%= Rails.application.credentials.dig(:quickbooks, :client_id) || ENV['QUICKBOOKS_CLIENT_ID'] %>
+  client_secret: <%= Rails.application.credentials.dig(:quickbooks, :client_secret) || ENV['QUICKBOOKS_CLIENT_SECRET'] %>
+
+defaults: &defaultConstants
+  baseURL: https://appcenter.intuit.com/connect/oauth2
+  baseapiURL: https://quickbooks.api.intuit.com
+  tokenURL: https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer
+  userinfoURL: https://accounts.platform.intuit.com/v1/openid_connect/userinfo
+  disconnectURL: https://developer.api.intuit.com/v2/oauth2/tokens/revoke
+  scope: com.intuit.quickbooks.accounting openid profile email phone address
+  refresh_grant_type: refresh_token
+  response_type: code
+  grant_type: authorization_code
+
+development:
+  OAuth2:
+    <<: *defaultOAuth2
+  Constant:
+    <<: *defaultConstants
+  Settings:
+    host_uri: http://localhost:3000/
+    redirect_uri: http://localhost:3000/quickbooks/oauth_callback
+
+test:
+  OAuth2:
+    <<: *defaultOAuth2
+  Constant:
+    <<: *defaultConstants
+  Settings:
+    host_uri: http://localhost:3000/
+    redirect_uri: http://localhost:3000/quickbooks/oauth_callback
+
+production:
+  OAuth2:
+    <<: *defaultOAuth2
+  Constant:
+    <<: *defaultConstants
+  Settings:
+    host_uri: https://redflag-detector.fly.dev/
+    redirect_uri: https://redflag-detector.fly.dev/quickbooks/oauth_callback

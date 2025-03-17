@@ -14,6 +14,23 @@ Rails.application.routes.draw do
     get "sample-report", to: "reports#sample", as: :sample_report
   end
 
+  # QuickBooks Integration
+  namespace :quickbooks do
+    # Authentication
+    get "connect", to: "auth#connect"
+    get "oauth_callback", to: "auth#oauth_callback"
+    get "disconnect", to: "auth#disconnect"
+    get "refresh_token", to: "auth#refresh_token"
+    
+    # Data Analysis
+    get "start_analysis", to: "data#start_analysis"
+    get "permissions_error", to: "data#permissions_error"
+    post "analyze", to: "data#analyze"
+    
+    # API Test
+    get "test_connection", to: "data#test_connection"
+  end
+
   # Defines the root path route ("/")
   root "pages#home"
 end

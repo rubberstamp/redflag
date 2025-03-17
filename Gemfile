@@ -30,6 +30,11 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+# QuickBooks API integration
+gem "qbo_api"
+gem "oauth2"
+gem "faraday" # Required for qbo_api
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
