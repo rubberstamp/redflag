@@ -30,10 +30,13 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+# Removed activerecord-session_store - using database models for large data instead
+
 # QuickBooks API integration
 gem "qbo_api"
 gem "oauth2"
 gem "faraday" # Required for qbo_api
+gem "redis" # For background job status and caching
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

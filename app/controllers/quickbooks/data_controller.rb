@@ -172,98 +172,84 @@ class Quickbooks::DataController < ApplicationController
       end_period: params[:end_period] == "1"
     }
     
-    Rails.logger.debug "Analyzing QuickBooks data from #{@start_date} to #{@end_date}"
+    Rails.logger.debug "Initializing analysis for QuickBooks data from #{@start_date} to #{@end_date}"
     Rails.logger.debug "Detection rules: #{@detection_rules.inspect}"
     
-    begin
-      # Get the QuickBooks service
-      service = quickbooks_service
-      # If service is nil, quickbooks_service already handled the redirect
-      return if service.nil?
-      
-      # Verify permissions
-      has_permissions, error_message = service.verify_permissions
-      unless has_permissions
-        @error_message = error_message
-        redirect_to quickbooks_permissions_error_path(error_message: error_message)
-        return
-      end
-      
-      # Retrieve transaction data
-      @transactions = service.fetch_transactions(@start_date, @end_date)
-      
-      Rails.logger.debug "Retrieved #{@transactions.length} transactions from QuickBooks"
-      
-      # Check if we have any transactions to analyze
-      if @transactions.empty?
-        flash[:alert] = "No transactions found in the selected date range (#{@start_date.strftime("%b %d, %Y")} to #{@end_date.strftime("%b %d, %Y")}). Please try a different date range."
-        redirect_to quickbooks_start_analysis_path
-        return
-      end
-      
-      # Analyze the data for red flags
-      @analysis_results = analyze_transactions(@transactions, @detection_rules)
-      
-      flagged_count = @analysis_results[:flagged_transactions]&.length || 
-                     @analysis_results['flagged_transactions']&.length || 0
-      Rails.logger.debug "Analysis complete. Flagged #{flagged_count} transactions"
-      
-      # Store results in the database instead of the session
-      realm_id = session[:quickbooks]&.[]("realm_id")
-      profile = QuickbooksProfile.find_by(realm_id: realm_id)
-      
-      # Ensure analysis_results have flagged_transactions
-      if @analysis_results&.[]('flagged_transactions').nil? && @analysis_results&.[](:flagged_transactions).nil?
-        Rails.logger.warn "No flagged_transactions in analysis_results - adding empty array"
-        if @analysis_results.is_a?(Hash)
-          @analysis_results['flagged_transactions'] = []
-        else
-          @analysis_results = { 'flagged_transactions' => [] }
-        end
-      end
-      
-      # Create a new analysis record
-      analysis = profile.analyses.new(
-        start_date: @start_date,
-        end_date: @end_date,
-        detection_rules: @detection_rules.as_json,
-        results: @analysis_results.as_json,
-        transactions_data: @transactions.as_json
-      )
-      
-      if analysis.save
-        Rails.logger.info "Analysis saved to database with ID: #{analysis.id}"
-        # Store just the ID in the session to avoid cookie overflow
-        session[:current_analysis_id] = analysis.id
-        redirect_to quickbooks_analysis_report_path
-      else
-        Rails.logger.error "Failed to save analysis: #{analysis.errors.full_messages.join(', ')}"
-        flash[:alert] = "An error occurred while saving analysis results."
-        redirect_to quickbooks_start_analysis_path
-      end
-    rescue OAuth2::Error => e
-      Rails.logger.error "OAuth error: #{e.message}"
-      error_message = "Your QuickBooks session has expired. Please reconnect."
-      
-      flash[:alert] = error_message
-      redirect_to quickbooks_start_analysis_path
-    rescue StandardError => e
-      Rails.logger.error "Error analyzing transactions: #{e.message}"
-      Rails.logger.error "Error backtrace: #{e.backtrace.join("\n")}"
-      
-      # Provide a user-friendly error message based on the type of error
-      if e.message.include?("ApplicationAuthorizationFailed")
-        error_message = "QuickBooks API authorization failed. Please disconnect and reconnect your QuickBooks account."
-      elsif e.message.include?("ThrottleExceeded")
-        error_message = "QuickBooks API rate limit exceeded. Please wait a few minutes and try again."
-      else
-        error_message = "Error analyzing your QuickBooks data: #{e.message.split(';').first}"
-      end
-      
-      # Store error for display
-      flash[:alert] = error_message
-      redirect_to quickbooks_start_analysis_path
+    # Get the profile
+    realm_id = session[:quickbooks]&.[]("realm_id")
+    profile = QuickbooksProfile.find_by(realm_id: realm_id)
+    
+    if profile.nil?
+      flash[:alert] = "QuickBooks profile not found. Please reconnect."
+      redirect_to quickbooks_start_analysis_path(skip_validation: true)
+      return
     end
+    
+    # Generate a unique session identifier for this analysis
+    session[:analysis_session_id] = SecureRandom.uuid
+    
+    # Store initial status in Redis
+    status = {
+      progress: 0,
+      message: "Starting analysis...",
+      timestamp: Time.current.to_i
+    }
+    
+    Redis.new.set(
+      "quickbooks_analysis_status:#{session[:analysis_session_id]}", 
+      status.to_json, 
+      ex: 1.hour.to_i
+    )
+    
+    # Start the background job
+    QuickbooksAnalysisJob.perform_later(
+      profile.id, 
+      @start_date, 
+      @end_date, 
+      @detection_rules, 
+      session[:analysis_session_id]
+    )
+    
+    # Redirect to a progress page
+    redirect_to quickbooks_analysis_progress_path
+  end
+  
+  # Show analysis progress
+  def analysis_progress
+    render 'quickbooks/data/analysis_progress'
+  end
+  
+  # API endpoint to check analysis status
+  def analysis_status
+    session_id = session[:analysis_session_id]
+    
+    if session_id.blank?
+      render json: { error: "No analysis in progress" }, status: :not_found
+      return
+    end
+    
+    # Get status from Redis
+    status_json = Redis.new.get("quickbooks_analysis_status:#{session_id}")
+    
+    if status_json.blank?
+      render json: { progress: 0, message: "Starting analysis..." }, status: :ok
+      return
+    end
+    
+    status = JSON.parse(status_json)
+    
+    # If analysis is complete, get the analysis ID
+    if status['progress'] == 100 && status['success'] == true
+      # Get analysis ID from Redis
+      analysis_id = status['analysis_id'] || Redis.new.get("quickbooks_analysis:#{session_id}")
+      
+      if analysis_id.present?
+        session[:current_analysis_id] = analysis_id.to_s
+        status['redirect_url'] = quickbooks_analysis_report_path
+      end
+    end
+    
+    render json: status, status: :ok
   end
   
   private

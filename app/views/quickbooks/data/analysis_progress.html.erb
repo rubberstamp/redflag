@@ -1,0 +1,211 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-red-900 text-white shadow-md">
+    <div class="container mx-auto px-6 py-6 max-w-7xl flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold">QuickBooks Red Flag Detector</h1>
+        <p class="text-red-100">Analysis In Progress</p>
+      </div>
+      <div class="flex space-x-4">
+        <%= link_to "Cancel", quickbooks_start_analysis_path, class: "bg-white text-red-900 px-4 py-2 rounded font-medium hover:bg-gray-100" %>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Indicator -->
+  <div class="container mx-auto px-6 py-12 max-w-3xl">
+    <div class="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Analyzing Your QuickBooks Data</h2>
+      
+      <div id="progress-container" class="mb-6">
+        <div class="flex justify-between mb-1">
+          <span id="progress-message" class="text-gray-700">Starting analysis...</span>
+          <span id="progress-percentage" class="text-gray-700">0%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div id="progress-bar" class="bg-red-900 h-4 rounded-full" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <!-- Analysis Steps -->
+      <div class="space-y-4 mt-10">
+        <div id="step-1" class="flex items-center space-x-3">
+          <div id="step-1-icon" class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+            <svg id="step-1-svg" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-gray-700">Validating account permissions</p>
+            <p id="step-1-status" class="text-sm text-gray-500">Waiting to start...</p>
+          </div>
+        </div>
+        
+        <div id="step-2" class="flex items-center space-x-3">
+          <div id="step-2-icon" class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+            <svg id="step-2-svg" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-gray-700">Fetching transaction data</p>
+            <p id="step-2-status" class="text-sm text-gray-500">Waiting to start...</p>
+          </div>
+        </div>
+        
+        <div id="step-3" class="flex items-center space-x-3">
+          <div id="step-3-icon" class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+            <svg id="step-3-svg" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-gray-700">Analyzing for red flags</p>
+            <p id="step-3-status" class="text-sm text-gray-500">Waiting to start...</p>
+          </div>
+        </div>
+        
+        <div id="step-4" class="flex items-center space-x-3">
+          <div id="step-4-icon" class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+            <svg id="step-4-svg" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-gray-700">Generating report</p>
+            <p id="step-4-status" class="text-sm text-gray-500">Waiting to start...</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Error Container (initially hidden) -->
+      <div id="error-container" class="mt-6 bg-red-50 p-4 rounded-md border border-red-200 hidden">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">An error occurred</h3>
+            <div class="mt-2 text-sm text-red-700">
+              <p id="error-message"></p>
+            </div>
+            <div class="mt-4">
+              <%= link_to "Try Again", quickbooks_start_analysis_path, class: "text-sm font-medium text-red-800 hover:text-red-700" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const progressBar = document.getElementById('progress-bar');
+    const progressPercentage = document.getElementById('progress-percentage');
+    const progressMessage = document.getElementById('progress-message');
+    const errorContainer = document.getElementById('error-container');
+    const errorMessage = document.getElementById('error-message');
+    
+    // Step elements
+    const steps = [
+      {
+        icon: document.getElementById('step-1-icon'),
+        svg: document.getElementById('step-1-svg'),
+        status: document.getElementById('step-1-status'),
+        progress: 10
+      },
+      {
+        icon: document.getElementById('step-2-icon'),
+        svg: document.getElementById('step-2-svg'),
+        status: document.getElementById('step-2-status'),
+        progress: 20
+      },
+      {
+        icon: document.getElementById('step-3-icon'),
+        svg: document.getElementById('step-3-svg'),
+        status: document.getElementById('step-3-status'),
+        progress: 50
+      },
+      {
+        icon: document.getElementById('step-4-icon'),
+        svg: document.getElementById('step-4-svg'),
+        status: document.getElementById('step-4-status'),
+        progress: 80
+      }
+    ];
+    
+    let pollTimer;
+    let lastTimestamp = 0;
+    
+    function updateProgress(progress, message) {
+      progressBar.style.width = `${progress}%`;
+      progressPercentage.textContent = `${progress}%`;
+      progressMessage.textContent = message;
+      
+      // Update step styling based on progress
+      steps.forEach((step, index) => {
+        if (progress >= step.progress) {
+          step.icon.classList.remove('bg-gray-100');
+          step.icon.classList.add('bg-green-100');
+          step.svg.classList.remove('text-gray-400');
+          step.svg.classList.add('text-green-600');
+          step.status.textContent = 'Completed';
+          step.status.classList.remove('text-gray-500');
+          step.status.classList.add('text-green-600');
+        } else if (index === 0 || progress >= steps[index - 1].progress) {
+          step.icon.classList.remove('bg-gray-100', 'bg-green-100');
+          step.icon.classList.add('bg-blue-100');
+          step.svg.classList.remove('text-gray-400', 'text-green-600');
+          step.svg.classList.add('text-blue-600');
+          step.status.textContent = 'In progress...';
+          step.status.classList.remove('text-gray-500', 'text-green-600');
+          step.status.classList.add('text-blue-600');
+        }
+      });
+    }
+    
+    function showError(message) {
+      errorContainer.classList.remove('hidden');
+      errorMessage.textContent = message;
+    }
+    
+    function pollStatus() {
+      fetch('<%= quickbooks_analysis_status_path %>')
+        .then(response => response.json())
+        .then(data => {
+          // Check if this is a new update
+          if (data.timestamp > lastTimestamp) {
+            lastTimestamp = data.timestamp;
+            
+            // Update the progress bar and message
+            updateProgress(data.progress, data.message);
+            
+            // If we have a redirect URL, go there
+            if (data.redirect_url) {
+              window.location.href = data.redirect_url;
+              return;
+            }
+            
+            // If the process failed, show error
+            if (data.progress === 100 && data.success === false) {
+              clearInterval(pollTimer);
+              showError(data.message);
+              return;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error polling status:', error);
+        });
+    }
+    
+    // Start polling for status updates
+    pollTimer = setInterval(pollStatus, 1000);
+    
+    // Initial call to update display
+    pollStatus();
+  });
+</script>
