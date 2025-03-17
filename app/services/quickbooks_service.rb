@@ -1,33 +1,37 @@
 class QuickbooksService
-  attr_reader :access_token, :realm_id, :refresh_token, :expires_at, :qbo_api
+  attr_reader :access_token, :realm_id, :qbo_api
 
-  def initialize(access_token:, realm_id:, refresh_token: nil, expires_at: nil)
+  def initialize(access_token:, realm_id:)
     # Validate required parameters
     raise ArgumentError, "access_token is required" if access_token.blank?
     raise ArgumentError, "realm_id is required" if realm_id.blank?
     
-    @access_token = access_token
+    # Convert tokens to strings and ensure they're not hashes or complex objects
+    token_str = access_token.is_a?(String) ? access_token : access_token.to_s
+    
+    # If token looks like a Hash or complex object (contains curly braces), raise an error
+    if token_str.include?('{') || token_str.include?('}')
+      raise ArgumentError, "access_token appears to be in an invalid format"
+    end
+    
+    @access_token = token_str
     @realm_id = realm_id
-    @refresh_token = refresh_token
-    @expires_at = expires_at
+    # We don't store refresh_token or expires_at here as QboApi doesn't use them
     
     # Log initialization for debugging
-    Rails.logger.debug "QuickbooksService initialized with realm_id: #{realm_id}, token: #{access_token[0..5]}..."
-    Rails.logger.debug "Access token length: #{access_token.length}, expires_at: #{expires_at.present? ? Time.at(expires_at.to_i) : 'N/A'}"
+    Rails.logger.debug "QuickbooksService initialized with realm_id: #{realm_id}"
+    Rails.logger.debug "Access token class: #{token_str.class}, length: #{token_str.length}"
+    Rails.logger.debug "First/last chars of token: #{token_str[0..5]}...#{token_str[-6..-1]}"
     
     # Initialize the qbo_api client with the token
+    # QboApi only accepts access_token and realm_id
     @qbo_api = QboApi.new(
-      access_token: access_token,
-      realm_id: realm_id,
-      refresh_token: refresh_token,
-      client_id: OAUTH_CLIENT_ID,
-      client_secret: OAUTH_CLIENT_SECRET
+      access_token: token_str,
+      realm_id: realm_id
     )
     
-    # Use Faraday middleware for detailed logging in development
-    if Rails.env.development?
-      @qbo_api.connection.builder.insert_before(Faraday::Response::Logger, Faraday::DetailedLogger, Rails.logger)
-    end
+    # Skip detailed logging - Faraday::Response::Logger middleware isn't available
+    # Log request/response data through other means if needed in the future
   end
 
   # Verify if we have sufficient permissions before attempting data retrieval
