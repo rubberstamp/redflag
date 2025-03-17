@@ -68,7 +68,12 @@ class QuickbooksAnalysisJob < ApplicationJob
       
       if analysis.save
         # Store the analysis ID in Redis for the session to access
-        Redis.new.set("quickbooks_analysis:#{session_id}", analysis.id.to_s, ex: 1.hour.to_i)
+        begin
+          $redis.set("quickbooks_analysis:#{session_id}", analysis.id.to_s, ex: 1.hour.to_i)
+          Rails.logger.info "Stored analysis ID #{analysis.id} in Redis for session #{session_id}"
+        rescue => e
+          Rails.logger.error "Failed to store analysis ID in Redis: #{e.message}"
+        end
         
         # Update job status to completed
         update_status(session_id, 100, "Completed", true, analysis.id)
@@ -107,8 +112,9 @@ class QuickbooksAnalysisJob < ApplicationJob
     status[:analysis_id] = analysis_id if analysis_id
 
     begin
-      # Store in Redis with expiration
-      Redis.new.set("quickbooks_analysis_status:#{session_id}", status.to_json, ex: 1.hour.to_i)
+      # Use the global Redis instance
+      $redis.set("quickbooks_analysis_status:#{session_id}", status.to_json, ex: 1.hour.to_i)
+      Rails.logger.debug "Updated analysis status in Redis: progress=#{progress}, message=#{message}"
     rescue => e
       Rails.logger.error "Failed to update status in Redis: #{e.message}"
       # Continue processing even if Redis update fails

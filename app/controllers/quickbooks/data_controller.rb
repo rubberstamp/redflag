@@ -204,11 +204,12 @@ class Quickbooks::DataController < ApplicationController
     }
     
     begin
-      Redis.new.set(
+      $redis.set(
         "quickbooks_analysis_status:#{session[:analysis_session_id]}", 
         status.to_json, 
         ex: 1.hour.to_i
       )
+      Rails.logger.info "Stored initial status in Redis for analysis session: #{session[:analysis_session_id]}"
     rescue => e
       Rails.logger.error "Failed to set initial status in Redis: #{e.message}"
       # Continue processing even if Redis update fails
@@ -243,7 +244,8 @@ class Quickbooks::DataController < ApplicationController
     
     # Get status from Redis
     begin
-      status_json = Redis.new.get("quickbooks_analysis_status:#{session_id}")
+      status_json = $redis.get("quickbooks_analysis_status:#{session_id}")
+      Rails.logger.debug "Retrieved status from Redis for session: #{session_id}" if status_json.present?
     rescue => e
       Rails.logger.error "Failed to get status from Redis: #{e.message}"
       status_json = nil
@@ -259,11 +261,16 @@ class Quickbooks::DataController < ApplicationController
     # If analysis is complete, get the analysis ID
     if status['progress'] == 100 && status['success'] == true
       # Get analysis ID from Redis
-      analysis_id = status['analysis_id'] || Redis.new.get("quickbooks_analysis:#{session_id}")
+      begin
+        analysis_id = status['analysis_id'] || $redis.get("quickbooks_analysis:#{session_id}")
       
-      if analysis_id.present?
-        session[:current_analysis_id] = analysis_id.to_s
-        status['redirect_url'] = quickbooks_analysis_report_path
+        if analysis_id.present?
+          session[:current_analysis_id] = analysis_id.to_s
+          status['redirect_url'] = quickbooks_analysis_report_path
+          Rails.logger.info "Analysis complete. Setting redirect to report path."
+        end
+      rescue => e
+        Rails.logger.error "Error retrieving analysis ID from Redis: #{e.message}"
       end
     end
     

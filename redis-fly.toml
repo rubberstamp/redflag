@@ -1,0 +1,26 @@
+# fly.toml app configuration file for Redis
+app = "redflag-redis"
+primary_region = "ewr"
+
+[build]
+  image = "flyio/redis:7.0"
+
+[env]
+  PORT = "6379"
+  REDIS_ARGS = "--save 60 1 --loglevel warning"
+  FLY_USE_REDIS_PERSISTENCE = "true"
+
+[http_service]
+  internal_port = 6379
+  force_https = false
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = 256
+
+[[mounts]]
+  source = "redis_data"
+  destination = "/data"
