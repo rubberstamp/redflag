@@ -152,12 +152,16 @@ class QuickbooksAnalysisJob < ApplicationJob
       amount.to_f
     end
     
+    # Get company name from profile
+    company_name = profile.company_name.presence || "QuickBooks Account"
+    
     # Return analysis results with string keys to ensure JSON compatibility
     {
       'flagged_transactions' => flagged,
       'total_transactions' => transactions.length,
       'total_amount' => total_amount,
-      'risk_score' => flagged.empty? ? 0 : rand(25..65)
+      'risk_score' => flagged.empty? ? 0 : rand(25..65),
+      'account_name' => company_name
     }
   end
 end

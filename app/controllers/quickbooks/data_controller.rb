@@ -56,18 +56,23 @@ class Quickbooks::DataController < ApplicationController
       return
     end
     
+    # Get the profile for company name
+    @profile = @analysis.quickbooks_profile
+    
     # Set up variables for the template
     @start_date = @analysis.start_date
     @end_date = @analysis.end_date
     @detection_rules = @analysis.detection_rules
     @transactions = @analysis.transactions_data
+    @company_name = @profile&.company_name || "QuickBooks Account"
     
     # Build analysis results hash with proper format
     @analysis_results = {
       total_transactions: @analysis.total_transactions,
       total_amount: @analysis.total_amount,
       risk_score: @analysis.risk_score,
-      flagged_transactions: @analysis.flagged_transactions
+      flagged_transactions: @analysis.flagged_transactions,
+      account_name: @company_name
     }
     
     # Process transaction dates if needed
