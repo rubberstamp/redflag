@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full bg-gray-50">
   <head>
     <title><%= content_for(:title) || "Redflag" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -22,9 +22,70 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
+  <body class="h-full">
+    <div class="min-h-full">
+      <nav class="bg-red-800" data-controller="navbar">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 items-center justify-between">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <img class="h-8 w-auto" src="/icon.svg" alt="Redflag">
+              </div>
+              <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-4">
+                  <%= link_to "Home", root_path, class: "text-white hover:bg-red-700 rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Analysis", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "QuickBooks", quickbooks_test_connection_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                </div>
+              </div>
+            </div>
+            <div class="hidden md:block">
+              <div class="ml-4 flex items-center md:ml-6">
+                <!-- User menu can go here when authentication is added -->
+              </div>
+            </div>
+            <div class="-mr-2 flex md:hidden">
+              <!-- Mobile menu button -->
+              <button type="button" 
+                      class="relative inline-flex items-center justify-center rounded-md bg-red-800 p-2 text-gray-200 hover:bg-red-700 hover:text-white focus:outline-none" 
+                      aria-controls="mobile-menu" 
+                      aria-expanded="false"
+                      data-action="click->navbar#toggleMenu">
+                <span class="absolute -inset-0.5"></span>
+                <span class="sr-only">Open main menu</span>
+                <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state -->
+        <div class="md:hidden hidden" id="mobile-menu" data-navbar-target="mobileMenu">
+          <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+            <%= link_to "Home", root_path, class: "text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "Analysis", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "QuickBooks", quickbooks_test_connection_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+          </div>
+        </div>
+      </nav>
+
+      <main>
+        <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <% if flash.any? %>
+            <div class="mb-4">
+              <% flash.each do |key, value| %>
+                <div class="<%= key == 'notice' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700' %> px-4 py-3 rounded relative border" role="alert">
+                  <span class="block sm:inline"><%= value %></span>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          
+          <%= yield %>
+        </div>
+      </main>
+    </div>
   </body>
 </html>
