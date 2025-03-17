@@ -1,0 +1,132 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-red-900 text-white shadow-md">
+    <div class="container mx-auto px-6 py-6 max-w-7xl flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold">QuickBooks Red Flag Detector</h1>
+        <p class="text-red-100">Transaction Analysis</p>
+      </div>
+      <div>
+        <%= link_to "Disconnect", quickbooks_disconnect_path, class: "bg-red-800 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-red-700" %>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="container mx-auto px-6 py-8 max-w-7xl">
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Analyze Your QuickBooks Data</h2>
+      
+      <%= form_with url: quickbooks_analyze_path, method: :post, id: "analysis_form", class: "space-y-6", local: true, data: { turbo: false } do |form| %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-semibold text-lg text-gray-700 mb-4">Date Range</h3>
+            <div class="space-y-4">
+              <div>
+                <%= form.label :start_date, "Start Date", class: "block text-sm font-medium text-gray-700" %>
+                <%= form.date_field :start_date, value: 90.days.ago.to_date, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" %>
+              </div>
+              <div>
+                <%= form.label :end_date, "End Date", class: "block text-sm font-medium text-gray-700" %>
+                <%= form.date_field :end_date, value: Date.today, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" %>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="font-semibold text-lg text-gray-700 mb-4">Detection Rules</h3>
+            <div class="space-y-3">
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <%= form.check_box :unusual_spending, checked: true, class: "focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= form.label :unusual_spending, "Unusual Spending Patterns", class: "font-medium text-gray-700" %>
+                  <p class="text-gray-500">Detect transactions that are statistical outliers in amount</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <%= form.check_box :duplicate_transactions, checked: true, class: "focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= form.label :duplicate_transactions, "Duplicate Transactions", class: "font-medium text-gray-700" %>
+                  <p class="text-gray-500">Flag potential duplicate payments with similar amounts and close dates</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <%= form.check_box :round_numbers, checked: true, class: "focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= form.label :round_numbers, "Round Number Amounts", class: "font-medium text-gray-700" %>
+                  <p class="text-gray-500">Flag even amounts that may indicate manual estimates</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <%= form.check_box :new_vendors, checked: true, class: "focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= form.label :new_vendors, "New or Unknown Vendors", class: "font-medium text-gray-700" %>
+                  <p class="text-gray-500">Flag payments to new or unknown vendors</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <%= form.check_box :outside_hours, checked: true, class: "focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= form.label :outside_hours, "Outside Business Hours", class: "font-medium text-gray-700" %>
+                  <p class="text-gray-500">Flag transactions created outside of typical business hours</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <%= form.check_box :end_period, checked: true, class: "focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= form.label :end_period, "End of Period Transactions", class: "font-medium text-gray-700" %>
+                  <p class="text-gray-500">Flag transactions clustered at end of financial periods</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pt-5 border-t border-gray-200 mt-6">
+          <div class="flex justify-end space-x-3">
+            <%= link_to "Test Connection", quickbooks_test_connection_path, class: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+            <%= form.submit "Start Analysis", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-900 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Tips Section -->
+    <div class="bg-white rounded-lg shadow-md p-8">
+      <h3 class="text-lg font-semibold mb-4 text-gray-800">Tips for Effective Analysis</h3>
+      
+      <ul class="list-disc pl-5 space-y-2 text-gray-600">
+        <li>For best results, select a date range of 30-90 days</li>
+        <li>Enable all detection rules for the most comprehensive analysis</li>
+        <li>Combine multiple rules to increase detection accuracy</li>
+        <li>After receiving results, investigate suspicious transactions in your QuickBooks account</li>
+        <li>The analysis does not modify your QuickBooks data in any way</li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-6 mt-12">
+    <div class="container mx-auto px-6 max-w-7xl text-center text-sm">
+      <p>&copy; 2025 Red Flag Detector. All rights reserved.</p>
+      <p class="mt-2 text-gray-400">This tool is for informational purposes only. Please consult with a financial professional before taking action.</p>
+    </div>
+  </footer>
+</div>

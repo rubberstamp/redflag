@@ -1,4 +1,6 @@
 class QuickbooksProfile < ApplicationRecord
+  # Associations
+  has_many :analyses, class_name: 'QuickbooksAnalysis', dependent: :destroy
   # Validations
   validates :realm_id, presence: true, uniqueness: true
   
@@ -8,6 +10,7 @@ class QuickbooksProfile < ApplicationRecord
     # Skip encryption in test
   else
     # Use encryption in other environments
+    # Instead of a custom serializer, use type casting in the appropriate methods
     encrypts :access_token, deterministic: false, key: ActiveRecord::Encryption.config.primary_key
     encrypts :refresh_token, deterministic: false, key: ActiveRecord::Encryption.config.primary_key
   end
@@ -134,8 +137,18 @@ class QuickbooksProfile < ApplicationRecord
     # If no expiration time is stored, consider it expired to be safe
     return true unless token_expires_at.present?
     
-    # Add a 5-minute buffer to avoid edge cases
-    token_expires_at < (Time.current + 5.minutes)
+    begin
+      # Parse expiration time safely
+      expiry_time = token_expires_at.is_a?(Time) ? token_expires_at : Time.parse(token_expires_at.to_s)
+      
+      # Add a 5-minute buffer to avoid edge cases
+      Rails.logger.debug "Token expires at: #{expiry_time}, Current time: #{Time.current}"
+      expiry_time < (Time.current + 5.minutes)
+    rescue => e
+      # If we can't parse the expiration time, consider it expired
+      Rails.logger.error "Error checking token expiration: #{e.message}"
+      true
+    end
   end
   
   # Get the company name (use stored field or profile_data as fallback)
@@ -167,6 +180,18 @@ class QuickbooksProfile < ApplicationRecord
   # Get the phone number (use stored field or profile_data as fallback)
   def phone_number
     phone.presence || profile_data&.dig('phone_number')
+  end
+  
+  # Override access_token getter to ensure it returns a string
+  def access_token
+    token = super
+    token.is_a?(String) ? token : token.to_s if token.present?
+  end
+  
+  # Override refresh_token getter to ensure it returns a string
+  def refresh_token
+    token = super
+    token.is_a?(String) ? token : token.to_s if token.present?
   end
   
   # Get full address as a formatted string

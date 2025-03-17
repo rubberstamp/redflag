@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     get "start_analysis", to: "data#start_analysis"
     get "permissions_error", to: "data#permissions_error"
     post "analyze", to: "data#analyze"
+    get "analysis_report", to: "data#analysis_report"
     
     # API Test
     get "test_connection", to: "data#test_connection"
