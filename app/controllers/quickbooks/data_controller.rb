@@ -64,7 +64,10 @@ class Quickbooks::DataController < ApplicationController
     @end_date = @analysis.end_date
     @detection_rules = @analysis.detection_rules
     @transactions = @analysis.transactions_data
-    @company_name = @profile&.company_name || "QuickBooks Account"
+    
+    # Get company name from different sources, prioritize results that may have come from the job
+    stored_account_name = @analysis.results['account_name'] || @analysis.results[:account_name]
+    @company_name = stored_account_name.presence || @profile&.company_name || "QuickBooks Account"
     
     # Build analysis results hash with proper format
     @analysis_results = {
@@ -200,11 +203,16 @@ class Quickbooks::DataController < ApplicationController
       timestamp: Time.current.to_i
     }
     
-    Redis.new.set(
-      "quickbooks_analysis_status:#{session[:analysis_session_id]}", 
-      status.to_json, 
-      ex: 1.hour.to_i
-    )
+    begin
+      Redis.new.set(
+        "quickbooks_analysis_status:#{session[:analysis_session_id]}", 
+        status.to_json, 
+        ex: 1.hour.to_i
+      )
+    rescue => e
+      Rails.logger.error "Failed to set initial status in Redis: #{e.message}"
+      # Continue processing even if Redis update fails
+    end
     
     # Start the background job
     QuickbooksAnalysisJob.perform_later(
@@ -234,7 +242,12 @@ class Quickbooks::DataController < ApplicationController
     end
     
     # Get status from Redis
-    status_json = Redis.new.get("quickbooks_analysis_status:#{session_id}")
+    begin
+      status_json = Redis.new.get("quickbooks_analysis_status:#{session_id}")
+    rescue => e
+      Rails.logger.error "Failed to get status from Redis: #{e.message}"
+      status_json = nil
+    end
     
     if status_json.blank?
       render json: { progress: 0, message: "Starting analysis..." }, status: :ok

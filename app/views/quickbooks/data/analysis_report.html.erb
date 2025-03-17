@@ -1,10 +1,12 @@
 <div class="min-h-screen bg-gray-50">
+  <% content_for(:title) { "Analysis Report for #{@company_name} - Redflag" } %>
+  
   <!-- Header -->
   <header class="bg-red-900 text-white shadow-md">
     <div class="container mx-auto px-6 py-6 max-w-7xl flex justify-between items-center">
       <div>
         <h1 class="text-3xl font-bold">QuickBooks Red Flag Detector</h1>
-        <p class="text-red-100">Analysis Report</p>
+        <p class="text-red-100">Analysis Report for <%= @company_name %></p>
       </div>
       <div class="flex space-x-4">
         <%= link_to "New Analysis", quickbooks_start_analysis_path, class: "bg-white text-red-900 px-4 py-2 rounded font-medium hover:bg-gray-100" %>

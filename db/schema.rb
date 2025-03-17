@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_17_143032) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_17_221128) do
+  create_table "quickbooks_analyses", force: :cascade do |t|
+    t.integer "quickbooks_profile_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.json "detection_rules"
+    t.json "results"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.json "transactions_data"
+    t.index ["quickbooks_profile_id"], name: "index_quickbooks_analyses_on_quickbooks_profile_id"
+  end
+
   create_table "quickbooks_profiles", force: :cascade do |t|
     t.integer "user_id"
     t.string "realm_id"
@@ -34,10 +46,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_143032) do
     t.string "last_connection_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "legal_name"
+    t.json "company_info"
+    t.integer "fiscal_year_start_month"
     t.index ["active"], name: "index_quickbooks_profiles_on_active"
     t.index ["company_name"], name: "index_quickbooks_profiles_on_company_name"
     t.index ["email"], name: "index_quickbooks_profiles_on_email"
     t.index ["realm_id"], name: "index_quickbooks_profiles_on_realm_id", unique: true
     t.index ["user_id"], name: "index_quickbooks_profiles_on_user_id"
   end
+
+  add_foreign_key "quickbooks_analyses", "quickbooks_profiles"
 end

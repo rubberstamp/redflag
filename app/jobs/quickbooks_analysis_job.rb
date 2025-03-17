@@ -43,7 +43,7 @@ class QuickbooksAnalysisJob < ApplicationJob
       update_status(session_id, 50, "Analyzing transactions...")
 
       # Analyze the data for red flags
-      analysis_results = analyze_transactions(transactions, detection_rules)
+      analysis_results = analyze_transactions(transactions, detection_rules, profile)
       
       # Ensure analysis_results have flagged_transactions
       if analysis_results&.[]('flagged_transactions').nil? && analysis_results&.[](:flagged_transactions).nil?
@@ -106,11 +106,16 @@ class QuickbooksAnalysisJob < ApplicationJob
     # Add analysis_id if provided
     status[:analysis_id] = analysis_id if analysis_id
 
-    # Store in Redis with expiration
-    Redis.new.set("quickbooks_analysis_status:#{session_id}", status.to_json, ex: 1.hour.to_i)
+    begin
+      # Store in Redis with expiration
+      Redis.new.set("quickbooks_analysis_status:#{session_id}", status.to_json, ex: 1.hour.to_i)
+    rescue => e
+      Rails.logger.error "Failed to update status in Redis: #{e.message}"
+      # Continue processing even if Redis update fails
+    end
   end
 
-  def analyze_transactions(transactions, detection_rules = {})
+  def analyze_transactions(transactions, detection_rules = {}, profile = nil)
     # Use the analysis service to analyze transactions
     # Generate some sample data for demo purposes
     flagged = []
@@ -152,8 +157,8 @@ class QuickbooksAnalysisJob < ApplicationJob
       amount.to_f
     end
     
-    # Get company name from profile
-    company_name = profile.company_name.presence || "QuickBooks Account"
+    # Get company name from profile if available
+    company_name = profile&.company_name.presence || "QuickBooks Account"
     
     # Return analysis results with string keys to ensure JSON compatibility
     {

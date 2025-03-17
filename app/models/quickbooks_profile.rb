@@ -64,6 +64,9 @@ class QuickbooksProfile < ApplicationRecord
         # Extract and store specific fields from profile_data
         profile.update_from_profile_data(profile_data)
         
+        # Get more detailed company information using the QboApi
+        fetch_and_update_company_info(profile)
+        
         # Save the profile
         if profile.save
           Rails.logger.info "Successfully saved QuickBooks profile for realm_id: #{realm_id}"
@@ -76,6 +79,9 @@ class QuickbooksProfile < ApplicationRecord
         end
       else
         Rails.logger.error "Failed to fetch QuickBooks profile: #{response.status} - #{response.body}"
+        # Try to get company info anyway
+        fetch_and_update_company_info(profile)
+        
         # Try to save what we have so far
         if profile.save
           Rails.logger.info "Created partial QuickBooks profile without user info"
@@ -87,6 +93,9 @@ class QuickbooksProfile < ApplicationRecord
       Rails.logger.error "Error fetching QuickBooks profile: #{e.message}"
       Rails.logger.error e.backtrace.join("\n")
       
+      # Try to get company info anyway
+      fetch_and_update_company_info(profile)
+      
       # Try to save the profile even if we couldn't fetch user info
       if profile.save
         Rails.logger.info "Created QuickBooks profile with only connection info due to error: #{e.message}"
@@ -94,6 +103,100 @@ class QuickbooksProfile < ApplicationRecord
       end
       return nil
     end
+  end
+  
+  # Fetch detailed company information using the QboApi
+  def self.fetch_and_update_company_info(profile)
+    return unless profile.access_token.present? && profile.realm_id.present?
+    
+    begin
+      # Create a QuickBooks service to access the QBO API
+      service = QuickbooksService.new(
+        access_token: profile.access_token,
+        realm_id: profile.realm_id
+      )
+      
+      # Get company info from the API
+      company_info = service.qbo_api.get(:companyinfo, 1)
+      
+      # If we have company info, update the profile
+      if company_info.present?
+        Rails.logger.debug "Retrieved company info: #{company_info.inspect}"
+        
+        # Store the complete company info
+        profile.company_info = company_info
+        
+        # Parse company info into profile attributes
+        profile.parse_company_info
+        
+        Rails.logger.info "Updated profile with company info for #{profile.company_name}"
+        return true
+      else
+        Rails.logger.warn "No company info returned from QuickBooks API"
+      end
+    rescue => e
+      Rails.logger.error "Error fetching company info: #{e.message}"
+    end
+    
+    return false
+  end
+  
+  # Parse company_info JSON data into profile attributes
+  def parse_company_info
+    return unless company_info.present?
+    
+    # Extract basic company information - always override with QBO data
+    self.company_name = company_info['CompanyName'] if company_info['CompanyName'].present?
+    self.legal_name = company_info['LegalName'] if company_info['LegalName'].present?
+    
+    # Get fiscal year start month
+    self.fiscal_year_start_month = company_info['FiscalYearStartMonth'] if company_info['FiscalYearStartMonth'].present?
+    
+    # Handle email information - always override with QBO data
+    if company_info['Email'].present?
+      if company_info['Email'].is_a?(Hash) && company_info['Email']['Address'].present?
+        self.email = company_info['Email']['Address']
+      elsif company_info['Email'].is_a?(String)
+        self.email = company_info['Email']
+      end
+    end
+    
+    # Handle phone information - always override with QBO data
+    if company_info['PrimaryPhone'].present?
+      if company_info['PrimaryPhone'].is_a?(Hash) && company_info['PrimaryPhone']['FreeFormNumber'].present?
+        self.phone = company_info['PrimaryPhone']['FreeFormNumber']
+      elsif company_info['PrimaryPhone'].is_a?(String)
+        self.phone = company_info['PrimaryPhone']
+      end
+    end
+    
+    # Handle address information
+    if company_info['CompanyAddr'].present?
+      addr = company_info['CompanyAddr']
+      
+      # Build address from available lines
+      address_lines = []
+      ['Line1', 'Line2', 'Line3', 'Line4', 'Line5'].each do |line|
+        address_lines << addr[line] if addr[line].present?
+      end
+      
+      # Set address to all available lines, always override with QBO data
+      self.address = address_lines.join(', ') if address_lines.any?
+      
+      # Set individual address components, always override with QBO data
+      self.city = addr['City'] if addr['City'].present?
+      self.region = addr['CountrySubDivisionCode'] || addr['Region'] if addr['CountrySubDivisionCode'].present? || addr['Region'].present?
+      self.postal_code = addr['PostalCode'] if addr['PostalCode'].present?
+      self.country = addr['Country'] if addr['Country'].present?
+    end
+    
+    # Add extra metadata from company info if available
+    if company_info['MetaData'].present? && company_info['MetaData']['CreateTime'].present?
+      self.last_updated = Time.parse(company_info['MetaData']['CreateTime']) rescue Time.current
+    end
+    
+    # Return self for method chaining
+    self
   end
   
   # Extract and store profile fields from the profile_data hash
@@ -151,14 +254,44 @@ class QuickbooksProfile < ApplicationRecord
     end
   end
   
-  # Get the company name (use stored field or profile_data as fallback)
+  # Get the company name (prioritize stored field, then company_info, then profile_data)
   def company_name
-    read_attribute(:company_name).presence || profile_data&.dig('name') || "QuickBooks Company"
+    # First check the stored column
+    stored_name = read_attribute(:company_name)
+    return stored_name if stored_name.present?
+    
+    # Next check company_info for CompanyName or LegalName
+    if company_info.present?
+      return company_info['CompanyName'] if company_info['CompanyName'].present?
+      return company_info['LegalName'] if company_info['LegalName'].present?
+    end
+    
+    # Then check profile_data
+    return profile_data&.dig('name') if profile_data&.dig('name').present?
+    
+    # Default fallback
+    "QuickBooks Company"
   end
   
-  # Get the email (use stored field or profile_data as fallback)
+  # Get the email (prioritize stored field, then company_info, then profile_data)
   def email
-    read_attribute(:email).presence || profile_data&.dig('email')
+    # First check the stored column
+    stored_email = read_attribute(:email)
+    return stored_email if stored_email.present?
+    
+    # Next check company_info for Email
+    if company_info.present? && company_info['Email'].present?
+      if company_info['Email'].is_a?(Hash) && company_info['Email']['Address'].present?
+        return company_info['Email']['Address']
+      elsif company_info['Email'].is_a?(String)
+        return company_info['Email']
+      end
+    end
+    
+    # Then check profile_data
+    return profile_data&.dig('email') if profile_data&.dig('email').present?
+    
+    nil
   end
   
   # Get the full name (use stored fields or profile_data as fallback)
@@ -177,15 +310,37 @@ class QuickbooksProfile < ApplicationRecord
     end
   end
   
-  # Get the phone number (use stored field or profile_data as fallback)
+  # Get the phone number (prioritize stored field, then company_info, then profile_data)
   def phone_number
-    phone.presence || profile_data&.dig('phone_number')
+    # First check the stored column
+    stored_phone = read_attribute(:phone)
+    return stored_phone if stored_phone.present?
+    
+    # Next check company_info for PrimaryPhone
+    if company_info.present? && company_info['PrimaryPhone'].present?
+      if company_info['PrimaryPhone'].is_a?(Hash) && company_info['PrimaryPhone']['FreeFormNumber'].present?
+        return company_info['PrimaryPhone']['FreeFormNumber']
+      elsif company_info['PrimaryPhone'].is_a?(String)
+        return company_info['PrimaryPhone']
+      end
+    end
+    
+    # Then check profile_data
+    return profile_data&.dig('phone_number') if profile_data&.dig('phone_number').present?
+    
+    nil
   end
   
   # Override access_token getter to ensure it returns a string
   def access_token
     token = super
     token.is_a?(String) ? token : token.to_s if token.present?
+  end
+  
+  # Override company_info setter to parse attributes when assigned
+  def company_info=(info)
+    super(info)
+    parse_company_info if info.present?
   end
   
   # Override refresh_token getter to ensure it returns a string
@@ -280,6 +435,9 @@ class QuickbooksProfile < ApplicationRecord
       expires_at: token_expires_at&.to_i
     )
     
+    # Track if either API call was successful
+    any_update_successful = false
+    
     begin
       # Fetch user profile from QuickBooks API
       response = token.get('/v1/openid_connect/userinfo')
@@ -294,21 +452,34 @@ class QuickbooksProfile < ApplicationRecord
         
         # Update structured fields from profile_data
         update_from_profile_data(fresh_profile_data)
-        
-        # Save the updated profile
-        if save
-          Rails.logger.info "Successfully refreshed profile data for #{company_name}"
-          return true
-        else
-          Rails.logger.error "Failed to save refreshed profile data: #{errors.full_messages.join(', ')}"
-          return false
-        end
+        any_update_successful = true
       else
         Rails.logger.error "Failed to refresh profile data: #{response.status} - #{response.body}"
-        return false
       end
     rescue => e
-      Rails.logger.error "Error refreshing profile data: #{e.message}"
+      Rails.logger.error "Error refreshing OpenID profile data: #{e.message}"
+    end
+    
+    # Also try to update company info using the QBO API
+    begin
+      if self.class.fetch_and_update_company_info(self)
+        any_update_successful = true
+      end
+    rescue => e
+      Rails.logger.error "Error refreshing company info: #{e.message}"
+    end
+    
+    # Save the updated profile if any updates were successful
+    if any_update_successful
+      if save
+        Rails.logger.info "Successfully refreshed profile data for #{company_name}"
+        return true
+      else
+        Rails.logger.error "Failed to save refreshed profile data: #{errors.full_messages.join(', ')}"
+        return false
+      end
+    else
+      Rails.logger.error "Failed to refresh any profile data from QuickBooks"
       return false
     end
   end
