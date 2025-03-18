@@ -37,5 +37,5 @@ production:
   Constant:
     <<: *defaultConstants
   Settings:
-    host_uri: https://redflag-detector.fly.dev/
+    host_uri: https://redflag.fly.dev/
     redirect_uri: https://redflag-detector.fly.dev/quickbooks/oauth_callback

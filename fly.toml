@@ -1,5 +1,5 @@
 # fly.toml app configuration file
-app = "redflag-detector"
+app = "redflag"
 primary_region = "ewr"
 console_command = "/rails/bin/rails console"
 
@@ -15,7 +15,7 @@ console_command = "/rails/bin/rails console"
 
 [checks]
   [checks.status]
-    port = 80
+    port = 3000
     type = "http"
     interval = "10s"
     timeout = "2s"
@@ -30,6 +30,19 @@ console_command = "/rails/bin/rails console"
   cpus = 1
   memory_mb = 1024
 
+[mounts]
+  source = "storage"
+  destination = "/rails/storage"
+
 [[statics]]
   guest_path = "/rails/public"
   url_prefix = "/"
+
+[env]
+  PORT = "3000"
+  DATABASE_URL = "sqlite3:///rails/storage/production.sqlite3"
+  SOLID_QUEUE_IN_PUMA = "true"
+  # Redis URL will be set via secrets with: flyctl secrets set REDIS_URL=redis://redflag-redis.internal:6379
+
+# Redis is deployed separately as redflag-redis app
+# No need to define Redis service here as it's handled by redis-fly.toml

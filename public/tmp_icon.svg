@@ -1,0 +1,6 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="256" fill="#8b0000"/>
+  <g transform="translate(120, 120) scale(0.55)">
+    <path fill="white" d="M64,32V464a16,16,0,0,0,32,0V304H424L368,192l56-112H96V32a16,16,0,0,0-32,0Zm96,32h81.61L288,128l-46.39,64H160Z"/>
+  </g>
+</svg>
