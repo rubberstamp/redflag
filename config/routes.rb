@@ -14,6 +14,17 @@ Rails.application.routes.draw do
     get "sample-report", to: "reports#sample", as: :sample_report
   end
 
+  # CSV Import routes
+  resources :imports, only: [:new, :create] do
+    collection do
+      post :mapping
+      post :preview
+      get :progress
+      get :status
+      get :analysis_report, as: :report
+    end
+  end
+
   # QuickBooks Integration
   namespace :quickbooks do
     # Authentication

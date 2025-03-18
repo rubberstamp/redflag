@@ -1,0 +1,242 @@
+<div class="min-h-screen bg-gray-50">
+  <% content_for(:title) { "Analysis Report - Redflag" } %>
+  
+  <!-- Header -->
+  <header class="bg-red-900 text-white shadow-md">
+    <div class="container mx-auto px-6 py-6 max-w-7xl flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold">QuickBooks Red Flag Detector</h1>
+        <p class="text-red-100">Analysis Report for <%= @company_name %></p>
+      </div>
+      <div class="flex space-x-4">
+        <%= link_to "New Analysis", session[:import_source] == 'csv' ? new_import_path : quickbooks_start_analysis_path, class: "bg-white text-red-900 px-4 py-2 rounded font-medium hover:bg-gray-100" %>
+        <%= link_to "Disconnect", session[:import_source] == 'csv' ? root_path : quickbooks_disconnect_path, class: "bg-red-800 text-white px-4 py-2 rounded font-medium hover:bg-red-700" %>
+      </div>
+    </div>
+  </header>
+
+  <!-- Report Summary -->
+  <div class="container mx-auto px-6 py-8 max-w-7xl">
+    <div class="flex flex-col md:flex-row justify-between items-start mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Analysis Report for <%= @company_name %></h2>
+        <p class="text-gray-500"><%= @start_date.strftime("%B %d, %Y") %> to <%= @end_date.strftime("%B %d, %Y") %></p>
+      </div>
+      <div class="mt-4 md:mt-0 flex items-center bg-white p-4 rounded-lg shadow-sm border">
+        <div class="mr-4 w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+          <% risk_score = @analysis_results['risk_score'] || 0 %>
+          <div class="w-12 h-12 rounded-full <%= risk_score < 30 ? 'bg-green-500' : (risk_score < 70 ? 'bg-yellow-500' : 'bg-red-500') %> flex items-center justify-center text-white font-bold text-xl">
+            <%= risk_score %>
+          </div>
+        </div>
+        <div>
+          <p class="text-gray-500 text-sm">Overall Risk Score</p>
+          <p class="text-lg font-semibold text-gray-800"><%= risk_score %>/100</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm">Total Transactions</p>
+            <p class="text-2xl font-bold text-gray-800"><%= @analysis_results['total_transactions'] || 0 %></p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm">Flagged Transactions</p>
+            <p class="text-2xl font-bold text-gray-800"><%= @analysis_results['flagged_transactions']&.size || 0 %></p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-8.5-6h17" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm">Total Amount</p>
+            <p class="text-2xl font-bold text-gray-800">$<%= number_with_precision(@analysis_results['total_amount'] || 0, precision: 2, delimiter: ',') %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detection Rules -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Detection Rules</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <% (@detection_rules || {}).each do |rule, enabled| %>
+          <% # Handle both string and symbol keys %>
+          <% rule_name = rule.to_s %>
+          <% if enabled || enabled == "1" || enabled == true %>
+            <div class="flex items-center p-3 rounded-md bg-green-50">
+              <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-800"><%= rule_name.titleize %></p>
+                <p class="text-xs text-green-700 font-medium uppercase">Active</p>
+              </div>
+            </div>
+          <% else %>
+            <div class="flex items-center p-3 rounded-md bg-gray-50">
+              <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-400">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-800"><%= rule_name.titleize %></p>
+                <p class="text-xs text-gray-500 font-medium uppercase">Inactive</p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Flagged Transactions Table -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Flagged Transactions</h3>
+      <% flagged_trans = @analysis_results['flagged_transactions'] || [] %>
+      <% if flagged_trans.empty? %>
+        <div class="bg-gray-50 border-l-4 border-gray-300 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-gray-800">No Red Flags Detected</h3>
+              <div class="mt-2 text-sm text-gray-700">
+                <p>No suspicious transactions were found in the selected date range with the current detection rules.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Score</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% flagged_trans.each do |transaction| %>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= transaction['date'] %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= transaction['type'] %></td>
+                  <td class="px-6 py-4 text-sm text-gray-900"><%= transaction['description'] || "No description" %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">$<%= number_with_precision(transaction['amount'], precision: 2, delimiter: ',') %></td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <% risk_score = transaction['risk_score'] || 0 %>
+                    <div class="flex items-center">
+                      <div class="h-2 w-16 bg-gray-200 rounded-full mr-2">
+                        <div class="h-2 rounded-full <%= risk_score < 30 ? 'bg-green-500' : (risk_score < 70 ? 'bg-yellow-500' : 'bg-red-500') %>" style="width: <%= risk_score %>%;"></div>
+                      </div>
+                      <span class="text-sm font-medium <%= risk_score < 30 ? 'text-green-600' : (risk_score < 70 ? 'text-yellow-600' : 'text-red-600') %>"><%= risk_score %></span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800"><%= transaction['reason'] || "Unknown" %></span>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-4 text-center">
+          <button class="px-4 py-2 text-sm text-red-900 font-medium hover:text-red-700">View All Flagged Transactions →</button>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Recommendations</h3>
+      <ul class="space-y-3">
+        <li class="flex items-start">
+          <div class="flex-shrink-0 h-5 w-5 mt-1 flex items-center justify-center rounded-full bg-red-100 text-red-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-gray-800 font-medium">Review Flagged Transactions</p>
+            <p class="text-sm text-gray-500">Review any flagged transactions in your <%= session[:import_source] == 'csv' ? 'data' : 'QuickBooks account' %> to verify their legitimacy.</p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <div class="flex-shrink-0 h-5 w-5 mt-1 flex items-center justify-center rounded-full bg-red-100 text-red-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-gray-800 font-medium">Implement Stronger Controls</p>
+            <p class="text-sm text-gray-500">Consider implementing stronger internal controls for high-risk transaction types.</p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <div class="flex-shrink-0 h-5 w-5 mt-1 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-gray-800 font-medium">Setup Approval Workflows</p>
+            <p class="text-sm text-gray-500">Set up approval workflows for transactions above certain thresholds.</p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <div class="flex-shrink-0 h-5 w-5 mt-1 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-gray-800 font-medium">Vendor Verification</p>
+            <p class="text-sm text-gray-500">Implement a vendor verification process for new or infrequent vendors.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center text-gray-500 text-sm mb-8">
+      <p>This report is for informational purposes only. Please consult with a financial professional before taking action.</p>
+      <div class="flex justify-center mt-4 space-x-4">
+        <%= link_to "New Analysis", session[:import_source] == 'csv' ? new_import_path : quickbooks_start_analysis_path, class: "text-red-900 hover:text-red-700 font-medium" %>
+      </div>
+    </div>
+  </div>
+</div>

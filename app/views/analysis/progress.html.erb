@@ -1,0 +1,166 @@
+<div class="min-h-screen bg-gray-50">
+  <% content_for(:title) { "Analysis in Progress - Redflag" } %>
+  
+  <!-- Header -->
+  <header class="bg-red-900 text-white shadow-md">
+    <div class="container mx-auto px-6 py-6 max-w-7xl flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold">Data Analysis</h1>
+        <p class="text-red-100">Analyzing your transaction data</p>
+      </div>
+      <div class="flex space-x-4">
+        <%= link_to "Cancel", root_path, class: "bg-white text-red-900 px-4 py-2 rounded font-medium hover:bg-gray-100" %>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-6 py-12 max-w-4xl">
+    <div class="bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6" id="status-title">Analysis in Progress</h2>
+      
+      <div class="mb-6">
+        <div class="relative pt-1">
+          <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+            <div id="progress-bar" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500 transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <div class="flex justify-between">
+            <span id="progress-text" class="text-sm font-medium text-gray-600">0%</span>
+            <span id="time-elapsed" class="text-sm font-medium text-gray-500">Time elapsed: 0s</span>
+          </div>
+        </div>
+      </div>
+      
+      <div id="status-message" class="text-center py-4 text-gray-700">
+        Initializing analysis...
+      </div>
+      
+      <div id="loading-animation" class="flex justify-center py-6">
+        <svg class="animate-spin h-10 w-10 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      
+      <div id="completed-animation" class="hidden flex justify-center py-6">
+        <svg class="h-16 w-16 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      
+      <div id="error-animation" class="hidden flex justify-center py-6">
+        <svg class="h-16 w-16 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      
+      <div id="complete-info" class="hidden text-center">
+        <p class="text-green-600 font-medium mb-4">Analysis completed successfully!</p>
+        <div id="redirect-counter" class="text-sm text-gray-500 mb-6">
+          You will be redirected in <span id="redirect-seconds">5</span> seconds...
+        </div>
+        <a id="view-report-button" href="#" class="inline-block bg-red-900 text-white px-6 py-2 rounded font-medium hover:bg-red-800">
+          View Report Now
+        </a>
+      </div>
+      
+      <div id="error-info" class="hidden text-center">
+        <p id="error-message" class="text-red-600 font-medium mb-6">An error occurred during analysis.</p>
+        <a href="<%= session[:import_source] == 'csv' ? new_import_path : quickbooks_start_analysis_path %>" class="inline-block bg-red-900 text-white px-6 py-2 rounded font-medium hover:bg-red-800">
+          Try Again
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    const startTime = new Date();
+    let redirectUrl = null;
+    let redirectCountdown = null;
+    let statusCheckInterval = null;
+    
+    function updateTimeElapsed() {
+      const elapsedSeconds = Math.floor((new Date() - startTime) / 1000);
+      const minutes = Math.floor(elapsedSeconds / 60);
+      const seconds = elapsedSeconds % 60;
+      
+      let timeText = '';
+      if (minutes > 0) {
+        timeText = `${minutes}m ${seconds}s`;
+      } else {
+        timeText = `${seconds}s`;
+      }
+      
+      document.getElementById('time-elapsed').textContent = `Time elapsed: ${timeText}`;
+    }
+    
+    function checkStatus() {
+      fetch('<%= session[:import_source] == 'csv' ? status_imports_path : quickbooks_analysis_status_path %>')
+        .then(response => response.json())
+        .then(data => {
+          // Update progress bar
+          const progressBar = document.getElementById('progress-bar');
+          const progressText = document.getElementById('progress-text');
+          const statusMessage = document.getElementById('status-message');
+          
+          progressBar.style.width = `${data.progress}%`;
+          progressText.textContent = `${data.progress}%`;
+          statusMessage.textContent = data.message;
+          
+          // Check if analysis is complete
+          if (data.progress === 100) {
+            if (data.success) {
+              // Analysis completed successfully
+              document.getElementById('loading-animation').classList.add('hidden');
+              document.getElementById('completed-animation').classList.remove('hidden');
+              document.getElementById('complete-info').classList.remove('hidden');
+              document.getElementById('status-title').textContent = 'Analysis Complete';
+              
+              // Set redirect URL
+              redirectUrl = data.redirect_url;
+              document.getElementById('view-report-button').href = redirectUrl;
+              
+              // Start redirect countdown
+              let secondsLeft = 5;
+              redirectCountdown = setInterval(function() {
+                secondsLeft--;
+                document.getElementById('redirect-seconds').textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                  clearInterval(redirectCountdown);
+                  window.location.href = redirectUrl;
+                }
+              }, 1000);
+              
+              // Clear status check interval
+              clearInterval(statusCheckInterval);
+            } else {
+              // Analysis failed
+              document.getElementById('loading-animation').classList.add('hidden');
+              document.getElementById('error-animation').classList.remove('hidden');
+              document.getElementById('error-info').classList.remove('hidden');
+              document.getElementById('status-title').textContent = 'Analysis Failed';
+              document.getElementById('error-message').textContent = data.message;
+              
+              // Clear status check interval
+              clearInterval(statusCheckInterval);
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error checking status:', error);
+        });
+    }
+    
+    // Update elapsed time every second
+    setInterval(updateTimeElapsed, 1000);
+    
+    // Check status every 2 seconds
+    statusCheckInterval = setInterval(checkStatus, 2000);
+    
+    // Initial status check
+    checkStatus();
+  });
+<% end %>

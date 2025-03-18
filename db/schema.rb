@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_18_102727) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_18_112205) do
   create_table "quickbooks_analyses", force: :cascade do |t|
-    t.integer "quickbooks_profile_id", null: false
+    t.integer "quickbooks_profile_id"
     t.date "start_date"
     t.date "end_date"
     t.json "detection_rules"
@@ -26,7 +26,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_18_102727) do
     t.datetime "status_updated_at"
     t.boolean "status_success"
     t.boolean "completed"
+    t.string "source", default: "quickbooks"
     t.index ["quickbooks_profile_id"], name: "index_quickbooks_analyses_on_quickbooks_profile_id"
+    t.index ["session_id"], name: "index_quickbooks_analyses_on_session_id"
+    t.index ["source"], name: "index_quickbooks_analyses_on_source"
   end
 
   create_table "quickbooks_profiles", force: :cascade do |t|

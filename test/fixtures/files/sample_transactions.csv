@@ -1,0 +1,11 @@
+ID,Date,Type,Vendor/Customer,Amount,Description
+100,2025-01-15,Purchase,Office Supplies Inc,250.00,Office supplies and stationery
+101,2025-01-18,Purchase,Computer World,1299.99,New laptop purchase
+102,2025-01-20,Purchase,Acme Inc,45.50,Software subscription
+103,2025-01-25,Purchase,Digital Services,500.00,Website maintenance
+104,2025-01-28,Purchase,Office Supplies Inc,250.00,More office supplies
+105,2025-02-01,Bill Payment,Electricity Co,-125.75,Monthly utility bill
+106,2025-02-05,Bill Payment,Internet Provider,-89.99,Internet service
+107,2025-02-10,Deposit,Client A,1500.00,Project payment
+108,2025-02-15,Purchase,Office Rent,2000.00,Monthly office rent
+109,2025-02-20,Expense,Travel Expenses,345.60,Business trip expenses

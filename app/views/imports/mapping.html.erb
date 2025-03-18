@@ -1,0 +1,135 @@
+<div class="min-h-screen bg-gray-50">
+  <% content_for(:title) { "Map CSV Columns - Redflag" } %>
+  
+  <!-- Header -->
+  <header class="bg-red-900 text-white shadow-md">
+    <div class="container mx-auto px-6 py-6 max-w-7xl flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold">CSV Column Mapping</h1>
+        <p class="text-red-100">Map your CSV columns to our system fields</p>
+      </div>
+      <div class="flex space-x-4">
+        <%= link_to "Back", new_import_path, class: "bg-white text-red-900 px-4 py-2 rounded font-medium hover:bg-gray-100" %>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-6 py-8 max-w-5xl">
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Map CSV Columns</h2>
+      
+      <% if flash[:alert] %>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700"><%= flash[:alert] %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
+        <div class="flex items-center mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+          <h3 class="font-medium text-gray-900">Detected Format: <%= @detected_format.to_s.titleize %></h3>
+        </div>
+        <p class="text-sm text-gray-700">
+          We've detected your CSV format and pre-filled the mappings below. You can adjust these mappings if needed.
+        </p>
+      </div>
+      
+      <%= form_with(url: preview_imports_path, method: :post, local: true, class: "space-y-6") do |form| %>
+        <%= form.hidden_field :temp_csv_path, value: @temp_file_path if @temp_file_path.present? %>
+        
+        <div class="space-y-4">
+          <div class="flex items-center space-x-4">
+            <div class="flex-1">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Format</label>
+              <%= form.select :format, 
+                options_for_select([
+                  ["Standard", "standard"], 
+                  ["QuickBooks", "quickbooks"], 
+                  ["Bank Export", "bank_export"],
+                  ["Custom", "custom"]
+                ], @detected_format),
+                {}, 
+                { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md" } %>
+            </div>
+          </div>
+          
+          <div id="custom-mapping" class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <h3 class="font-medium text-gray-900 mb-3">Custom Column Mapping</h3>
+            <p class="text-sm text-gray-500 mb-4">Match your CSV columns to our required fields</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <% CsvImportService::TRANSACTION_FIELDS.each do |field, field_name| %>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"><%= field.to_s.titleize %></label>
+                  <%= form.select "mapping[#{field}]", 
+                    options_for_select([["Not Mapped", ""]] + @headers.map { |h| [h, h] }, @mapping[field]),
+                    {}, 
+                    { class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md" } %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+          <h3 class="font-medium text-gray-900 mb-2">CSV Headers Preview</h3>
+          <div class="overflow-x-auto">
+            <div class="inline-block min-w-full">
+              <div class="overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <% @headers.each do |header| %>
+                        <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <%= header %>
+                        </th>
+                      <% end %>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-end space-x-4 mt-6">
+          <%= link_to "Back", new_import_path, class: "text-gray-700 px-4 py-2 rounded font-medium hover:text-gray-900" %>
+          <%= form.submit "Preview Data", class: "bg-red-900 text-white px-4 py-2 rounded font-medium hover:bg-red-800 cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    const formatSelect = document.querySelector('[name="format"]');
+    const customMapping = document.getElementById('custom-mapping');
+    
+    function toggleCustomMapping() {
+      if (formatSelect.value === 'custom') {
+        customMapping.classList.remove('hidden');
+      } else {
+        customMapping.classList.add('hidden');
+      }
+    }
+    
+    // Initialize
+    toggleCustomMapping();
+    
+    // Listen for changes
+    formatSelect.addEventListener('change', toggleCustomMapping);
+  });
+<% end %>

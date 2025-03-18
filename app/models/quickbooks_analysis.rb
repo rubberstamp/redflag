@@ -1,12 +1,12 @@
 class QuickbooksAnalysis < ApplicationRecord
-  belongs_to :quickbooks_profile
+  belongs_to :quickbooks_profile, optional: true
   
   # Validations
-  validates :quickbooks_profile, presence: true
+  validates :quickbooks_profile, presence: true, if: -> { source == "quickbooks" }
   validates :start_date, presence: true
   validates :end_date, presence: true
-  validates :detection_rules, presence: true
-  validates :results, presence: true
+  validates :detection_rules, presence: true, on: :update
+  validates :results, presence: true, on: :update
   
   # Store transactions data
   attribute :transactions_data, :json
@@ -14,6 +14,9 @@ class QuickbooksAnalysis < ApplicationRecord
   # Scopes
   scope :recent, -> { order(created_at: :desc) }
   scope :for_profile, ->(profile_id) { where(quickbooks_profile_id: profile_id) }
+  scope :csv_imports, -> { where(source: "csv") }
+  scope :quickbooks_imports, -> { where(source: "quickbooks") }
+  scope :completed, -> { where(completed: true) }
   
   # Convenience methods
   def flagged_transactions
