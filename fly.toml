@@ -42,7 +42,6 @@ console_command = "/rails/bin/rails console"
   PORT = "3000"
   DATABASE_URL = "sqlite3:///rails/storage/production.sqlite3"
   SOLID_QUEUE_IN_PUMA = "true"
-  # Redis URL will be set via secrets with: flyctl secrets set REDIS_URL=redis://redflag-redis.internal:6379
+  JOB_CONCURRENCY = "2"
 
-# Redis is deployed separately as redflag-redis app
-# No need to define Redis service here as it's handled by redis-fly.toml
+# Using SolidQueue for background jobs (no Redis needed)

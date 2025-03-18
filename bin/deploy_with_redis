@@ -7,7 +7,7 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}Deploying RedFlag with Redis support...${NC}"
+echo -e "${BLUE}Deploying RedFlag to Fly.io...${NC}"
 
 # Check for Fly CLI
 if ! command -v flyctl &> /dev/null; then
@@ -16,34 +16,9 @@ if ! command -v flyctl &> /dev/null; then
   exit 1
 fi
 
-# Check if Redis is already deployed
-if flyctl status --app redflag-redis &> /dev/null; then
-  echo -e "${GREEN}Redis app already exists. Skipping Redis deployment.${NC}"
-else
-  echo -e "${BLUE}Deploying Redis to Fly.io...${NC}"
-  
-  # Create and deploy Redis
-  flyctl launch --name redflag-redis --config redis-fly.toml --no-deploy
-  
-  # Create a volume for Redis persistence
-  flyctl volumes create redis_data --app redflag-redis --size 1
-  
-  # Deploy Redis
-  flyctl deploy --app redflag-redis --config redis-fly.toml
-  
-  echo -e "${GREEN}Redis successfully deployed!${NC}"
-fi
-
-# Get Redis URL and set it in the main application
-echo -e "${BLUE}Setting up Redis connection for the main app...${NC}"
-REDIS_URL="redis://redflag-redis.internal:6379"
-
-flyctl secrets set --app redflag-detector "REDIS_URL=${REDIS_URL}"
-echo -e "${GREEN}Redis URL set as secret for the main app${NC}"
-
-# Deploy the main application
-echo -e "${BLUE}Deploying main application...${NC}"
-flyctl deploy --app redflag-detector
+# Deploy the application
+echo -e "${BLUE}Deploying application...${NC}"
+flyctl deploy --app redflag
 
 echo -e "${GREEN}Deployment completed successfully!${NC}"
-echo -e "Your application is now running with Redis support at: ${BLUE}https://redflag-detector.fly.dev${NC}"
+echo -e "Your application is now running at: ${BLUE}https://redflag.fly.dev${NC}"

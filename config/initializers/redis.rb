@@ -3,13 +3,27 @@ require 'redis'
 # Configure Redis connection
 redis_url = ENV["REDIS_URL"] || "redis://localhost:6379/1"
 
+# Debug logs
+Rails.logger.debug "Redis URL from ENV: #{ENV['REDIS_URL'].inspect}"
+Rails.logger.debug "Using Redis URL: #{redis_url.gsub(/:[^:]*@/, ':****@')}"
+
 begin
+  # More detailed connection options
+  uri = URI.parse(redis_url)
+  redis_connection_info = {
+    host: uri.host,
+    port: uri.port,
+    db: uri.path.gsub('/', '').presence || 0,
+    password: uri.password
+  }
+  Rails.logger.debug "Redis connection details: host=#{uri.host}, port=#{uri.port}, db=#{uri.path.gsub('/', '').presence || 0}"
+  
   $redis = Redis.new(url: redis_url)
   
   # Test connection
-  $redis.ping
+  ping_result = $redis.ping
   
-  Rails.logger.info "Connected to Redis at #{redis_url.gsub(/:[^:]*@/, ':****@')}"
+  Rails.logger.info "Connected to Redis at #{redis_url.gsub(/:[^:]*@/, ':****@')}, PING response: #{ping_result}"
 rescue Redis::CannotConnectError => e
   Rails.logger.error "Failed to connect to Redis at #{redis_url.gsub(/:[^:]*@/, ':****@')}: #{e.message}"
   

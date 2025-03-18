@@ -17,7 +17,7 @@ Rails.application.config.to_prepare do
   
   # Set OAuth redirect URIs
   if Rails.env.production?
-    OAUTH_REDIRECT_URI = "https://redflag-detector.fly.dev/quickbooks/oauth_callback"
+    OAUTH_REDIRECT_URI = "https://redflag.fly.dev/quickbooks/oauth_callback"
   else
     OAUTH_REDIRECT_URI = "http://localhost:3000/quickbooks/oauth_callback"
   end

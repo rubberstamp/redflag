@@ -67,13 +67,9 @@ class QuickbooksAnalysisJob < ApplicationJob
       )
       
       if analysis.save
-        # Store the analysis ID in Redis for the session to access
-        begin
-          $redis.set("quickbooks_analysis:#{session_id}", analysis.id.to_s, ex: 1.hour.to_i)
-          Rails.logger.info "Stored analysis ID #{analysis.id} in Redis for session #{session_id}"
-        rescue => e
-          Rails.logger.error "Failed to store analysis ID in Redis: #{e.message}"
-        end
+        # Update the session_id field on the analysis record instead of using Redis
+        analysis.update(session_id: session_id)
+        Rails.logger.info "Updated analysis record #{analysis.id} with session #{session_id}"
         
         # Update job status to completed
         update_status(session_id, 100, "Completed", true, analysis.id)
@@ -111,14 +107,27 @@ class QuickbooksAnalysisJob < ApplicationJob
     # Add analysis_id if provided
     status[:analysis_id] = analysis_id if analysis_id
 
-    begin
-      # Use the global Redis instance
-      $redis.set("quickbooks_analysis_status:#{session_id}", status.to_json, ex: 1.hour.to_i)
-      Rails.logger.debug "Updated analysis status in Redis: progress=#{progress}, message=#{message}"
-    rescue => e
-      Rails.logger.error "Failed to update status in Redis: #{e.message}"
-      # Continue processing even if Redis update fails
-    end
+    # Store the status in the database instead of Redis
+    analysis = find_or_create_analysis_for_session(session_id)
+    analysis.update(
+      status_progress: progress,
+      status_message: message,
+      status_updated_at: Time.current,
+      status_success: success,
+      completed: progress == 100
+    )
+    
+    Rails.logger.debug "Updated analysis status in database: progress=#{progress}, message=#{message}"
+  end
+  
+  def find_or_create_analysis_for_session(session_id)
+    # Find an existing analysis record for this session or create a temporary one
+    QuickbooksAnalysis.find_by(session_id: session_id) || 
+      QuickbooksAnalysis.create(
+        session_id: session_id,
+        start_date: Date.current,
+        end_date: Date.current
+      )
   end
 
   def analyze_transactions(transactions, detection_rules = {}, profile = nil)
