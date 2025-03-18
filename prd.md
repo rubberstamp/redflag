@@ -1,28 +1,31 @@
 # Product Requirements Document: QuickBooks Red Flag Detector
 
 ## Overview
-A lightweight Rails application that enables users to quickly authenticate with QuickBooks, scan their financial data for anomalies using AI analysis, generate a comprehensive report, and securely log out. The focus is on a quick, secure session that identifies potential waste, fraud, and abuse in financial transactions.
+A lightweight Rails application that enables users to quickly import financial data (either through QuickBooks authentication or CSV upload), scan it for anomalies using AI analysis, generate a comprehensive report, and securely log out. The focus is on a quick, secure session that identifies potential waste, fraud, and abuse in financial transactions, with flexible data input options.
 
 ## Problem Statement
 Business owners and financial teams need an efficient way to audit QuickBooks data for suspicious transactions without extensive manual review. Current solutions are either too complex, expensive, or require significant technical expertise.
 
 ## User Flow
-1. User visits site and authenticates with QuickBooks via OAuth
-2. System pulls relevant financial data
+1. User visits site and either:
+   - Authenticates with QuickBooks via OAuth
+   - Uploads a CSV file with transaction data
+2. System imports relevant financial data
 3. AI-powered analysis engine identifies potential red flags
 4. Report is generated and displayed with risk scores
-5. User reviews findings and can export report
+5. User reviews findings
 6. User logs out, with no data retained locally
 
 ## Technical Requirements
 1. Built on Ruby on Rails
 2. QuickBooks API integration using official gems
-3. Integration with AI/ML APIs for transaction analysis
-4. Stateless design - no data stored between sessions
-5. Responsive design for all devices
-6. Exportable reports (PDF, CSV)
+3. CSV import functionality for transaction data
+4. Integration with AI/ML APIs for transaction analysis
+5. Stateless design - no data stored between sessions
+6. Responsive design for all devices
 7. Secure handling of financial data with proper encryption
 8. Inline Tailwind CSS for all styling
+9. CSV mapping interface for custom file formats
 
 ## AI Analysis Capabilities
 1. Pattern recognition to identify anomalies in transaction history
@@ -52,14 +55,19 @@ Business owners and financial teams need an efficient way to audit QuickBooks da
 4. User satisfaction with report accuracy
 5. AI detection accuracy rate
 6. False positive reduction rate
+7. CSV import success rate
+8. User satisfaction with CSV import experience
 
 ## Future Enhancements
 - Custom rule configuration
 - Scheduled automated scans
-- Integration with other accounting platforms
+- Integration with other accounting platforms (Xero, FreshBooks, etc.)
 - Advanced AI model training with user feedback
 - Multi-user access with role-based permissions
 - Predictive analytics for future spending anomalies
 - Industry-specific analysis models
 - Automated remediation recommendations
 - Integration with governance and compliance frameworks
+- Batch CSV import for multiple files
+- Template library for common CSV formats
+- Direct import from banking platforms
