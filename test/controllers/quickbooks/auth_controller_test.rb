@@ -3,8 +3,9 @@ require "test_helper"
 class Quickbooks::AuthControllerTest < ActionDispatch::IntegrationTest
   # Test that the connect action clears existing sessions
   test "connect action clears existing sessions" do
-    # Set up a fake session
-    post session_url, params: { quickbooks: { realm_id: "test_realm" } }
+    # Simulate a session by using session variables
+    get root_path
+    post root_path, params: { _method: 'patch', session: { quickbooks: { realm_id: "test_realm" } } }
     
     # Call connect which should clear the session
     get quickbooks_connect_path

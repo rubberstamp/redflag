@@ -4,12 +4,26 @@ one:
   quickbooks_profile: one
   start_date: 2025-03-17
   end_date: 2025-03-17
-  detection_rules: 
-  results: 
+  detection_rules: {}
+  results: {}
+  session_id: session_1
+  status_progress: 100
+  status_message: Completed
+  status_updated_at: 2025-03-17 17:33:32
+  status_success: true
+  completed: true
+  transactions_data: {}
 
 two:
   quickbooks_profile: two
   start_date: 2025-03-17
   end_date: 2025-03-17
-  detection_rules: 
-  results: 
+  detection_rules: {}
+  results: {}
+  session_id: session_2
+  status_progress: 100
+  status_message: Completed
+  status_updated_at: 2025-03-17 17:33:32
+  status_success: true
+  completed: true
+  transactions_data: {}
