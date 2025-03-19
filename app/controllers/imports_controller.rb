@@ -1,4 +1,5 @@
 class ImportsController < ApplicationController
+  require 'csv'
   def new
     # Show the import form
   end
@@ -158,8 +159,8 @@ class ImportsController < ApplicationController
       return
     end
     
-    # Get status from database
-    analysis = QuickbooksAnalysis.find_by(session_id: session_id)
+    # Get status from database - use the most recent record with this session_id
+    analysis = QuickbooksAnalysis.where(session_id: session_id).order(created_at: :desc).first
     
     if analysis.nil?
       render json: { progress: 0, message: "Starting analysis..." }, status: :ok

@@ -113,14 +113,19 @@ class CsvAnalysisJob < ApplicationJob
   end
   
   def find_or_create_analysis_for_session(session_id)
-    # Find an existing analysis record for this session or create a temporary one
-    QuickbooksAnalysis.find_by(session_id: session_id) || 
-      QuickbooksAnalysis.create(
-        session_id: session_id,
-        start_date: Date.current,
-        end_date: Date.current,
-        source: "csv"
-      )
+    # Find the most recent analysis record for this session
+    analysis = QuickbooksAnalysis.where(session_id: session_id).order(created_at: :desc).first
+    
+    # Return the existing record if found
+    return analysis if analysis
+    
+    # Create a new record if none exists
+    QuickbooksAnalysis.create(
+      session_id: session_id,
+      start_date: @start_date || Date.current,
+      end_date: @end_date || Date.current,
+      source: "csv"
+    )
   end
 
   def analyze_transactions(transactions, detection_rules = {})
