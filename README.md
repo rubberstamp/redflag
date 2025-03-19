@@ -1,24 +1,25 @@
-# README
+# RedFlag
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+RedFlag is a QuickBooks transaction analysis and fraud detection tool. It helps businesses identify suspicious transactions and protect against financial fraud.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- QuickBooks integration for accessing financial data
+- CSV import for analyzing transactions from any source
+- Advanced transaction analysis with multiple detection rules
+- Interactive dashboards for reviewing flagged transactions
+- Secure, stateless design with proper encryption
 
-* System dependencies
+## Deployment
 
-* Configuration
+This application is automatically deployed to Fly.io when changes are pushed to the main branch.
 
-* Database creation
+## Development
 
-* Database initialization
+To run the application locally:
 
-* How to run the test suite
+```bash
+bin/dev
+```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+This will start the web server, CSS watcher, and background job worker.
