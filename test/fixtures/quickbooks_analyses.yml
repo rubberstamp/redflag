@@ -1,7 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  quickbooks_profile: one
+test_analysis:
+  id: 1
+  quickbooks_profile_id: 1
   start_date: 2025-03-17
   end_date: 2025-03-17
   detection_rules: {}
@@ -14,13 +15,29 @@ one:
   completed: true
   transactions_data: {}
 
-two:
-  quickbooks_profile: two
+expired_analysis:
+  id: 2
+  quickbooks_profile_id: 2
   start_date: 2025-03-17
   end_date: 2025-03-17
   detection_rules: {}
   results: {}
   session_id: session_2
+  status_progress: 100
+  status_message: Completed
+  status_updated_at: 2025-03-17 17:33:32
+  status_success: true
+  completed: true
+  transactions_data: {}
+
+disconnected_analysis:
+  id: 3
+  quickbooks_profile_id: 3
+  start_date: 2025-03-17
+  end_date: 2025-03-17
+  detection_rules: {}
+  results: {}
+  session_id: session_3
   status_progress: 100
   status_message: Completed
   status_updated_at: 2025-03-17 17:33:32

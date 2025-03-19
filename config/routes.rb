@@ -43,6 +43,14 @@ Rails.application.routes.draw do
     
     # API Test
     get "test_connection", to: "data#test_connection"
+    
+    # Profile routes
+    get "profile", to: "profiles#show", as: :profile
+  end
+  
+  # Test routes for integration tests
+  if Rails.env.test?
+    post "test/session", to: "test_support#setup_session"
   end
 
   # Defines the root path route ("/")

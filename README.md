@@ -9,13 +9,15 @@ RedFlag analyzes financial transactions to detect potential fraud, waste, and ab
 - **Comprehensive Analysis**: Detects unusual spending patterns, duplicate transactions, round numbers, and more
 - **Risk Scoring**: Each potential issue is assigned a risk score to help prioritize investigation efforts
 - **Detailed Report**: View a comprehensive report of flagged transactions and recommendations
+- **Interactive Dashboards**: Review flagged transactions through an interactive interface
+- **Secure Design**: Stateless design with proper encryption for sensitive data
 
 ## Getting Started
 
 ### Prerequisites
 
-- Ruby 3.2.2
-- Rails 8.0.0
+- Ruby 3.2.0
+- Rails 8.0.2
 - SQLite3
 - Node.js and Yarn
 
@@ -23,7 +25,7 @@ RedFlag analyzes financial transactions to detect potential fraud, waste, and ab
 
 1. Clone the repository
    ```
-   git clone https://github.com/yourusername/redflag.git
+   git clone https://github.com/rubberstamp/redflag.git
    cd redflag
    ```
 
@@ -35,12 +37,12 @@ RedFlag analyzes financial transactions to detect potential fraud, waste, and ab
 
 3. Set up the database
    ```
-   bin/rails db:create db:migrate
+   bin/rails db:create db:migrate db:migrate:queue
    ```
 
 4. Start the server
    ```
-   bin/rails server
+   bin/dev_fixed
    ```
 
 ### Configuration
@@ -75,10 +77,24 @@ The system looks for the following fields in your CSV:
 
 ## Development
 
+### Running the Application
+
+```bash
+bin/dev_fixed
+```
+
+This will start the web server and CSS watcher. For full functionality including background jobs, see the DEV_NOTES.md file.
+
 ### Running Tests
 
-```
+```bash
 bin/rails test
+```
+
+For system tests:
+
+```bash
+bin/rails test:system
 ```
 
 ### Database Schema
@@ -89,10 +105,10 @@ The application uses two main models:
 
 ## Deployment
 
-The application is configured for deployment on Fly.io.
+The application is configured for deployment on Fly.io. It is automatically deployed when changes are pushed to the main branch.
 
-```
-bin/fly deploy
+```bash
+bin/deploy_with_redis
 ```
 
 ## License

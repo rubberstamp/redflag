@@ -1,3 +1,3 @@
 web: bin/rails server
 css: bin/rails tailwindcss:watch
-jobs: bin/jobs work
+# jobs: bin/jobs start  # Job processing disabled until SolidQueue is properly configured
