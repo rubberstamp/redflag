@@ -20,6 +20,9 @@ class ImportsController < ApplicationController
       # Store the file persistently
       file_extension = File.extname(params[:file].original_filename)
       filename = "csv_upload_#{SecureRandom.uuid}#{file_extension}"
+      tmp_uploads_dir = Rails.root.join('tmp', 'csv_uploads')
+      FileUtils.mkdir(tmp_uploads_dir) unless File.directory?(tmp_uploads_dir)
+
       persistent_path = Rails.root.join('tmp', 'csv_uploads', filename)
       FileUtils.cp(params[:file].tempfile.path, persistent_path)
       file_path = persistent_path.to_s
