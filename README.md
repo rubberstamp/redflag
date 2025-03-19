@@ -23,3 +23,17 @@ bin/dev
 ```
 
 This will start the web server, CSS watcher, and background job worker.
+
+## Testing
+
+Run the test suite with:
+
+```bash
+bin/rails test
+```
+
+For system tests:
+
+```bash
+bin/rails test:system
+```
