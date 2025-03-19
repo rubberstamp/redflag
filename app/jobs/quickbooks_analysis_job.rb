@@ -57,24 +57,39 @@ class QuickbooksAnalysisJob < ApplicationJob
       # Update job status
       update_status(session_id, 80, "Saving results...")
       
-      # Create a new analysis record
-      analysis = profile.analyses.new(
-        start_date: start_date,
-        end_date: end_date,
-        detection_rules: detection_rules.as_json,
-        results: analysis_results.as_json,
-        transactions_data: transactions.as_json
-      )
+      # Find the existing analysis record or create a new one
+      analysis = QuickbooksAnalysis.where(session_id: session_id).order(created_at: :desc).first
       
-      if analysis.save
-        # Update the session_id field on the analysis record instead of using Redis
-        analysis.update(session_id: session_id)
-        Rails.logger.info "Updated analysis record #{analysis.id} with session #{session_id}"
+      if analysis
+        # Update the existing record
+        analysis.update(
+          start_date: start_date,
+          end_date: end_date,
+          detection_rules: detection_rules.as_json,
+          results: analysis_results.as_json,
+          transactions_data: transactions.as_json
+        )
+        Rails.logger.info "Updated existing analysis record #{analysis.id} with results"
         
         # Update job status to completed
         update_status(session_id, 100, "Completed", true, analysis.id)
       else
-        update_status(session_id, 100, "Failed to save analysis: #{analysis.errors.full_messages.join(', ')}", false)
+        # Create a new analysis record if one doesn't exist
+        analysis = profile.analyses.new(
+          session_id: session_id,
+          start_date: start_date,
+          end_date: end_date,
+          detection_rules: detection_rules.as_json,
+          results: analysis_results.as_json,
+          transactions_data: transactions.as_json
+        )
+        
+        if analysis.save
+          Rails.logger.info "Created new analysis record #{analysis.id} with session #{session_id} and results"
+          update_status(session_id, 100, "Completed", true, analysis.id)
+        else
+          update_status(session_id, 100, "Failed to save analysis: #{analysis.errors.full_messages.join(', ')}", false)
+        end
       end
     rescue OAuth2::Error => e
       update_status(session_id, 100, "OAuth error: Your QuickBooks session has expired. Please reconnect.", false)
@@ -107,27 +122,48 @@ class QuickbooksAnalysisJob < ApplicationJob
     # Add analysis_id if provided
     status[:analysis_id] = analysis_id if analysis_id
 
-    # Store the status in the database instead of Redis
-    analysis = find_or_create_analysis_for_session(session_id)
-    analysis.update(
-      status_progress: progress,
-      status_message: message,
-      status_updated_at: Time.current,
-      status_success: success,
-      completed: progress == 100
-    )
+    # If we have a specific analysis ID, update that record
+    if analysis_id
+      analysis = QuickbooksAnalysis.find_by(id: analysis_id)
+      if analysis
+        analysis.update(
+          status_progress: progress,
+          status_message: message,
+          status_updated_at: Time.current,
+          status_success: success,
+          completed: progress == 100
+        )
+        Rails.logger.debug "Updated analysis #{analysis_id} status: progress=#{progress}, message=#{message}"
+        return
+      end
+    end
+
+    # Otherwise find the most recent analysis record for this session
+    analysis = QuickbooksAnalysis.where(session_id: session_id).order(created_at: :desc).first
     
-    Rails.logger.debug "Updated analysis status in database: progress=#{progress}, message=#{message}"
-  end
-  
-  def find_or_create_analysis_for_session(session_id)
-    # Find an existing analysis record for this session or create a temporary one
-    QuickbooksAnalysis.find_by(session_id: session_id) || 
+    if analysis
+      analysis.update(
+        status_progress: progress,
+        status_message: message,
+        status_updated_at: Time.current,
+        status_success: success,
+        completed: progress == 100
+      )
+      Rails.logger.debug "Updated latest analysis for session #{session_id} status: progress=#{progress}, message=#{message}"
+    else
+      # Create a new record if none exists (this shouldn't happen in normal flow)
       QuickbooksAnalysis.create(
         session_id: session_id,
         start_date: Date.current,
-        end_date: Date.current
+        end_date: Date.current,
+        status_progress: progress,
+        status_message: message,
+        status_updated_at: Time.current,
+        status_success: success,
+        completed: progress == 100
       )
+      Rails.logger.debug "Created new analysis record for session #{session_id} with status: progress=#{progress}, message=#{message}"
+    end
   end
 
   def analyze_transactions(transactions, detection_rules = {}, profile = nil)

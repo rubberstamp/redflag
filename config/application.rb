@@ -24,10 +24,12 @@ module Redflag
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     
-    # Set up Active Job to use async adapter for background jobs in development
-    config.active_job.queue_adapter = :async
+    # Set up Active Job to use SolidQueue adapter for background jobs
+    config.active_job.queue_adapter = :solid_queue
     
-    # Simple database configuration for development
-    # Multiple database support is configured in production environment only
+    # Configure SolidQueue to use the queue database
+    config.solid_queue.connects_to = {database: {writing: :queue}}
+    
+    # Multiple database support is configured for both development and production
   end
 end
