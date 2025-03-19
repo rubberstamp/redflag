@@ -79,8 +79,13 @@ class CsvAnalysisJob < ApplicationJob
       
       update_status(session_id, 100, "Error: #{error_message}", false)
     ensure
-      # Clean up temporary file if it exists
-      File.delete(file_path) if File.exist?(file_path) && !Rails.env.development?
+      # Only clean up temporary files that are not in our persistent storage
+      if File.exist?(file_path) && !file_path.include?('tmp/csv_uploads') && !Rails.env.development?
+        File.delete(file_path)
+      end
+      
+      # Schedule cleanup of old CSV files
+      cleanup_old_csv_files
     end
   end
 
@@ -142,5 +147,27 @@ class CsvAnalysisJob < ApplicationJob
     
     # Add the account name to the results
     results.merge('account_name' => "CSV Import")
+  end
+  
+  def cleanup_old_csv_files
+    csv_dir = Rails.root.join('tmp', 'csv_uploads')
+    return unless Dir.exist?(csv_dir)
+    
+    # Keep only files created within the last hour
+    threshold = 1.hour.ago
+    
+    Dir.glob(File.join(csv_dir, '*')).each do |file|
+      next if File.directory?(file)
+      
+      file_age = File.mtime(file)
+      if file_age < threshold
+        begin
+          File.delete(file)
+          Rails.logger.info "Deleted old CSV file: #{file}"
+        rescue => e
+          Rails.logger.error "Failed to delete old CSV file #{file}: #{e.message}"
+        end
+      end
+    end
   end
 end

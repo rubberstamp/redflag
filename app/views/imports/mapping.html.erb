@@ -46,8 +46,17 @@
         </p>
       </div>
       
-      <%= form_with(url: preview_imports_path, method: :post, local: true, class: "space-y-6") do |form| %>
-        <%= form.hidden_field :temp_csv_path, value: @temp_file_path if @temp_file_path.present? %>
+      <%= form_with(url: preview_imports_path, method: :post, local: true, data: { turbo: false }, class: "space-y-6") do |form| %>
+        <% if @temp_file_path.present? %>
+          <%= form.hidden_field :temp_csv_path, value: @temp_file_path %>
+          <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+            <div class="flex">
+              <div class="ml-3">
+                <p class="text-sm text-green-700">CSV file uploaded and ready for mapping</p>
+              </div>
+            </div>
+          </div>
+        <% end %>
         
         <div class="space-y-4">
           <div class="flex items-center space-x-4">
@@ -66,8 +75,11 @@
           </div>
           
           <div id="custom-mapping" class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-            <h3 class="font-medium text-gray-900 mb-3">Custom Column Mapping</h3>
-            <p class="text-sm text-gray-500 mb-4">Match your CSV columns to our required fields</p>
+            <h3 class="font-medium text-gray-900 mb-3">Column Mapping</h3>
+            <p class="text-sm text-gray-500 mb-4" id="mapping-description">
+              Match your CSV columns to our required fields. 
+              <span id="predefined-format-note" class="text-red-600 hidden">Using predefined format. You can adjust these mappings if needed.</span>
+            </p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <% CsvImportService::TRANSACTION_FIELDS.each do |field, field_name| %>
@@ -117,12 +129,16 @@
   document.addEventListener('DOMContentLoaded', function() {
     const formatSelect = document.querySelector('[name="format"]');
     const customMapping = document.getElementById('custom-mapping');
+    const predefinedFormatNote = document.getElementById('predefined-format-note');
     
     function toggleCustomMapping() {
       if (formatSelect.value === 'custom') {
         customMapping.classList.remove('hidden');
+        predefinedFormatNote.classList.add('hidden');
       } else {
-        customMapping.classList.add('hidden');
+        // Always show the mapping for any format, but display a note for predefined formats
+        customMapping.classList.remove('hidden');
+        predefinedFormatNote.classList.remove('hidden');
       }
     }
     

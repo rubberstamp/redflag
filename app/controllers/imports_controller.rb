@@ -5,17 +5,38 @@ class ImportsController < ApplicationController
   end
   
   def create
-    # Validate that a file was uploaded
-    unless params[:file].present?
+    # Check if we have a file from params or a stored temp path
+    file_path = nil
+    
+    if params[:file].present?
+      # Check file type if directly uploaded
+      unless params[:file].content_type == "text/csv" || 
+             params[:file].original_filename.ends_with?(".csv")
+        flash[:alert] = "File must be a CSV"
+        render :new
+        return
+      end
+      
+      # Store the file persistently
+      file_extension = File.extname(params[:file].original_filename)
+      filename = "csv_upload_#{SecureRandom.uuid}#{file_extension}"
+      persistent_path = Rails.root.join('tmp', 'csv_uploads', filename)
+      FileUtils.cp(params[:file].tempfile.path, persistent_path)
+      file_path = persistent_path.to_s
+      
+    elsif params[:temp_csv_path].present?
+      file_path = params[:temp_csv_path]
+    elsif session[:temp_csv_path].present?
+      file_path = session[:temp_csv_path]
+    else
       flash[:alert] = "Please select a CSV file to upload"
       render :new
       return
     end
     
-    # Check file type
-    unless params[:file].content_type == "text/csv" || 
-           params[:file].original_filename.ends_with?(".csv")
-      flash[:alert] = "File must be a CSV"
+    # Verify the file exists
+    unless File.exist?(file_path)
+      flash[:alert] = "CSV file not found. Please upload it again."
       render :new
       return
     end
@@ -57,9 +78,11 @@ class ImportsController < ApplicationController
       source: "csv"
     )
     
+    Rails.logger.info "Starting CSV analysis job with file: #{file_path}"
+    
     # Enqueue the job to process the CSV in the background
     CsvAnalysisJob.perform_later(
-      params[:file].tempfile.path,
+      file_path,
       start_date,
       end_date,
       @detection_rules,
@@ -68,26 +91,40 @@ class ImportsController < ApplicationController
     )
     
     # Redirect to progress page
-    redirect_to analysis_progress_path
+    redirect_to progress_imports_path
   end
   
   def mapping
     # If file is uploaded, detect headers and suggest mapping
     if params[:file].present?
       begin
-        # Check if we have a real file or a test fixture
-        path = params[:file].respond_to?(:tempfile) ? params[:file].tempfile.path : params[:file].path
+        # Log that we received the file
+        Rails.logger.info "Received file upload for mapping: #{params[:file].original_filename}"
         
-        csv = CSV.read(path, headers: true)
+        # Generate a unique filename for the uploaded file
+        file_extension = File.extname(params[:file].original_filename)
+        filename = "csv_upload_#{SecureRandom.uuid}#{file_extension}"
+        
+        # Create a persistent path in the tmp directory
+        persistent_path = Rails.root.join('tmp', 'csv_uploads', filename)
+        
+        # Check if we have a real file or a test fixture and copy it to the persistent location
+        source_path = params[:file].respond_to?(:tempfile) ? params[:file].tempfile.path : params[:file].path
+        FileUtils.cp(source_path, persistent_path)
+        
+        Rails.logger.info "Copied CSV file to persistent location: #{persistent_path}"
+        
+        csv = CSV.read(persistent_path, headers: true)
         @headers = csv.headers
         
         # Detect format based on headers
         service = CsvImportService.new
         @detected_format = service.detect_format(@headers)
         @mapping = CsvImportService::FORMATS[@detected_format]
+        Rails.logger.info "Detected CSV format: #{@detected_format}"
         
-        # Store the uploaded file temporarily
-        @temp_file_path = path
+        # Store the uploaded file path in the session
+        @temp_file_path = persistent_path.to_s
         session[:temp_csv_path] = @temp_file_path
         
         render :mapping
@@ -103,10 +140,28 @@ class ImportsController < ApplicationController
   end
   
   def preview
-    if params[:file].present? || session[:temp_csv_path].present?
-      file_path = params[:file]&.tempfile&.path || session[:temp_csv_path]
+    if params[:file].present? || params[:temp_csv_path].present? || session[:temp_csv_path].present?
+      # Use the persistent path stored in the session or param
+      file_path = if params[:file].present?
+                    # If a new file was uploaded, store it persistently
+                    file_extension = File.extname(params[:file].original_filename)
+                    filename = "csv_upload_#{SecureRandom.uuid}#{file_extension}"
+                    persistent_path = Rails.root.join('tmp', 'csv_uploads', filename)
+                    FileUtils.cp(params[:file].tempfile.path, persistent_path)
+                    session[:temp_csv_path] = persistent_path.to_s
+                    persistent_path.to_s
+                  elsif params[:temp_csv_path].present?
+                    params[:temp_csv_path]
+                  else
+                    session[:temp_csv_path]
+                  end
+      
+      Rails.logger.info "Preview action called with file_path: #{file_path}"
+      Rails.logger.info "Format from params: #{params[:format]}"
+      Rails.logger.info "Mapping from params: #{params[:mapping]}"
       
       if file_path.present? && File.exist?(file_path)
+        Rails.logger.info "File exists and will be processed"
         # Create mapping from params or use default
         mapping = {}
         if params[:mapping].present?
@@ -178,7 +233,7 @@ class ImportsController < ApplicationController
     # If analysis is complete, set the redirect URL
     if analysis.status_progress == 100 && analysis.status_success == true
       session[:current_analysis_id] = analysis.id.to_s
-      status['redirect_url'] = analysis_report_path
+      status['redirect_url'] = report_imports_path
       Rails.logger.info "Analysis complete. Setting redirect to report path."
     end
     

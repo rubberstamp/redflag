@@ -81,9 +81,23 @@
         </table>
       </div>
       
-      <%= form_with(url: imports_path, method: :post, local: true, class: "mt-8 space-y-6") do |form| %>
-        <%= form.hidden_field :file, value: params[:file] if params[:file].present? %>
-        <%= form.hidden_field :temp_csv_path, value: params[:temp_csv_path] || session[:temp_csv_path] %>
+      <%= form_with(url: imports_path, method: :post, local: true, data: { turbo: false }, class: "mt-8 space-y-6") do |form| %>
+        <% if params[:file].present? %>
+          <%= form.hidden_field :file, value: params[:file] %>
+        <% end %>
+        
+        <% temp_path = params[:temp_csv_path] || session[:temp_csv_path] %>
+        <% if temp_path.present? %>
+          <%= form.hidden_field :temp_csv_path, value: temp_path %>
+          <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+            <div class="flex">
+              <div class="ml-3">
+                <p class="text-sm text-green-700">CSV file ready for analysis</p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        
         <%= form.hidden_field :mapping_format, value: params[:format] || session[:csv_format] %>
         
         <% if params[:mapping].present? %>
