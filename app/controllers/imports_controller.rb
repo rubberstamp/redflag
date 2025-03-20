@@ -1,44 +1,39 @@
 class ImportsController < ApplicationController
   require 'csv'
+  
   def new
     # Show the import form
   end
   
   def create
-    # Check if we have a file from params or a stored temp path
-    file_path = nil
+    # Check if we have a file from params or a stored upload ID
+    csv_upload = nil
     
     if params[:file].present?
-      # Check file type if directly uploaded
-      unless params[:file].content_type == "text/csv" || 
-             params[:file].original_filename.ends_with?(".csv")
-        flash[:alert] = "File must be a CSV"
+      # Create a new CSV upload record with the attached file
+      csv_upload = CsvUpload.new(session_id: session.id)
+      csv_upload.file.attach(params[:file])
+      
+      unless csv_upload.save
+        flash[:alert] = "Error uploading CSV: #{csv_upload.errors.full_messages.join(', ')}"
         render :new
         return
       end
       
-      # Store the file persistently
-      file_extension = File.extname(params[:file].original_filename)
-      filename = "csv_upload_#{SecureRandom.uuid}#{file_extension}"
-      tmp_uploads_dir = Rails.root.join('tmp', 'csv_uploads')
-      FileUtils.mkdir(tmp_uploads_dir) unless File.directory?(tmp_uploads_dir)
-
-      persistent_path = Rails.root.join('tmp', 'csv_uploads', filename)
-      FileUtils.cp(params[:file].tempfile.path, persistent_path)
-      file_path = persistent_path.to_s
-      
-    elsif params[:temp_csv_path].present?
-      file_path = params[:temp_csv_path]
-    elsif session[:temp_csv_path].present?
-      file_path = session[:temp_csv_path]
+      # Store the upload ID in session for later reference
+      session[:csv_upload_id] = csv_upload.id
+    elsif params[:csv_upload_id].present?
+      csv_upload = CsvUpload.find_by(id: params[:csv_upload_id])
+    elsif session[:csv_upload_id].present?
+      csv_upload = CsvUpload.find_by(id: session[:csv_upload_id])
     else
       flash[:alert] = "Please select a CSV file to upload"
       render :new
       return
     end
     
-    # Verify the file exists
-    unless File.exist?(file_path)
+    # Check that we have a valid upload with an attached file
+    if csv_upload.nil? || !csv_upload.file.attached?
       flash[:alert] = "CSV file not found. Please upload it again."
       render :new
       return
@@ -81,11 +76,11 @@ class ImportsController < ApplicationController
       source: "csv"
     )
     
-    Rails.logger.info "Starting CSV analysis job with file: #{file_path}"
+    Rails.logger.info "Starting CSV analysis job with upload ID: #{csv_upload.id}"
     
     # Enqueue the job to process the CSV in the background
     CsvAnalysisJob.perform_later(
-      file_path,
+      csv_upload.id,  # Pass ID instead of file_path
       start_date,
       end_date,
       @detection_rules,
@@ -104,20 +99,22 @@ class ImportsController < ApplicationController
         # Log that we received the file
         Rails.logger.info "Received file upload for mapping: #{params[:file].original_filename}"
         
-        # Generate a unique filename for the uploaded file
-        file_extension = File.extname(params[:file].original_filename)
-        filename = "csv_upload_#{SecureRandom.uuid}#{file_extension}"
+        # Create a new CSV upload record with the attached file
+        csv_upload = CsvUpload.new(session_id: session.id)
+        csv_upload.file.attach(params[:file])
         
-        # Create a persistent path in the tmp directory
-        persistent_path = Rails.root.join('tmp', 'csv_uploads', filename)
+        unless csv_upload.save
+          flash[:alert] = "Error uploading CSV: #{csv_upload.errors.full_messages.join(', ')}"
+          redirect_to new_import_path
+          return
+        end
         
-        # Check if we have a real file or a test fixture and copy it to the persistent location
-        source_path = params[:file].respond_to?(:tempfile) ? params[:file].tempfile.path : params[:file].path
-        FileUtils.cp(source_path, persistent_path)
+        # Store the upload ID in session
+        session[:csv_upload_id] = csv_upload.id
         
-        Rails.logger.info "Copied CSV file to persistent location: #{persistent_path}"
-        
-        csv = CSV.read(persistent_path, headers: true)
+        # Read CSV data from Active Storage
+        csv_data = csv_upload.file.download
+        csv = CSV.parse(csv_data, headers: true)
         @headers = csv.headers
         
         # Detect format based on headers
@@ -125,10 +122,6 @@ class ImportsController < ApplicationController
         @detected_format = service.detect_format(@headers)
         @mapping = CsvImportService::FORMATS[@detected_format]
         Rails.logger.info "Detected CSV format: #{@detected_format}"
-        
-        # Store the uploaded file path in the session
-        @temp_file_path = persistent_path.to_s
-        session[:temp_csv_path] = @temp_file_path
         
         render :mapping
       rescue => e
@@ -143,28 +136,33 @@ class ImportsController < ApplicationController
   end
   
   def preview
-    if params[:file].present? || params[:temp_csv_path].present? || session[:temp_csv_path].present?
-      # Use the persistent path stored in the session or param
-      file_path = if params[:file].present?
-                    # If a new file was uploaded, store it persistently
-                    file_extension = File.extname(params[:file].original_filename)
-                    filename = "csv_upload_#{SecureRandom.uuid}#{file_extension}"
-                    persistent_path = Rails.root.join('tmp', 'csv_uploads', filename)
-                    FileUtils.cp(params[:file].tempfile.path, persistent_path)
-                    session[:temp_csv_path] = persistent_path.to_s
-                    persistent_path.to_s
-                  elsif params[:temp_csv_path].present?
-                    params[:temp_csv_path]
+    if params[:file].present? || params[:csv_upload_id].present? || session[:csv_upload_id].present?
+      # Get the CSV upload
+      csv_upload = if params[:file].present?
+                    # If a new file was uploaded, create a new upload record
+                    upload = CsvUpload.new(session_id: session.id)
+                    upload.file.attach(params[:file])
+                    
+                    unless upload.save
+                      flash[:alert] = "Error uploading CSV: #{upload.errors.full_messages.join(', ')}"
+                      redirect_to new_import_path
+                      return
+                    end
+                    
+                    session[:csv_upload_id] = upload.id
+                    upload
+                  elsif params[:csv_upload_id].present?
+                    CsvUpload.find_by(id: params[:csv_upload_id])
                   else
-                    session[:temp_csv_path]
+                    CsvUpload.find_by(id: session[:csv_upload_id])
                   end
       
-      Rails.logger.info "Preview action called with file_path: #{file_path}"
+      Rails.logger.info "Preview action called with csv_upload_id: #{csv_upload&.id}"
       Rails.logger.info "Format from params: #{params[:format]}"
       Rails.logger.info "Mapping from params: #{params[:mapping]}"
       
-      if file_path.present? && File.exist?(file_path)
-        Rails.logger.info "File exists and will be processed"
+      if csv_upload&.file&.attached?
+        Rails.logger.info "CSV file exists and will be processed"
         # Create mapping from params or use default
         mapping = {}
         if params[:mapping].present?
@@ -182,7 +180,8 @@ class ImportsController < ApplicationController
         
         begin
           # Parse first 10 rows for preview
-          @transactions = service.parse_file(file_path).first(10)
+          csv_data = csv_upload.file.download
+          @transactions = service.parse_data(csv_data).first(10)
           
           # Store mapping in session for later use
           session[:csv_mapping] = mapping.present? ? mapping : service.mapping

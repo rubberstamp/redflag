@@ -1,20 +1,30 @@
 class CsvAnalysisJob < ApplicationJob
   queue_as :default
 
-  def perform(file_path, start_date, end_date, detection_rules, session_id, format = "standard")
+  def perform(csv_upload_id, start_date, end_date, detection_rules, session_id, format = "standard")
     # Parse dates if they're strings
     @start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
     @end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
 
     begin
+      # Find the CSV upload
+      csv_upload = CsvUpload.find(csv_upload_id)
+      
+      # Make sure it has an attached file
+      unless csv_upload&.file&.attached?
+        update_status(session_id, 100, "CSV file not found.", false)
+        return
+      end
+
       # Update job status
       update_status(session_id, 10, "Reading CSV file...")
 
       # Create service to parse CSV
       service = CsvImportService.new(format.to_sym)
 
-      # Parse the CSV file
-      transactions = service.parse_file(file_path, @start_date, @end_date)
+      # Parse the CSV data (download the file to a string)
+      csv_data = csv_upload.file.download
+      transactions = service.parse_data(csv_data, @start_date, @end_date)
       
       # Check if we have any transactions to analyze
       if transactions.empty?
@@ -78,14 +88,6 @@ class CsvAnalysisJob < ApplicationJob
       Rails.logger.error e.backtrace.join("\n")
       
       update_status(session_id, 100, "Error: #{error_message}", false)
-    ensure
-      # Only clean up temporary files that are not in our persistent storage
-      if File.exist?(file_path) && !file_path.include?('tmp/csv_uploads') && !Rails.env.development?
-        File.delete(file_path)
-      end
-      
-      # Schedule cleanup of old CSV files
-      cleanup_old_csv_files
     end
   end
 
@@ -147,27 +149,5 @@ class CsvAnalysisJob < ApplicationJob
     
     # Add the account name to the results
     results.merge('account_name' => "CSV Import")
-  end
-  
-  def cleanup_old_csv_files
-    csv_dir = Rails.root.join('tmp', 'csv_uploads')
-    return unless Dir.exist?(csv_dir)
-    
-    # Keep only files created within the last hour
-    threshold = 1.hour.ago
-    
-    Dir.glob(File.join(csv_dir, '*')).each do |file|
-      next if File.directory?(file)
-      
-      file_age = File.mtime(file)
-      if file_age < threshold
-        begin
-          File.delete(file)
-          Rails.logger.info "Deleted old CSV file: #{file}"
-        rescue => e
-          Rails.logger.error "Failed to delete old CSV file #{file}: #{e.message}"
-        end
-      end
-    end
   end
 end
