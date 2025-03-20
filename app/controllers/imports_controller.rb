@@ -33,7 +33,7 @@ class ImportsController < ApplicationController
     end
     
     # Check that we have a valid upload with an attached file
-    if csv_upload.nil? || \!csv_upload.file.attached?
+    if csv_upload.nil? || !csv_upload.file.attached?
       flash[:alert] = "CSV file not found. Please upload it again."
       render :new
       return
@@ -172,7 +172,7 @@ class ImportsController < ApplicationController
         end
         
         # Use specified format or custom mapping
-        if params[:format].present? && params[:format] \!= "custom"
+        if params[:format].present? && params[:format] != "custom"
           service = CsvImportService.new(params[:format].to_sym)
         else
           service = CsvImportService.new(:standard, mapping)
