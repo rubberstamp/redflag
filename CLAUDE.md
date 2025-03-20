@@ -8,6 +8,10 @@
 - Start development server: `bin/rails server`
 - Run console: `bin/rails console`
 
+## Deployment
+- Make changes, commit to git, and push to origin to deploy
+- For custom domains, add them to fly.toml under [[http_service.domains]]
+
 ## Code Style Guidelines
 - **Ruby/Rails**: Follow Rails Omakase style (rubocop-rails-omakase)
 - **Styling**: Use Tailwind CSS inline for all styling

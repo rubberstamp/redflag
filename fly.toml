@@ -12,6 +12,10 @@ console_command = "/rails/bin/rails console"
   auto_start_machines = true
   min_machines_running = 0
   processes = ["app"]
+  
+  [[http_service.domains]]
+    name = "redflag.procurementexpress.com"
+    zone = "procurementexpress.com"
 
 [checks]
   [checks.status]
