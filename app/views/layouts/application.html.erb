@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="h-full bg-gray-50">
   <head>
-    <title><%= content_for(:title) || "Redflag" %></title>
+    <title><%= content_for(:title) || "RedFlag - Fraud Detection" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -29,13 +29,14 @@
           <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <img class="h-8 w-auto" src="/icon.svg" alt="Redflag">
+                <img class="h-8 w-auto" src="/icon.svg" alt="RedFlag">
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
                   <%= link_to "Home", root_path, class: "text-white hover:bg-red-700 rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "Analysis", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "QuickBooks", quickbooks_test_connection_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Import Data", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Reports", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
                 </div>
               </div>
             </div>
@@ -65,8 +66,9 @@
         <div class="md:hidden hidden" id="mobile-menu" data-navbar-target="mobileMenu">
           <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             <%= link_to "Home", root_path, class: "text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "Analysis", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "QuickBooks", quickbooks_test_connection_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "Import Data", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "Reports", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
           </div>
         </div>
       </nav>
