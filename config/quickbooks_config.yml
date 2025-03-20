@@ -37,5 +37,5 @@ production:
   Constant:
     <<: *defaultConstants
   Settings:
-    host_uri: https://redflag.fly.dev/
-    redirect_uri: https://redflag.fly.dev/quickbooks/oauth_callback
+    host_uri: https://redflag.procurementexpress.com/
+    redirect_uri: https://redflag.procurementexpress.com/quickbooks/oauth_callback

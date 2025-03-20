@@ -58,8 +58,8 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates and URLs.
-  config.action_mailer.default_url_options = { host: "redflag.fly.dev", protocol: 'https' }
-  config.action_controller.default_url_options = { host: "redflag.fly.dev", protocol: 'https' }
+  config.action_mailer.default_url_options = { host: "redflag.procurementexpress.com", protocol: 'https' }
+  config.action_controller.default_url_options = { host: "redflag.procurementexpress.com", protocol: 'https' }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -82,8 +82,9 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
-    "redflag.fly.dev",  # Allow requests from our fly.io domain
-    "localhost"         # Allow local development
+    "redflag.fly.dev",             # Allow requests from our fly.io domain
+    "redflag.procurementexpress.com", # Allow requests from our custom domain
+    "localhost"                    # Allow local development
   ]
   
   # Skip DNS rebinding protection for the default health check endpoint.
