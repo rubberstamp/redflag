@@ -16,9 +16,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
   
-  test "lead_thank_you should redirect to home without session data" do
+  test "lead_thank_you should show default data without session data" do
     get leads_thank_you_path
-    assert_redirected_to root_path
+    assert_response :success
+    assert_select "h1", /Thank You/
   end
   
   # Using ActionController::TestCase for session access
@@ -26,12 +27,25 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     tests PagesController
     
     test "lead_thank_you should display lead info from session" do
-      session[:lead_info] = {
-        name: "John Doe",
+      # Create a lead first
+      lead = Lead.create!(
+        first_name: "John",
+        last_name: "Doe",
         email: "john.doe@example.com",
         company: "Acme Corp",
-        plan: "free_trial"
+        plan: "free_trial",
+        newsletter: true
+      )
+      
+      # Set session data
+      session[:lead_info] = {
+        name: lead.full_name,
+        email: lead.email,
+        company: lead.company,
+        plan: lead.plan,
+        newsletter: lead.newsletter
       }
+      session[:lead_id] = lead.id
       
       get :lead_thank_you
       
@@ -40,6 +54,14 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       assert_select "span.font-medium.text-gray-800", "john.doe@example.com"
       assert_select "span.font-medium.text-gray-800", "Acme Corp"
       assert_select "span.font-medium.text-gray-800", "14-Day Free Trial"
+    end
+    
+    test "lead_thank_you should display default info if session is empty" do
+      get :lead_thank_you
+      
+      assert_response :success
+      assert_select "h1", /Thank You, Guest!/
+      assert_select "span.font-medium.text-gray-800", "your email"
     end
   end
 end

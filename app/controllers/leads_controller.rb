@@ -1,23 +1,38 @@
 class LeadsController < ApplicationController
+  # The index action is only accessible in the development environment
+  # and requires HTTP Basic Authentication
+  http_basic_authenticate_with name: "admin", password: "redflag-admin", 
+                               only: [:index, :admin_index], if: -> { Rails.env.development? }
+  
+  def index
+    @leads = Lead.order(created_at: :desc).limit(100)
+  end
+  
+  # Admin view with more details
+  def admin_index
+    @leads = Lead.order(created_at: :desc)
+    render :index
+  end
+  
   def create
-    # Create a Lead object to validate the data
+    # Create a Lead object
     @lead = Lead.new(lead_params)
     
-    if @lead.valid?
-      # In a real app, this would save to database and possibly trigger emails
-      # For demo purposes, we'll just redirect to thank you page
-      
-      # Optional: Log the lead data for demo purposes
-      Rails.logger.info "New Lead: #{lead_params.to_json}"
+    if @lead.save
+      # Save the lead to the database
+      Rails.logger.info "New Lead saved: #{@lead.id} - #{@lead.email}"
       
       # Store lead info in session to display on thank you page
       session[:lead_info] = {
-        name: "#{lead_params[:first_name]} #{lead_params[:last_name]}",
-        email: lead_params[:email],
-        company: lead_params[:company],
-        plan: lead_params[:plan],
-        newsletter: lead_params[:newsletter] == "1"
+        name: @lead.full_name,
+        email: @lead.email,
+        company: @lead.company,
+        plan: @lead.plan,
+        newsletter: @lead.newsletter
       }
+      
+      # Also store the lead ID in the session for reference
+      session[:lead_id] = @lead.id
       
       # Redirect to thank you page - use the same domain for the redirect
       redirect_to leads_thank_you_path(host: request.host)

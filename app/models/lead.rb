@@ -1,13 +1,9 @@
-class Lead
-  include ActiveModel::Model
-  include ActiveModel::Attributes
-  
-  attribute :first_name, :string
-  attribute :last_name, :string
-  attribute :email, :string
-  attribute :company, :string
-  attribute :plan, :string
-  attribute :newsletter, :boolean
-  
+class Lead < ApplicationRecord
+  # Validations
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  
+  # Helper method to get full name
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 end

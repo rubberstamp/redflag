@@ -1,0 +1,267 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Pricing Header -->
+  <div class="bg-red-900 text-white py-16">
+    <div class="container mx-auto px-6 max-w-5xl text-center">
+      <h1 class="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
+      <p class="text-xl text-red-100 mb-6 max-w-3xl mx-auto">Choose the plan that best fits your business needs. All plans include our core fraud detection features.</p>
+      
+      <!-- Billing Toggle -->
+      <div class="flex items-center justify-center space-x-4 mb-8">
+        <span class="text-red-200">Monthly</span>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" value="" class="sr-only peer">
+          <div class="w-11 h-6 bg-red-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+        </label>
+        <span class="text-red-200">Annually <span class="bg-yellow-500 text-red-900 text-xs px-2 py-1 rounded-full ml-1 font-semibold">Save 20%</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Cards -->
+  <div class="container mx-auto px-6 max-w-6xl -mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Free Trial Card -->
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="p-8">
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Free Trial</h3>
+          <div class="flex items-baseline mb-4">
+            <span class="text-4xl font-bold text-gray-900">$0</span>
+            <span class="text-gray-500 ml-2">/ 14 days</span>
+          </div>
+          <p class="text-gray-600 mb-6">Perfect for testing our fraud detection capabilities with your data.</p>
+          
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Basic fraud detection</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">5 fraud reports</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">QuickBooks integration</span>
+            </li>
+            <li class="flex items-center text-gray-400">
+              <svg class="w-5 h-5 text-gray-300 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              <span>Advanced detection rules</span>
+            </li>
+            <li class="flex items-center text-gray-400">
+              <svg class="w-5 h-5 text-gray-300 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              <span>Historical data analysis</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="px-8 pb-8">
+          <a href="<%= root_path %>" class="block w-full py-3 px-4 text-center bg-red-100 text-red-900 hover:bg-red-200 font-semibold rounded-lg transition-colors">
+            Start Free Trial
+          </a>
+        </div>
+      </div>
+      
+      <!-- Standard Plan Card -->
+      <div class="bg-white rounded-xl shadow-xl overflow-hidden transform scale-105 border-2 border-red-500 relative z-10">
+        <div class="absolute top-0 inset-x-0 bg-red-500 text-white text-center py-1 text-sm font-semibold">
+          MOST POPULAR
+        </div>
+        <div class="p-8 pt-10">
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Standard</h3>
+          <div class="flex items-baseline mb-4">
+            <span class="text-4xl font-bold text-gray-900">$99</span>
+            <span class="text-gray-500 ml-2">/ month</span>
+          </div>
+          <p class="text-gray-600 mb-6">Comprehensive fraud detection for small to medium businesses.</p>
+          
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Advanced fraud detection</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Unlimited reports</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">All integrations</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">12 months data history</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Email support</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="px-8 pb-8">
+          <a href="<%= root_path %>" class="block w-full py-3 px-4 text-center bg-red-900 text-white hover:bg-red-800 font-semibold rounded-lg transition-colors">
+            Choose Standard
+          </a>
+        </div>
+      </div>
+      
+      <!-- Premium Plan Card -->
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="p-8">
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Premium</h3>
+          <div class="flex items-baseline mb-4">
+            <span class="text-4xl font-bold text-gray-900">$249</span>
+            <span class="text-gray-500 ml-2">/ month</span>
+          </div>
+          <p class="text-gray-600 mb-6">Advanced fraud protection with premium features and support.</p>
+          
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Everything in Standard</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Custom detection rules</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">API access</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">24 months data history</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Priority phone support</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="px-8 pb-8">
+          <a href="<%= root_path %>" class="block w-full py-3 px-4 text-center bg-gray-800 text-white hover:bg-gray-700 font-semibold rounded-lg transition-colors">
+            Choose Premium
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Enterprise Section -->
+  <div class="container mx-auto px-6 max-w-5xl py-16">
+    <div class="bg-gray-100 rounded-xl p-8 md:p-12">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="md:w-2/3 mb-8 md:mb-0">
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Enterprise Plan</h3>
+          <p class="text-lg text-gray-600 mb-4">Custom solutions for large organizations with complex requirements.</p>
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Dedicated account manager</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Custom integrations</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">On-premise deployment</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">SLA guarantees</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <a href="<%= enterprise_path %>" class="inline-block py-3 px-6 bg-gray-800 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors">
+            Contact Sales
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- FAQ Section -->
+  <div class="container mx-auto px-6 max-w-4xl py-16">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Frequently Asked Questions</h2>
+    
+    <div class="space-y-6">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Can I change plans later?</h3>
+        <p class="text-gray-600">Yes, you can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle.</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Do you offer refunds?</h3>
+        <p class="text-gray-600">We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied, contact our support team for a full refund.</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">How does billing work?</h3>
+        <p class="text-gray-600">We bill monthly or annually, depending on your preference. All plans include unlimited users and fraud detection reports.</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Is my data secure?</h3>
+        <p class="text-gray-600">Yes, we use bank-level encryption and security practices. We never store your credentials and all data transfers are encrypted using TLS 1.2+.</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- CTA Section -->
+  <div class="bg-red-900 text-white py-16">
+    <div class="container mx-auto px-6 max-w-5xl text-center">
+      <h2 class="text-3xl font-bold mb-6">Ready to Protect Your Business?</h2>
+      <p class="text-xl text-red-100 mb-8 max-w-3xl mx-auto">Start your free trial today. No credit card required.</p>
+      
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="<%= root_path %>" class="bg-white text-red-900 px-8 py-4 rounded-lg font-semibold shadow-lg hover:bg-gray-100 transition duration-300 inline-block">
+          Start Free Trial
+        </a>
+        <a href="<%= quickbooks_connect_path %>" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-red-800 transition duration-300 inline-block">
+          Connect QuickBooks
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

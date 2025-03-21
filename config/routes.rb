@@ -58,8 +58,11 @@ Rails.application.routes.draw do
   get "leads/thank-you", to: "pages#lead_thank_you", as: :leads_thank_you
   get "enterprise", to: "pages#enterprise"
   
-  # Lead capture
-  resources :leads, only: [:create]
+  # Lead capture and management
+  resources :leads, only: [:index, :create]
+  
+  # Administrative leads view (only in development)
+  get 'admin/leads', to: 'leads#admin_index' if Rails.env.development?
   
   # Defines the root path route ("/")
   root "pages#home"

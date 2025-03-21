@@ -10,6 +10,8 @@ class LeadTest < ActiveSupport::TestCase
       plan: "free_trial"
     )
     assert lead.valid?
+    assert lead.save
+    assert_equal "John Doe", lead.full_name
   end
   
   test "should not validate without email" do
