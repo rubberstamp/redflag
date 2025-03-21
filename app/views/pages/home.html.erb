@@ -351,7 +351,15 @@
         <h3 class="text-xl font-bold text-gray-800 mb-4">Start Your Free Risk Assessment</h3>
         <p class="text-gray-600 mb-6">Enter your information to get instant access to RedFlag's fraud detection tools.</p>
         
-        <%= form_with(url: leads_path, scope: :lead, local: true, data: { turbo: false }, class: "space-y-4") do |form| %>
+        <%= form_with(url: leads_path, scope: :lead, local: true, 
+                   data: { 
+                     turbo: false, 
+                     controller: "analytics",
+                     action: "submit->analytics#trackFormSubmit",
+                     analytics_event_value: "lead_form_submitted",
+                     analytics_properties_value: { form_name: "lead_capture", source: "homepage" }.to_json
+                   }, 
+                   class: "space-y-4") do |form| %>
           <!-- Form Errors -->
           <% if flash[:errors].present? %>
             <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md mb-4">
@@ -407,9 +415,20 @@
           </div>
           
           <div class="flex gap-4">
-            <%= form.submit "Start Free Trial", class: "flex-1 bg-red-900 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-red-800 transition duration-300 text-lg flex items-center justify-center" %>
+            <%= form.submit "Start Free Trial", 
+                class: "flex-1 bg-red-900 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-red-800 transition duration-300 text-lg flex items-center justify-center",
+                data: {
+                  controller: "analytics",
+                  analytics_event_value: "cta_clicked",
+                  analytics_properties_value: { cta_type: "form_submit", cta_text: "Start Free Trial" }.to_json
+                } %>
             
-            <a href="<%= analysis_sample_report_path %>" class="flex-1 border-2 border-red-900 text-red-900 px-6 py-3 rounded-lg font-semibold hover:bg-red-900 hover:text-white transition duration-300 flex items-center justify-center">
+            <a href="<%= analysis_sample_report_path %>" 
+               class="flex-1 border-2 border-red-900 text-red-900 px-6 py-3 rounded-lg font-semibold hover:bg-red-900 hover:text-white transition duration-300 flex items-center justify-center"
+               data-controller="analytics"
+               data-action="click->analytics#trackClick"
+               data-analytics-event-value="cta_clicked"
+               data-analytics-properties-value='{"cta_type": "sample_report", "cta_text": "Sample Report"}'>
               <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15 12L9 8V16L15 12Z" fill="currentColor"/>
               </svg>

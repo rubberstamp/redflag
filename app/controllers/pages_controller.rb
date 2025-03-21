@@ -26,6 +26,14 @@ class PagesController < ApplicationController
       
       # Log this issue for tracking
       Rails.logger.warn "Lead thank you page accessed without session data. Using defaults."
+    else
+      # Track conversion complete event with lead properties
+      track_event('lead_conversion_complete', {
+        lead_id: session[:lead_id],
+        plan: @lead_info[:plan],
+        funnel_stage: 'thankyou_page',
+        conversion_completed: true
+      })
     end
   end
 end

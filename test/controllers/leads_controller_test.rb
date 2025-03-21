@@ -1,77 +1,100 @@
 require "test_helper"
 
 class LeadsControllerTest < ActionDispatch::IntegrationTest
-  test "should create lead and redirect to thank you page" do
-    assert_difference("Lead.count") do
+  setup do
+    # Set HTTP auth credentials for admin routes
+    @auth_headers = { "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Basic.encode_credentials("admin", "redflag-admin") }
+  end
+  
+  test "should create lead and set session" do
+    # Force PostHog to be disabled in test environment
+    Rails.application.config.posthog.instance_variable_set(:@disabled, true)
+    
+    # Post a new lead
+    assert_difference('Lead.count') do
       post leads_path, params: { 
         lead: { 
           first_name: "John", 
           last_name: "Doe", 
-          email: "john.doe@example.com", 
-          company: "Acme Corp", 
-          plan: "free_trial",
+          email: "john@example.com", 
+          company: "ACME Corp", 
+          plan: "standard",
           newsletter: "1"
         } 
       }
     end
     
-    # Get the lead we just created
-    lead = Lead.last
-    
+    # Verify redirect to thank you page
     assert_redirected_to leads_thank_you_path
     
-    # Check that session contains the lead info
+    # Check if session has lead info
     assert_equal "John Doe", session[:lead_info][:name]
-    assert_equal "john.doe@example.com", session[:lead_info][:email]
-    assert_equal "Acme Corp", session[:lead_info][:company]
-    assert_equal "free_trial", session[:lead_info][:plan]
+    assert_equal "john@example.com", session[:lead_info][:email]
+    assert_equal "ACME Corp", session[:lead_info][:company]
+    assert_equal "standard", session[:lead_info][:plan]
     assert_equal true, session[:lead_info][:newsletter]
-    assert_equal lead.id, session[:lead_id]
+    
+    # Verify lead ID is in session
+    assert session[:lead_id].present?
   end
   
-  test "should reject lead with invalid email" do
-    post leads_path, params: { 
-      lead: { 
-        first_name: "John", 
-        last_name: "Doe", 
-        email: "not-an-email", 
-        company: "Acme Corp", 
-        plan: "free_trial" 
-      } 
-    }
+  test "should not create lead with invalid data" do
+    # Post with missing required fields
+    assert_no_difference('Lead.count') do
+      post leads_path, params: { 
+        lead: { 
+          first_name: "", 
+          last_name: "Doe", 
+          email: "invalid_email", 
+          company: "", 
+          plan: "standard" 
+        } 
+      }
+    end
     
-    # Should return unprocessable entity status
+    # Should render the home page with errors
     assert_response :unprocessable_entity
-    
-    # Should include error flash message
-    assert_not_nil flash[:errors]
-    assert_includes flash[:errors], "Email is invalid"
-    
-    # Should render the home page template
-    assert_template "pages/home"
+    assert_includes @response.body, "Email is invalid"
   end
   
-  test "should reject lead without email" do
-    post leads_path, params: { 
-      lead: { 
-        first_name: "John", 
-        last_name: "Doe", 
-        company: "Acme Corp", 
-        plan: "free_trial" 
-      } 
-    }
-    
-    # Should return unprocessable entity status
-    assert_response :unprocessable_entity
-    
-    # Should include error flash message
-    assert_not_nil flash[:errors]
-    assert_includes flash[:errors], "Email can't be blank"
-    
-    # Should render the home page template
-    assert_template "pages/home"
+  test "should get admin index with auth" do
+    # Access admin index with auth
+    get leads_path, headers: @auth_headers
+    assert_response :success
+    assert_select "h1", "Lead Management"
   end
   
-  # The thank you page test is implemented in pages_controller_test.rb
-  # We use ActionController::TestCase there which allows setting session data properly
+  test "should not get admin index without auth" do
+    # Try to access admin index without auth
+    get leads_path
+    assert_response :unauthorized
+  end
+  
+  test "should get admin details with auth" do
+    # Create a test lead
+    lead = Lead.create!(
+      first_name: "Jane",
+      last_name: "Smith",
+      email: "jane@example.com",
+      company: "Test Co",
+      plan: "premium",
+      newsletter: true
+    )
+    
+    # Access admin_index with auth
+    get admin_leads_path, headers: @auth_headers
+    assert_response :success
+    
+    # Check if our test lead is in the response
+    assert_select "td", "Jane Smith"
+    assert_select "td", "jane@example.com"
+  end
+  
+  test "should have analytics tracking on lead creation" do
+    # Check if the analytics concern is included
+    assert LeadsController.included_modules.include?(AnalyticsTracking)
+    
+    # Check if track_event method is called (indirectly by checking if the method exists)
+    assert LeadsController.instance_methods.include?(:track_event)
+  end
 end

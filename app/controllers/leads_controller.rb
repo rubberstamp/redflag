@@ -33,6 +33,26 @@ class LeadsController < ApplicationController
       # Also store the lead ID in the session for reference
       session[:lead_id] = @lead.id
       
+      # Track lead submission with PostHog
+      track_event('lead_captured', {
+        lead_id: @lead.id,
+        email: @lead.email,
+        company: @lead.company,
+        plan: @lead.plan,
+        newsletter: @lead.newsletter,
+        conversion: true
+      })
+      
+      # Identify the user with their lead info
+      identify_user(@lead.id, {
+        email: @lead.email,
+        name: @lead.full_name,
+        company: @lead.company,
+        plan: @lead.plan,
+        newsletter: @lead.newsletter,
+        "$initial_referrer": request.referer
+      })
+      
       # Redirect to thank you page - use the same domain for the redirect
       redirect_to leads_thank_you_path(host: request.host)
     else

@@ -82,14 +82,24 @@
       
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-4 mt-8">
-        <a href="<%= quickbooks_connect_path %>" class="flex-1 bg-red-900 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-red-800 transition-colors flex items-center justify-center">
+        <a href="<%= quickbooks_connect_path %>" 
+           class="flex-1 bg-red-900 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-red-800 transition-colors flex items-center justify-center"
+           data-controller="analytics"
+           data-action="click->analytics#trackClick"
+           data-analytics-event-value="thank_you_cta_clicked"
+           data-analytics-properties-value='{"cta_type": "quickbooks_connect", "button_text": "Connect QuickBooks", "funnel_stage": "thankyou_page"}'>
           <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
           Connect QuickBooks
         </a>
         
-        <a href="<%= root_path %>" class="flex-1 border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+        <a href="<%= root_path %>" 
+           class="flex-1 border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center"
+           data-controller="analytics"
+           data-action="click->analytics#trackClick"
+           data-analytics-event-value="thank_you_cta_clicked"
+           data-analytics-properties-value='{"cta_type": "dashboard", "button_text": "Go to Dashboard", "funnel_stage": "thankyou_page"}'>
           Go to Dashboard
         </a>
       </div>

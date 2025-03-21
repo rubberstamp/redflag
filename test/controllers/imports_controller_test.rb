@@ -4,7 +4,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
     get new_import_path
     assert_response :success
-    assert_select "h1", "CSV Transaction Import"
+    assert_select "h2", "Import CSV Transaction Data"
   end
   
   test "should reject non-CSV files" do

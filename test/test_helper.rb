@@ -20,6 +20,14 @@ module ActiveSupport
     def teardown_fixtures(*); end
 
     # Add more helper methods to be used by all tests here...
+    
+    # Mock PostHog for testing
+    setup do
+      # Ensure PostHog client is properly mocked in test environment
+      if defined?(Rails.application.config.posthog)
+        Rails.application.config.posthog.instance_variable_set(:@disabled, true)
+      end
+    end
   end
 end
 
