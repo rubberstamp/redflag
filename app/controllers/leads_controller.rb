@@ -1,8 +1,7 @@
 class LeadsController < ApplicationController
-  # The index action is only accessible in the development environment
-  # and requires HTTP Basic Authentication
+  # Protect the leads list with HTTP Basic Authentication in all environments
   http_basic_authenticate_with name: "admin", password: "redflag-admin", 
-                               only: [:index, :admin_index], if: -> { Rails.env.development? }
+                               only: [:index, :admin_index]
   
   def index
     @leads = Lead.order(created_at: :desc).limit(100)

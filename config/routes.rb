@@ -61,8 +61,8 @@ Rails.application.routes.draw do
   # Lead capture and management
   resources :leads, only: [:index, :create]
   
-  # Administrative leads view (only in development)
-  get 'admin/leads', to: 'leads#admin_index' if Rails.env.development?
+  # Administrative leads view (protected by HTTP Basic Auth)
+  get 'admin/leads', to: 'leads#admin_index'
   
   # Defines the root path route ("/")
   root "pages#home"
