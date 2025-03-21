@@ -19,8 +19,8 @@ class LeadsController < ApplicationController
         newsletter: lead_params[:newsletter] == "1"
       }
       
-      # Redirect to thank you page
-      redirect_to leads_thank_you_path
+      # Redirect to thank you page - use the same domain for the redirect
+      redirect_to leads_thank_you_path(host: request.host)
     else
       # If validation fails, set flash errors and redirect back to the form
       flash.now[:errors] = @lead.errors.full_messages
