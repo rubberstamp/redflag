@@ -1,0 +1,92 @@
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center">
+  <div class="mx-auto w-full max-w-3xl px-6 py-24 text-center">
+    <div class="bg-white rounded-xl shadow-lg p-10">
+      <!-- Success Icon -->
+      <div class="w-20 h-20 bg-green-100 rounded-full mx-auto flex items-center justify-center mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">Thank You, <%= @lead_info[:name] %>!</h1>
+      
+      <div class="mb-8">
+        <p class="text-lg text-gray-600 mb-4">Your RedFlag account has been created successfully.</p>
+        <p class="text-gray-600">We've sent a confirmation email to <span class="font-semibold"><%= @lead_info[:email] %></span> with your login details.</p>
+      </div>
+      
+      <!-- Account Details Card -->
+      <div class="bg-gray-50 rounded-lg p-6 mb-8 text-left">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Your Account Details</h3>
+        
+        <div class="space-y-3">
+          <div class="flex justify-between border-b border-gray-200 pb-2">
+            <span class="text-gray-600">Name:</span>
+            <span class="font-medium text-gray-800"><%= @lead_info[:name] %></span>
+          </div>
+          <div class="flex justify-between border-b border-gray-200 pb-2">
+            <span class="text-gray-600">Company:</span>
+            <span class="font-medium text-gray-800"><%= @lead_info[:company] %></span>
+          </div>
+          <div class="flex justify-between border-b border-gray-200 pb-2">
+            <span class="text-gray-600">Email:</span>
+            <span class="font-medium text-gray-800"><%= @lead_info[:email] %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Plan:</span>
+            <span class="font-medium text-gray-800">
+              <%= case @lead_info[:plan]
+                  when "free_trial" then "14-Day Free Trial"
+                  when "standard" then "Standard Plan ($99/month)"
+                  when "premium" then "Premium Plan ($249/month)"
+                  when "enterprise" then "Enterprise Plan (Custom Pricing)"
+                  else "Free Trial"
+                  end %>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Next Steps -->
+      <div class="mb-8">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Next Steps</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="flex items-center mb-2">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                <span class="text-blue-600 font-semibold">1</span>
+              </div>
+              <h4 class="font-semibold text-gray-800">Connect Your Data</h4>
+            </div>
+            <p class="text-gray-600 text-sm">Connect your QuickBooks account or upload your transaction data to start analyzing.</p>
+          </div>
+          
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="flex items-center mb-2">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                <span class="text-blue-600 font-semibold">2</span>
+              </div>
+              <h4 class="font-semibold text-gray-800">Review Results</h4>
+            </div>
+            <p class="text-gray-600 text-sm">Get your first fraud risk assessment report in minutes.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 mt-8">
+        <a href="<%= quickbooks_connect_path %>" class="flex-1 bg-red-900 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-red-800 transition-colors flex items-center justify-center">
+          <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Connect QuickBooks
+        </a>
+        
+        <a href="<%= root_path %>" class="flex-1 border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+          Go to Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

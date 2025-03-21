@@ -53,6 +53,14 @@ Rails.application.routes.draw do
     post "test/session", to: "test_support#setup_session"
   end
 
+  # Pages routes
+  get "pricing", to: "pages#pricing"
+  get "leads/thank-you", to: "pages#lead_thank_you", as: :leads_thank_you
+  get "enterprise", to: "pages#enterprise"
+  
+  # Lead capture
+  resources :leads, only: [:create]
+  
   # Defines the root path route ("/")
   root "pages#home"
 end
