@@ -8,11 +8,11 @@
         </svg>
       </div>
       
-      <h1 class="text-3xl font-bold text-gray-800 mb-6">Thank You, <%= @lead_info[:name] %>!</h1>
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">Thank You, <%= @lead_info&.dig(:name).presence || 'Guest' %>!</h1>
       
       <div class="mb-8">
         <p class="text-lg text-gray-600 mb-4">Your RedFlag account has been created successfully.</p>
-        <p class="text-gray-600">We've sent a confirmation email to <span class="font-semibold"><%= @lead_info[:email] %></span> with your login details.</p>
+        <p class="text-gray-600">We've sent a confirmation email to <span class="font-semibold"><%= @lead_info&.dig(:email).presence || 'your email address' %></span> with your login details.</p>
       </div>
       
       <!-- Account Details Card -->
@@ -22,26 +22,32 @@
         <div class="space-y-3">
           <div class="flex justify-between border-b border-gray-200 pb-2">
             <span class="text-gray-600">Name:</span>
-            <span class="font-medium text-gray-800"><%= @lead_info[:name] %></span>
+            <span class="font-medium text-gray-800"><%= @lead_info&.dig(:name).presence || 'N/A' %></span>
           </div>
           <div class="flex justify-between border-b border-gray-200 pb-2">
             <span class="text-gray-600">Company:</span>
-            <span class="font-medium text-gray-800"><%= @lead_info[:company] %></span>
+            <span class="font-medium text-gray-800"><%= @lead_info&.dig(:company).presence || 'N/A' %></span>
           </div>
           <div class="flex justify-between border-b border-gray-200 pb-2">
             <span class="text-gray-600">Email:</span>
-            <span class="font-medium text-gray-800"><%= @lead_info[:email] %></span>
+            <span class="font-medium text-gray-800"><%= @lead_info&.dig(:email).presence || 'N/A' %></span>
           </div>
-          <div class="flex justify-between">
+          <div class="flex justify-between border-b border-gray-200 pb-2">
             <span class="text-gray-600">Plan:</span>
             <span class="font-medium text-gray-800">
-              <%= case @lead_info[:plan]
+              <%= case @lead_info&.dig(:plan)
                   when "free_trial" then "14-Day Free Trial"
                   when "standard" then "Standard Plan ($99/month)"
                   when "premium" then "Premium Plan ($249/month)"
                   when "enterprise" then "Enterprise Plan (Custom Pricing)"
                   else "Free Trial"
                   end %>
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Newsletter:</span>
+            <span class="font-medium text-gray-800">
+              <%= @lead_info&.dig(:newsletter) ? "Subscribed" : "Not subscribed" %>
             </span>
           </div>
         </div>
