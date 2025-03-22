@@ -49,7 +49,8 @@ class LeadMailerTest < ActionMailer::TestCase
     end
     
     assert_equal ["notifications@redflagapp.com"], email.from
-    assert_equal ["admin@redflagapp.com"], email.to
+    # Use the default admin email when env var is not set
+    assert_equal [ENV.fetch('ADMIN_EMAIL', 'admin@redflagapp.com')], email.to
     assert_equal "New Lead: Jane Smith (premium)", email.subject
     
     # Test that the email contains the lead's details

@@ -40,9 +40,9 @@
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
                   <%= link_to "Home", root_path, class: "text-white hover:bg-red-700 rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "Import Data", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
                   <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "Reports", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
                 </div>
               </div>
             </div>
@@ -72,9 +72,9 @@
         <div class="md:hidden hidden" id="mobile-menu" data-navbar-target="mobileMenu">
           <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             <%= link_to "Home", root_path, class: "text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "Import Data", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
             <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "Reports", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
           </div>
         </div>
       </nav>

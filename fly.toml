@@ -49,6 +49,8 @@ console_command = "/rails/bin/rails console"
   JOB_CONCURRENCY = "2"
   # Admin credentials for basic auth (real credentials should be set as secrets)
   ADMIN_USERNAME = "admin"
+  # Email configuration
+  ADMIN_EMAIL = "leads@redflagapp.com"
   # For security, don't set the real password here - use secrets
 
 # Using SolidQueue for background jobs (no Redis needed)

@@ -21,8 +21,11 @@ class LeadMailer < ApplicationMailer
     @lead = lead
     @lead_full_name = "#{@lead.first_name} #{@lead.last_name}"
     
+    # Get admin email from environment variable, with fallback
+    admin_email = ENV.fetch('ADMIN_EMAIL', 'admin@redflagapp.com')
+    
     mail(
-      to: "admin@redflagapp.com",
+      to: admin_email,
       subject: "New Lead: #{@lead_full_name} (#{@lead.plan})",
       track_opens: true
     ) do |format|
