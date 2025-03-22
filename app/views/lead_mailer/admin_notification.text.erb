@@ -1,0 +1,19 @@
+New Lead Notification
+
+A new lead has been captured on the RedFlag platform.
+
+Lead Details:
+- Name: <%= @lead_full_name %>
+- Company: <%= @lead.company %>
+- Email: <%= @lead.email %>
+- Plan: <%= @lead.plan.humanize %>
+- Newsletter: <%= @lead.newsletter? ? 'Yes' : 'No' %>
+- Date Created: <%= @lead.created_at.strftime('%B %d, %Y at %I:%M %p') %>
+
+View all leads at: <%= leads_url %>
+
+You are receiving this email because you are listed as an administrator for the RedFlag platform.
+
+--------------------
+© 2025 RedFlag. All rights reserved.
+This is an automated notification. Please do not reply to this email.

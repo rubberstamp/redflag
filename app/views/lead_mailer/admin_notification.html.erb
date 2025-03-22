@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <style type="text/css">
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .container {
+      padding: 20px;
+    }
+    .header {
+      background-color: #8b0000;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .footer {
+      background-color: #f5f5f5;
+      padding: 10px 20px;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+    h1 {
+      color: #8b0000;
+    }
+    .lead-details {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #8b0000;
+      color: white !important;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>New Lead Notification</h1>
+  </div>
+  
+  <div class="container">
+    <p>A new lead has been captured on the RedFlag platform.</p>
+    
+    <div class="lead-details">
+      <h2>Lead Details</h2>
+      <p><strong>Name:</strong> <%= @lead_full_name %></p>
+      <p><strong>Company:</strong> <%= @lead.company %></p>
+      <p><strong>Email:</strong> <%= @lead.email %></p>
+      <p><strong>Plan:</strong> <%= @lead.plan.humanize %></p>
+      <p><strong>Newsletter:</strong> <%= @lead.newsletter? ? 'Yes' : 'No' %></p>
+      <p><strong>Date Created:</strong> <%= @lead.created_at.strftime('%B %d, %Y at %I:%M %p') %></p>
+    </div>
+    
+    <a href="<%= leads_url %>" class="button">View All Leads</a>
+    
+    <p>You are receiving this email because you are listed as an administrator for the RedFlag platform.</p>
+  </div>
+  
+  <div class="footer">
+    <p>© 2025 RedFlag. All rights reserved.</p>
+    <p>
+      This is an automated notification. Please do not reply to this email.
+    </p>
+  </div>
+</body>
+</html>

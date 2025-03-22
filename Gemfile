@@ -41,6 +41,9 @@ gem "redis" # For background job status and caching
 # Analytics
 gem "posthog-ruby" # PostHog analytics tracking
 
+# Email
+gem "postmark-rails" # Postmark for transactional emails
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

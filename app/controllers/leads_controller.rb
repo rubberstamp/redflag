@@ -53,6 +53,12 @@ class LeadsController < ApplicationController
         "$initial_referrer": request.referer
       })
       
+      # Send welcome email to the lead
+      LeadMailer.welcome_email(@lead).deliver_later
+      
+      # Send notification to admin
+      LeadMailer.admin_notification(@lead).deliver_later
+      
       # Redirect to thank you page - use the same domain for the redirect
       redirect_to leads_thank_you_path(host: request.host)
     else
