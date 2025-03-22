@@ -40,7 +40,7 @@
 - 🟡 Improved connection status monitoring
 
 ### Report Generation
-- 🟡 Downloadable PDF reports
+- ❌ Downloadable reports (removed PDF functionality)
 - 🟡 Export to CSV functionality
 - 🟡 More comprehensive visualizations
 

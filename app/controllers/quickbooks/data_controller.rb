@@ -1,4 +1,5 @@
 class Quickbooks::DataController < ApplicationController
+  include Quickbooks::ProfilesHelper
   before_action :ensure_quickbooks_connected
   
   # Start the data analysis process
@@ -65,9 +66,15 @@ class Quickbooks::DataController < ApplicationController
     @detection_rules = @analysis.detection_rules
     @transactions = @analysis.transactions_data
     
+    # Parse company info from the profile using our helper
+    @company_info = parse_company_info(@profile) if @profile.present?
+    
     # Get company name from different sources, prioritize results that may have come from the job
     stored_account_name = @analysis.results['account_name'] || @analysis.results[:account_name]
-    @company_name = stored_account_name.presence || @profile&.company_name || "QuickBooks Account"
+    @company_name = stored_account_name.presence || 
+                    @company_info&.dig(:company_name) || 
+                    @profile&.company_name || 
+                    "QuickBooks Account"
     
     # Build analysis results hash with proper format
     @analysis_results = {
@@ -75,7 +82,8 @@ class Quickbooks::DataController < ApplicationController
       total_amount: @analysis.total_amount,
       risk_score: @analysis.risk_score,
       flagged_transactions: @analysis.flagged_transactions,
-      account_name: @company_name
+      account_name: @company_name,
+      company_info: @company_info # Add the parsed company info to results
     }
     
     # Process transaction dates if needed
@@ -90,9 +98,9 @@ class Quickbooks::DataController < ApplicationController
       end
     end
     
-    # Render the report
     render 'quickbooks/data/analysis_report'
   end
+  
   
   # Test connection to QuickBooks API
   def test_connection

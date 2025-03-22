@@ -20,7 +20,73 @@
     <div class="flex flex-col md:flex-row justify-between items-start mb-8">
       <div>
         <h2 class="text-2xl font-bold text-gray-800">Analysis Report for <%= @company_name %></h2>
+        <% if @company_info&.dig(:legal_name).present? && @company_info[:legal_name] != @company_name %>
+          <p class="text-gray-600 text-sm">Legal Name: <%= @company_info[:legal_name] %></p>
+        <% end %>
         <p class="text-gray-500"><%= @start_date.strftime("%B %d, %Y") %> to <%= @end_date.strftime("%B %d, %Y") %></p>
+        
+        <% if @company_info.present? %>
+          <div class="mt-4 text-gray-600 text-sm flex items-center space-x-2">
+            <% if @company_info[:address].present? || @company_info[:city].present? %>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                </svg>
+                <%= format_full_address(@company_info[:raw_data]) %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="mt-2 text-gray-600 text-sm flex flex-wrap items-center gap-4">
+            <% if @company_info[:phone].present? %>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                </svg>
+                <%= @company_info[:phone] %>
+              </div>
+            <% end %>
+
+            <% if @company_info[:email].present? %>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                </svg>
+                <%= @company_info[:email] %>
+              </div>
+            <% end %>
+
+            <% if @company_info[:website].present? %>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                </svg>
+                <%= @company_info[:website] %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="mt-2 text-gray-600 text-sm flex flex-wrap items-center gap-4">
+            <% if @company_info[:account_type].present? %>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                </svg>
+                <%= helpers.company_type_display(@company_info[:raw_data]) %>
+              </div>
+            <% end %>
+
+            <% if @company_info[:fiscal_year_start_month].present? %>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+                Fiscal Year Start: Month <%= @company_info[:fiscal_year_start_month] %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
       <div class="mt-4 md:mt-0 flex items-center bg-white p-4 rounded-lg shadow-sm border">
         <div class="mr-4 w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
@@ -35,6 +101,29 @@
         </div>
       </div>
     </div>
+
+    <!-- Summary Message -->
+    <% if @company_info.present? %>
+      <div class="bg-white rounded-lg shadow-sm p-5 border border-gray-200 mb-6">
+        <h3 class="font-medium text-gray-800 mb-3">Summary for <%= @company_name %></h3>
+        <p class="text-gray-700">
+          <%= @start_date.strftime("%B %d, %Y") %> to <%= @end_date.strftime("%B %d, %Y") %>: 
+          Analyzed <%= @analysis_results[:total_transactions] || 0 %> transactions 
+          <% if @company_info[:account_type].present? %>
+            using <%= company_type_display(@company_info[:raw_data]) %> rules
+          <% end %>
+          with a total value of $<%= number_with_precision(@analysis_results[:total_amount] || 0, precision: 2, delimiter: ',') %>.
+          <% if @analysis_results[:flagged_transactions].present? && @analysis_results[:flagged_transactions].size > 0 %>
+            Identified <%= @analysis_results[:flagged_transactions].size %> transactions requiring review.
+          <% else %>
+            No suspicious transactions detected.
+          <% end %>
+          <% if @company_info[:fiscal_year_start_month].present? %>
+            The analysis considered your fiscal year starting in month <%= @company_info[:fiscal_year_start_month] %>.
+          <% end %>
+        </p>
+      </div>
+    <% end %>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -180,6 +269,103 @@
       <% end %>
     </div>
 
+    <!-- Company Details -->
+    <% if @company_info.present? && @company_info[:raw_data].present? %>
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Company Information</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 class="font-semibold text-gray-700 mb-2">Business Details</h4>
+            <div class="space-y-2">
+              <% if @company_info[:company_name].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Company Name:</span>
+                  <span class="text-gray-800"><%= @company_info[:company_name] %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:legal_name].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Legal Name:</span>
+                  <span class="text-gray-800"><%= @company_info[:legal_name] %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:tax_identifier].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Tax ID:</span>
+                  <span class="text-gray-800"><%= @company_info[:tax_identifier] %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:start_date].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Business Start Date:</span>
+                  <span class="text-gray-800"><%= @company_info[:start_date] %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:account_type].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Accounting Method:</span>
+                  <span class="text-gray-800"><%= company_type_display(@company_info[:raw_data]) %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:fiscal_year_start_month].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Fiscal Year Start:</span>
+                  <span class="text-gray-800">Month <%= @company_info[:fiscal_year_start_month] %></span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold text-gray-700 mb-2">Contact Information</h4>
+            <div class="space-y-2">
+              <% address = format_full_address(@company_info[:raw_data]) %>
+              <% if address.present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Address:</span>
+                  <span class="text-gray-800"><%= address %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:phone].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Phone:</span>
+                  <span class="text-gray-800"><%= @company_info[:phone] %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:email].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Email:</span>
+                  <span class="text-gray-800"><%= @company_info[:email] %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:website].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Website:</span>
+                  <span class="text-gray-800"><%= @company_info[:website] %></span>
+                </div>
+              <% end %>
+              
+              <% if @company_info[:last_updated].present? %>
+                <div class="flex">
+                  <span class="text-gray-500 w-40">Profile Last Updated:</span>
+                  <span class="text-gray-800"><%= @company_info[:last_updated].strftime("%B %d, %Y") %></span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
     <!-- Recommendations -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8">
       <h3 class="text-xl font-bold text-gray-800 mb-4">Recommendations</h3>
@@ -230,6 +416,96 @@
         </li>
       </ul>
     </div>
+
+    <!-- Customized Analysis  -->
+    <% if @company_info.present? %>
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Customized Analysis for <%= @company_name %></h3>
+        
+        <div class="space-y-4">
+          <!-- Accounting Method Based Recommendations -->
+          <% if @company_info[:account_type].present? %>
+            <div class="bg-blue-50 rounded-lg p-4 border border-blue-100">
+              <h4 class="font-medium text-blue-800 mb-2">
+                <span class="inline-flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                  </svg>
+                  <%= company_type_display(@company_info[:raw_data]) %> Considerations
+                </span>
+              </h4>
+              <p class="text-blue-700 text-sm mb-2">
+                <% if @company_info[:account_type] == "Accrual" %>
+                  For your accrual-based accounting system, we recommend monitoring timing differences between when transactions are recorded and when cash changes hands, as this can create opportunities for manipulation.
+                <% elsif @company_info[:account_type] == "Cash" %>
+                  With your cash-based accounting method, special attention should be given to the timing of payments around period ends, which can be manipulated to shift expenses between periods.
+                <% else %>
+                  Based on your accounting method, we recommend establishing consistent procedures for recording transactions to prevent timing manipulation.
+                <% end %>
+              </p>
+              <% if @company_info[:fiscal_year_start_month].present? %>
+                <p class="text-blue-700 text-sm">
+                  Your fiscal year starts in month <%= @company_info[:fiscal_year_start_month] %>. 
+                  We've observed that transactions near fiscal year transitions deserve extra scrutiny.
+                </p>
+              <% end %>
+            </div>
+          <% end %>
+          
+          <!-- Industry-Specific Analysis -->
+          <div class="bg-green-50 rounded-lg p-4 border border-green-100">
+            <h4 class="font-medium text-green-800 mb-2">
+              <span class="inline-flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                </svg>
+                Personalized Risk Detection
+              </span>
+            </h4>
+            <p class="text-green-700 text-sm">
+              Based on your company profile and transaction data, our risk detection algorithm identified 
+              <%= @analysis_results[:flagged_transactions]&.size || 0 %> transactions that require attention, 
+              representing <%= number_to_percentage((@analysis_results[:flagged_transactions]&.size || 0).to_f / (@analysis_results[:total_transactions] || 1) * 100, precision: 1) %> 
+              of your total transactions.
+            </p>
+            <% if @analysis_results[:flagged_transactions].present? && @analysis_results[:flagged_transactions].size > 0 %>
+              <p class="text-green-700 text-sm mt-2">
+                Most common flag reason: <%= @analysis_results[:flagged_transactions].group_by { |t| t[:reason] || t["reason"] }.max_by { |_, v| v.size }.first %>
+              </p>
+            <% end %>
+          </div>
+          
+          <!-- Next Steps -->
+          <div class="mt-6">
+            <h4 class="font-semibold text-gray-800 mb-3">Recommended Next Steps:</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-3 rounded-md border border-gray-200 flex">
+                <div class="text-red-500 mr-3 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-800">Review Flagged Transactions</p>
+                  <p class="text-sm text-gray-600">Schedule a review meeting with your accounting team to examine the <%= @analysis_results[:flagged_transactions]&.size || 0 %> flagged transactions.</p>
+                </div>
+              </div>
+              <div class="bg-gray-50 p-3 rounded-md border border-gray-200 flex">
+                <div class="text-red-500 mr-3 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-800">Run Regular Analyses</p>
+                  <p class="text-sm text-gray-600">Set up a monthly audit schedule to continuously monitor for unusual transactions or patterns.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
 
     <!-- Footer -->
     <div class="text-center text-gray-500 text-sm mb-8">

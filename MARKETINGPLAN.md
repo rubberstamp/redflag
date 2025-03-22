@@ -8,7 +8,7 @@ Based on our analysis, the following offer structure is recommended for RedFlag 
 
 ### FREE TIER: "Fraud Risk Assessment"
 - One-time comprehensive scan of up to 6 months of financial data
-- PDF report with top 5-10 potential issues identified
+- Digital report with top 5-10 potential issues identified
 - Basic ROI calculation showing potential losses from identified issues
 - Limited access to the dashboard for 14 days
 - Sample real-time alerts to demonstrate continuous monitoring value

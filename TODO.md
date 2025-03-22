@@ -21,7 +21,7 @@
   - [ ] Create risk scoring algorithm
 - [ ] Report Generation
   - [ ] Design report UI with Tailwind CSS
-  - [ ] Create PDF export functionality
+  - [x] ~~Create PDF export functionality~~ (removed PDF functionality)
   - [ ] Create CSV export functionality
 - [ ] Secure Logout
   - [ ] Implement session cleanup

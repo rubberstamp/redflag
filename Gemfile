@@ -38,6 +38,8 @@ gem "oauth2"
 gem "faraday" # Required for qbo_api
 gem "redis" # For background job status and caching
 
+# PDF generation removed
+
 # Analytics
 gem "posthog-ruby" # PostHog analytics tracking
 
