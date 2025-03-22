@@ -47,7 +47,6 @@ console_command = "/rails/bin/rails console"
   DATABASE_URL = "sqlite3:///rails/storage/production.sqlite3"
   SOLID_QUEUE_IN_PUMA = "true"
   JOB_CONCURRENCY = "2"
-  # Email settings
-  POSTMARK_API_TOKEN = "get_token_from_postmark_dashboard"
 
 # Using SolidQueue for background jobs (no Redis needed)
+# Email configuration is stored as a secret (POSTMARK_API_TOKEN)
