@@ -2,8 +2,16 @@ require "test_helper"
 
 class LeadsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    # Set HTTP auth credentials for admin routes
-    @auth_headers = { "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Basic.encode_credentials("admin", "redflag-admin") }
+    # Set HTTP auth credentials for admin routes - use ENV variables
+    ENV["ADMIN_USERNAME"] = "admin" unless ENV["ADMIN_USERNAME"]
+    ENV["ADMIN_PASSWORD"] = "admin" unless ENV["ADMIN_PASSWORD"]
+    
+    @auth_headers = { 
+      "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Basic.encode_credentials(
+        ENV["ADMIN_USERNAME"], 
+        ENV["ADMIN_PASSWORD"]
+      ) 
+    }
   end
   
   test "should create lead and set session" do

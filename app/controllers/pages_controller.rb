@@ -11,8 +11,8 @@ class PagesController < ApplicationController
   end
   
   def lead_thank_you
-    # Make the lead info available to the view
-    @lead_info = session[:lead_info]
+    # Make the lead info available to the view - ensure it's a hash with symbol keys
+    @lead_info = session[:lead_info]&.symbolize_keys || {}
     
     # If no lead info in session, create a default set to prevent errors
     if @lead_info.blank?
@@ -27,6 +27,9 @@ class PagesController < ApplicationController
       # Log this issue for tracking
       Rails.logger.warn "Lead thank you page accessed without session data. Using defaults."
     else
+      # Log the lead info for debugging in development
+      Rails.logger.debug "Thank you page - Lead info: #{@lead_info.inspect}" if Rails.env.development?
+      
       # Track conversion complete event with lead properties
       track_event('lead_conversion_complete', {
         lead_id: session[:lead_id],
