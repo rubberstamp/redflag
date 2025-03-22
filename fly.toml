@@ -47,6 +47,9 @@ console_command = "/rails/bin/rails console"
   DATABASE_URL = "sqlite3:///rails/storage/production.sqlite3"
   SOLID_QUEUE_IN_PUMA = "true"
   JOB_CONCURRENCY = "2"
+  # Admin credentials for basic auth (real credentials should be set as secrets)
+  ADMIN_USERNAME = "admin"
+  # For security, don't set the real password here - use secrets
 
 # Using SolidQueue for background jobs (no Redis needed)
-# Email configuration is stored as a secret (POSTMARK_API_TOKEN)
+# Sensitive configuration is stored as secrets (POSTMARK_API_TOKEN, ADMIN_PASSWORD)

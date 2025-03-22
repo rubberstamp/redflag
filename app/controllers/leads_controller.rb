@@ -1,6 +1,7 @@
 class LeadsController < ApplicationController
   # Protect the leads list with HTTP Basic Authentication in all environments
-  http_basic_authenticate_with name: "admin", password: "redflag-admin", 
+  http_basic_authenticate_with name: ENV.fetch("ADMIN_USERNAME", "admin"),
+                               password: ENV.fetch("ADMIN_PASSWORD", "admin"),
                                only: [:index, :admin_index]
   
   def index

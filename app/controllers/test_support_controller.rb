@@ -4,7 +4,13 @@ class TestSupportController < ApplicationController
   
   # Setup session variables for testing
   def setup_session
-    session_data = params.permit!.to_h
+    # Only permit specific keys that we know are safe for testing
+    session_data = params.permit(
+      :lead_id, 
+      lead_info: [:name, :email, :company, :plan, :newsletter],
+      quickbooks: [:realm_id, :access_token, :refresh_token, :token_type, :expires_at]
+    ).to_h
+    
     session_data.each do |key, value|
       session[key] = value
     end
