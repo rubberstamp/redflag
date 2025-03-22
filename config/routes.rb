@@ -58,6 +58,27 @@ Rails.application.routes.draw do
   get "leads/thank-you", to: "pages#lead_thank_you", as: :leads_thank_you
   get "enterprise", to: "pages#enterprise"
   
+  # Product pages
+  get "features", to: "pages#features"
+  get "security", to: "pages#security"
+  
+  # Resource pages
+  get "documentation", to: "pages#documentation"
+  get "case-studies", to: "pages#case_studies"
+  get "blog", to: "pages#blog"
+  get "support", to: "pages#support"
+  
+  # Company pages
+  get "about", to: "pages#about"
+  get "careers", to: "pages#careers"
+  get "contact", to: "pages#contact"
+  get "partners", to: "pages#partners"
+  
+  # Legal pages
+  get "privacy-policy", to: "pages#privacy_policy"
+  get "terms-of-service", to: "pages#terms_of_service"
+  get "cookie-policy", to: "pages#cookie_policy"
+  
   # Lead capture and management
   resources :leads, only: [:index, :create]
   

@@ -10,6 +10,62 @@ class PagesController < ApplicationController
     # Static enterprise page
   end
   
+  # Product pages
+  def features
+    # Features page
+  end
+  
+  def security
+    # Security page
+  end
+  
+  # Resource pages
+  def documentation
+    # Documentation page
+  end
+  
+  def case_studies
+    # Case studies page
+  end
+  
+  def blog
+    # Blog page
+  end
+  
+  def support
+    # Support page
+  end
+  
+  # Company pages
+  def about
+    # About page
+  end
+  
+  def careers
+    # Careers page
+  end
+  
+  def contact
+    # Contact page
+  end
+  
+  def partners
+    # Partners page
+  end
+  
+  # Legal pages
+  def privacy_policy
+    # Privacy policy page
+  end
+  
+  def terms_of_service
+    # Terms of service page
+  end
+  
+  def cookie_policy
+    # Cookie policy page
+  end
+  
   def lead_thank_you
     # Make the lead info available to the view - ensure it's a hash with symbol keys
     @lead_info = session[:lead_info]&.symbolize_keys || {}
