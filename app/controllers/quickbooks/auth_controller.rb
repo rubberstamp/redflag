@@ -169,6 +169,9 @@ class Quickbooks::AuthController < ApplicationController
           "realm_id" => params[:realmId] # Just store the realm ID in the session
         }
         
+        # Set the import source to QuickBooks
+        session[:import_source] = "quickbooks"
+        
         Rails.logger.debug "OAuth successful: access_token=#{token.token[0..5]}..., refresh_token=#{token.refresh_token[0..5]}..., realm_id=#{params[:realmId]}, expires_at=#{token.expires_at}"
         
         # Store the profile and tokens in the database

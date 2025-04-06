@@ -139,10 +139,19 @@
     
     let pollTimer;
     let lastTimestamp = 0;
+    let startTime = new Date();
+    let backupTriggered = false;
     
     function updateProgress(progress, message) {
       progressBar.style.width = `${progress}%`;
       progressPercentage.textContent = `${progress}%`;
+      
+      // If we detected the fallback mechanism kicking in
+      if (!backupTriggered && progress > 0 && (new Date() - startTime) > 15000) {
+        backupTriggered = true;
+        message += " (Using direct processing)";
+      }
+      
       progressMessage.textContent = message;
       
       // Update step styling based on progress
