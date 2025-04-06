@@ -82,6 +82,7 @@ Rails.application.routes.draw do
   # Lead capture and management
   resources :leads, only: [:index, :create]
   post 'leads/initial_capture', to: 'leads#initial_capture', as: :initial_lead_capture
+  get 'leads/choose_import', to: 'leads#choose_import', as: :choose_import
   get 'leads/capture', to: 'leads#capture', as: :lead_capture
   get 'leads/cfo_consultation', to: 'leads#cfo_consultation', as: :cfo_consultation
   post 'leads/process_consultation', to: 'leads#process_consultation', as: :process_consultation

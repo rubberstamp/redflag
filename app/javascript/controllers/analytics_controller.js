@@ -129,4 +129,12 @@ export default class extends Controller {
   trackCFOSkip(event) {
     this.trackEvent('cfo_consultation_skipped');
   }
+
+  /**
+   * Track when a user selects an import method
+   */
+  trackImportChoice(event) {
+    const method = event.currentTarget.dataset.importMethod || 'unknown';
+    this.trackEvent('import_method_selected', { method: method });
+  }
 }

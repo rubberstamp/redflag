@@ -1,0 +1,112 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-6 py-12 md:max-w-3xl">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Choose Your Data Source</h1>
+      <p class="text-gray-600">Thank you for your interest in detecting fraud, waste, and abuse in your business. Please select how you'd like to import your transaction data.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- QuickBooks Option -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 transition-all hover:shadow-xl">
+        <div class="p-6 flex flex-col h-full">
+          <div class="mb-4 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-red-900">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900">QuickBooks Online</h3>
+          </div>
+
+          <div class="mb-6 text-gray-600 text-sm flex-grow">
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Connect securely to your QuickBooks Online account</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Analyze transactions directly from your accounting system</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>More comprehensive analysis with vendor and chart of accounts data</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Read-only access - we don't modify your QuickBooks data</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="text-center">
+            <a href="<%= quickbooks_connect_path %>" class="inline-block w-full py-3 px-4 bg-red-800 text-white font-medium rounded-lg hover:bg-red-700 transition duration-300 text-center" data-controller="analytics" data-action="click->analytics#trackImportChoice" data-import-method="quickbooks">
+              Connect QuickBooks
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSV Upload Option -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 transition-all hover:shadow-xl">
+        <div class="p-6 flex flex-col h-full">
+          <div class="mb-4 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-red-900">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900">CSV File Upload</h3>
+          </div>
+
+          <div class="mb-6 text-gray-600 text-sm flex-grow">
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Upload a CSV file of your transactions</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Works with any accounting system - export and upload</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Flexible mapping for different CSV formats</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Files are securely processed and deleted after analysis</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="text-center">
+            <a href="<%= new_import_path %>" class="inline-block w-full py-3 px-4 bg-red-800 text-white font-medium rounded-lg hover:bg-red-700 transition duration-300 text-center" data-controller="analytics" data-action="click->analytics#trackImportChoice" data-import-method="csv">
+              Upload CSV File
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center text-gray-500 text-sm">
+      <p>Both options provide secure, read-only analysis of your financial data. Your information is never shared with third parties.</p>
+    </div>
+  </div>
+</div>

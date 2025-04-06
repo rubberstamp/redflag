@@ -1,8 +1,6 @@
 <%# Initial lead capture form - just email %>
 <div class="mt-4" data-controller="analytics">
-  <form id="initial-lead-form" action="<%= initial_lead_capture_path %>" method="post" class="space-y-4" data-remote="true">
-    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-    
+  <%= form_with url: initial_lead_capture_path, id: "initial-lead-form", class: "space-y-4", data: { controller: "lead-capture", action: "submit->lead-capture#submit" } do |f| %>
     <div>
       <label for="email" class="sr-only">Email address</label>
       <input type="email" name="email" id="email" class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Your email address" required>
@@ -16,45 +14,9 @@
     </div>
     
     <div id="initial-lead-errors" class="hidden mt-2 text-sm text-red-600"></div>
-  </form>
+  <% end %>
   
   <div class="mt-4 text-center text-xs text-gray-500">
     <p>We'll use your email to send your report. See our <a href="/privacy-policy" class="text-red-700 hover:text-red-800">Privacy Policy</a>.</p>
   </div>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('initial-lead-form');
-    const errorsContainer = document.getElementById('initial-lead-errors');
-    
-    form.addEventListener('ajax:success', function(event) {
-      const [response, status, xhr] = event.detail;
-      if (response.success) {
-        // Successful email capture, redirect to the appropriate flow
-        window.location.href = '<%= new_import_path %>';
-      }
-    });
-    
-    form.addEventListener('ajax:error', function(event) {
-      const [response, status, xhr] = event.detail;
-      errorsContainer.classList.remove('hidden');
-      errorsContainer.innerHTML = '';
-      
-      if (response.errors && response.errors.length) {
-        const ul = document.createElement('ul');
-        ul.classList.add('list-disc', 'pl-5');
-        
-        response.errors.forEach(error => {
-          const li = document.createElement('li');
-          li.textContent = error;
-          ul.appendChild(li);
-        });
-        
-        errorsContainer.appendChild(ul);
-      } else {
-        errorsContainer.textContent = 'An error occurred. Please try again.';
-      }
-    });
-  });
-</script>

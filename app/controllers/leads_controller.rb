@@ -29,11 +29,21 @@ class LeadsController < ApplicationController
         email: @lead.email
       })
       
-      # Return success JSON for AJAX form submission
-      render json: { success: true, lead_id: @lead.id }
+      # Create an analysis session ID to track the user's progress
+      session[:analysis_session_id] ||= SecureRandom.hex(10)
+      
+      respond_to do |format|
+        format.html { redirect_to choose_import_path }
+        format.json { render json: { success: true, lead_id: @lead.id, redirect_url: choose_import_path } }
+      end
     else
-      # Return validation errors for AJAX form
-      render json: { success: false, errors: @lead.errors.full_messages }, status: :unprocessable_entity
+      respond_to do |format|
+        format.html do 
+          flash.now[:errors] = @lead.errors.full_messages
+          render :new, status: :unprocessable_entity
+        end
+        format.json { render json: { success: false, errors: @lead.errors.full_messages }, status: :unprocessable_entity }
+      end
     end
   end
   
@@ -153,6 +163,23 @@ class LeadsController < ApplicationController
     redirect_to_report_page
   end
   
+  # Let the user choose between CSV and QuickBooks import
+  def choose_import
+    # Ensure we have a lead ID in the session
+    unless session[:lead_id].present?
+      redirect_to root_path, alert: "Please enter your email to begin."
+      return
+    end
+    
+    @lead = Lead.find_by(id: session[:lead_id])
+    
+    # Track the page view with analytics
+    track_event('import_choice_view', {
+      lead_id: @lead&.id,
+      email: @lead&.email
+    })
+  end
+
   # Show the full lead capture form
   def capture
     # Ensure we have an analysis in progress
