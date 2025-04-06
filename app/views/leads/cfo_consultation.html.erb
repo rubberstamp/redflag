@@ -30,12 +30,18 @@
           <div class="border border-gray-200 rounded-lg p-6">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Schedule a Call</h3>
             
-            <%# This is a placeholder for the actual scheduling widget %>
-            <div class="h-96 flex items-center justify-center bg-gray-100 rounded">
-              <p class="text-gray-500">Scheduling widget placeholder</p>
-              <%# Real implementation would have embedded calendar here %>
-              <%# The scheduling code would go here %>
-            </div>
+            <!-- Start of Meetings Embed Script -->
+            <div class="meetings-iframe-container" data-src="https://meetings.hubspot.com/james-kennedy/redflag-consultation?embed=true" style="min-height: 450px;"></div>
+            <script type="text/javascript" src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js"></script>
+            <style>
+              .meetings-iframe-container iframe {
+                width: 100% !important;
+                height: 100% !important;
+                min-height: 450px !important;
+                border: none !important;
+              }
+            </style>
+            <!-- End of Meetings Embed Script -->
             
             <div class="mt-4">
               <%= form_tag process_consultation_path, method: :post do %>
