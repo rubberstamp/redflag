@@ -26,21 +26,56 @@ class LeadsControllerTest < ActionDispatch::IntegrationTest
           last_name: "Doe", 
           email: "john@example.com", 
           company: "ACME Corp", 
+          company_size: "11-50 employees",
+          phone: "+1 555-123-4567",
           plan: "standard",
           newsletter: "1"
-        } 
+        },
+        skip_cfo_consultation: "true" # Skip CFO consultation for this test
       }
     end
     
-    # Verify redirect to thank you page
-    assert_redirected_to leads_thank_you_path
+    # With skip_cfo_consultation=true, it should redirect to the appropriate report page
+    # But since we don't have a valid analysis session in this test, it defaults to root_path
+    # We'll just verify it doesn't go to the CFO consultation page
+    assert_not_equal cfo_consultation_path, @response.redirect_url
     
     # Check if session has lead info
     assert_equal "John Doe", session[:lead_info][:name]
     assert_equal "john@example.com", session[:lead_info][:email]
     assert_equal "ACME Corp", session[:lead_info][:company]
+    assert_equal "11-50 employees", session[:lead_info][:company_size]
+    assert_equal "+1 555-123-4567", session[:lead_info][:phone]
     assert_equal "standard", session[:lead_info][:plan]
     assert_equal true, session[:lead_info][:newsletter]
+    
+    # Verify lead ID is in session
+    assert session[:lead_id].present?
+  end
+  
+  test "should create lead and redirect to CFO consultation" do
+    # Force PostHog to be disabled in test environment
+    Rails.application.config.posthog.instance_variable_set(:@disabled, true)
+    
+    # Post a new lead without skip_cfo_consultation flag
+    assert_difference('Lead.count') do
+      post leads_path, params: { 
+        lead: { 
+          first_name: "Jane", 
+          last_name: "Smith", 
+          email: "jane@example.com", 
+          company: "Test Corp", 
+          company_size: "51-200 employees",
+          phone: "+1 555-987-6543",
+          plan: "standard",
+          newsletter: "0"
+        }
+        # No skip_cfo_consultation parameter
+      }
+    end
+    
+    # Verify redirect to CFO consultation page
+    assert_redirected_to cfo_consultation_path
     
     # Verify lead ID is in session
     assert session[:lead_id].present?

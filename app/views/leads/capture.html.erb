@@ -1,0 +1,103 @@
+<%# Full lead capture form - shown after analysis is complete but before showing results %>
+<div class="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="px-4 py-5 sm:p-6">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Your Report is Ready!</h2>
+        <p class="text-lg text-gray-600">
+          We need a few details to deliver your waste, fraud, and abuse report.
+        </p>
+      </div>
+
+      <% if flash[:errors].present? %>
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">Please correct the following errors:</h3>
+              <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                <% flash[:errors].each do |error| %>
+                  <li><%= error %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%= form_for @lead, html: { class: "space-y-6" } do |f| %>
+        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <div class="sm:col-span-3">
+            <%= f.label :first_name, class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1">
+              <%= f.text_field :first_name, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md", required: true %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :last_name, class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1">
+              <%= f.text_field :last_name, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md", required: true %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1">
+              <%= f.email_field :email, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md", required: true %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :phone, "Phone Number", class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1">
+              <%= f.telephone_field :phone, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md", placeholder: "+1 (555) 123-4567" %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :company, "Company Name", class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1">
+              <%= f.text_field :company, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md", required: true %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <%= f.label :company_size, "Company Size", class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1">
+              <%= f.select :company_size, Lead::COMPANY_SIZE_OPTIONS, { include_blank: "Select company size" }, { class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" } %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <div class="flex items-start">
+              <div class="flex items-center h-5">
+                <%= f.check_box :newsletter, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= f.label :newsletter, "Subscribe to our newsletter for fraud detection tips", class: "font-medium text-gray-700" %>
+              </div>
+            </div>
+          </div>
+
+          <%= f.hidden_field :plan, value: "report_user" %>
+        </div>
+
+        <div class="pt-5 border-t border-gray-200">
+          <div class="flex justify-end">
+            <div class="mt-1 sm:mt-0 sm:flex-shrink-0">
+              <%= f.submit "Continue", class: "block w-full bg-indigo-600 border border-transparent rounded-md py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+            </div>
+          </div>
+          <div class="mt-3 text-center text-sm text-gray-500">
+            <p>We take your privacy seriously. View our <a href="/privacy-policy" class="text-indigo-600 hover:text-indigo-500">Privacy Policy</a>.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

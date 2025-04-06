@@ -1,0 +1,106 @@
+<%# Report preview partial - shows limited insights to demonstrate value before full lead capture %>
+<div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+  <div class="px-4 py-5 sm:px-6 bg-gradient-to-r from-indigo-700 to-blue-700">
+    <h3 class="text-lg leading-6 font-medium text-white">Report Preview</h3>
+    <p class="mt-1 max-w-2xl text-sm text-indigo-100">
+      Here's a preview of what we found in your data
+    </p>
+  </div>
+  
+  <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+    <div class="space-y-6">
+      <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-yellow-700">
+              We detected <span class="font-medium">potential risk signals</span> in your transaction data.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <dt class="text-sm font-medium text-gray-500 truncate">
+              Suspicious Transactions
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold text-gray-900">
+              <span class="blur-sm">12</span>
+            </dd>
+          </div>
+        </div>
+        
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <dt class="text-sm font-medium text-gray-500 truncate">
+              Risk Categories
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold text-gray-900">
+              <span class="blur-sm">5</span>
+            </dd>
+          </div>
+        </div>
+        
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <dt class="text-sm font-medium text-gray-500 truncate">
+              Overall Risk Score
+            </dt>
+            <dd class="mt-1 text-3xl font-semibold text-gray-900">
+              <span class="blur-sm">42%</span>
+            </dd>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border border-gray-200 rounded-md overflow-hidden">
+        <div class="bg-gray-50 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Highest Risk Transactions (Preview)
+        </div>
+        <div class="bg-white">
+          <div class="px-4 py-3 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm font-medium text-indigo-600 truncate">
+                  <span class="blur-sm">Round Number Payment</span>
+                </div>
+                <div class="text-sm text-gray-500">
+                  <span class="blur-sm">$5,000.00 on March 15, 2025</span>
+                </div>
+              </div>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                High Risk
+              </span>
+            </div>
+          </div>
+          
+          <div class="px-4 py-3 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm font-medium text-indigo-600 truncate">
+                  <span class="blur-sm">Duplicate Transaction</span>
+                </div>
+                <div class="text-sm text-gray-500">
+                  <span class="blur-sm">$1,247.50 on March 3, 2025</span>
+                </div>
+              </div>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                High Risk
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center">
+        <p class="text-sm text-gray-500 mb-3">Complete your information to see the full report with all findings and recommendations.</p>
+      </div>
+    </div>
+  </div>
+</div>

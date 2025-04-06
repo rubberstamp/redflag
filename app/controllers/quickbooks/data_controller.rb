@@ -264,8 +264,17 @@ class Quickbooks::DataController < ApplicationController
     # If analysis is complete, set the redirect URL
     if analysis.status_progress == 100 && analysis.status_success == true
       session[:current_analysis_id] = analysis.id.to_s
-      status['redirect_url'] = quickbooks_analysis_report_path
-      Rails.logger.info "Analysis complete. Setting redirect to report path."
+      
+      # For the first version of progressive lead capture, we'll go to lead capture first
+      # If user already completed lead capture, we can show the report directly
+      if session[:lead_id].present? && Lead.find_by(id: session[:lead_id])&.complete_lead?
+        status['redirect_url'] = quickbooks_analysis_report_path
+        Rails.logger.info "Analysis complete. User has complete lead info. Redirecting to report."
+      else
+        # Need to capture lead info first
+        status['redirect_url'] = lead_capture_path
+        Rails.logger.info "Analysis complete. Setting redirect to lead capture."
+      end
     end
     
     render json: status, status: :ok

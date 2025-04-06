@@ -96,4 +96,37 @@ export default class extends Controller {
     
     this.trackEvent(eventName, properties)
   }
+  
+  /**
+   * Track when a user submits the initial email capture form
+   */
+  trackInitialCapture(event) {
+    const email = this.element.querySelector('#email')?.value;
+    
+    this.trackEvent('initial_email_capture_click', { 
+      email: email,
+      location: window.location.pathname
+    });
+  }
+  
+  /**
+   * Track when a user completes the full lead capture form
+   */
+  trackLeadComplete(event) {
+    this.trackEvent('lead_form_complete_click');
+  }
+  
+  /**
+   * Track when a user schedules a CFO consultation
+   */
+  trackCFOSchedule(event) {
+    this.trackEvent('cfo_consultation_scheduled');
+  }
+  
+  /**
+   * Track when a user skips the CFO consultation
+   */
+  trackCFOSkip(event) {
+    this.trackEvent('cfo_consultation_skipped');
+  }
 }
