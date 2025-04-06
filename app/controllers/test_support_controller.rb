@@ -7,7 +7,10 @@ class TestSupportController < ApplicationController
     # Only permit specific keys that we know are safe for testing
     session_data = params.permit(
       :lead_id, 
-      lead_info: [:name, :email, :company, :plan, :newsletter],
+      :current_analysis_id,
+      :analysis_session_id,
+      :import_source,
+      lead_info: [:name, :email, :company, :company_size, :phone, :plan, :newsletter],
       quickbooks: [:realm_id, :access_token, :refresh_token, :token_type, :expires_at]
     ).to_h
     

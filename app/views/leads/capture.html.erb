@@ -29,7 +29,7 @@
         </div>
       <% end %>
 
-      <%= form_for @lead, html: { class: "space-y-6" } do |f| %>
+      <%= form_with(url: leads_path, model: @lead, scope: :lead, local: true, html: { class: "space-y-6" }) do |f| %>
         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div class="sm:col-span-3">
             <%= f.label :first_name, class: "block text-sm font-medium text-gray-700" %>

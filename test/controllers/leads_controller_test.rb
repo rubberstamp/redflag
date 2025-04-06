@@ -140,4 +140,145 @@ class LeadsControllerTest < ActionDispatch::IntegrationTest
     # Check if track_event method is called (indirectly by checking if the method exists)
     assert LeadsController.instance_methods.include?(:track_event)
   end
+  
+  # Tests for the new progressive lead capture flow
+  
+  test "should capture initial lead with just email" do
+    # Post just the email for initial capture
+    assert_difference('Lead.count') do
+      post initial_lead_capture_path, params: { email: "initial@example.com" }, as: :json
+    end
+    
+    # Verify response is JSON with success: true
+    assert_response :success
+    response_data = JSON.parse(@response.body)
+    assert response_data["success"]
+    assert response_data["lead_id"].present?
+    
+    # Verify lead was created with just email
+    lead = Lead.find(response_data["lead_id"])
+    assert_equal "initial@example.com", lead.email
+    assert_nil lead.first_name # Should be nil since we only provided email
+    
+    # Verify lead ID is in session
+    assert session[:lead_id].present?
+  end
+  
+  test "should not capture initial lead with invalid email" do
+    # Post an invalid email
+    assert_no_difference('Lead.count') do
+      post initial_lead_capture_path, params: { email: "not-an-email" }, as: :json
+    end
+    
+    # Verify response is JSON with errors
+    assert_response :unprocessable_entity
+    response_data = JSON.parse(@response.body)
+    assert_not response_data["success"]
+    assert response_data["errors"].present?
+    assert_includes response_data["errors"], "Email is invalid"
+  end
+  
+  test "should show lead capture form" do
+    # Setup an analysis session
+    post "/test/session", params: { analysis_session_id: "test-analysis-123" }
+    
+    # Request the lead capture form
+    get lead_capture_path
+    
+    # Verify it renders the form
+    assert_response :success
+    assert_select "form[action=?]", leads_path
+    assert_select "input[name='lead[email]']"
+    assert_select "input[name='lead[first_name]']"
+    assert_select "input[name='lead[last_name]']"
+    assert_select "input[name='lead[company]']"
+  end
+  
+  test "should redirect from lead capture when no analysis is in progress" do
+    # Request the lead capture form without an analysis session
+    get lead_capture_path
+    
+    # Verify it redirects to home
+    assert_redirected_to root_path
+    assert_equal "Please start an analysis first.", flash[:alert]
+  end
+  
+  test "should show CFO consultation page" do
+    # Create a lead and set it in the session
+    lead = Lead.create!(
+      first_name: "Jane",
+      last_name: "Smith",
+      email: "jane@example.com",
+      company: "Test Co",
+      plan: "premium"
+    )
+    post "/test/session", params: { lead_id: lead.id }
+    
+    # Request the CFO consultation page
+    get cfo_consultation_path
+    
+    # Verify it renders the page
+    assert_response :success
+    assert_select "h2", "Speak with a Financial Expert"
+    assert_select "form[action=?]", process_consultation_path
+  end
+  
+  test "should redirect from CFO consultation when no lead exists" do
+    # Request the CFO consultation page without a lead in session
+    get cfo_consultation_path
+    
+    # Verify it redirects to home
+    assert_redirected_to root_path
+    assert_equal "Please start over with the analysis process.", flash[:alert]
+  end
+  
+  test "should process CFO consultation choice and update lead" do
+    # Create a lead and set up session
+    lead = Lead.create!(
+      first_name: "John",
+      last_name: "Doe",
+      email: "john@example.com",
+      company: "ACME Corp",
+      plan: "standard"
+    )
+    post "/test/session", params: { 
+      lead_id: lead.id,
+      analysis_session_id: "test-analysis-123"
+    }
+    
+    # Process the consultation with "true" to schedule
+    post process_consultation_path, params: { schedule_consultation: "true" }
+    
+    # Reload the lead and verify cfo_consultation was updated
+    lead.reload
+    assert lead.cfo_consultation
+    
+    # Without import_source specified, it defaults to QuickBooks path
+    assert_redirected_to quickbooks_analysis_report_path
+  end
+  
+  test "should process CFO consultation skip" do
+    # Create a lead and set up session
+    lead = Lead.create!(
+      first_name: "Jane",
+      last_name: "Smith",
+      email: "jane@example.com",
+      company: "Test Co",
+      plan: "premium"
+    )
+    post "/test/session", params: { 
+      lead_id: lead.id,
+      analysis_session_id: "test-analysis-123"
+    }
+    
+    # Process the consultation with "false" to skip
+    post process_consultation_path, params: { schedule_consultation: "false" }
+    
+    # Reload the lead and verify cfo_consultation was updated
+    lead.reload
+    assert_not lead.cfo_consultation
+    
+    # Without import_source specified, it defaults to QuickBooks path
+    assert_redirected_to quickbooks_analysis_report_path
+  end
 end

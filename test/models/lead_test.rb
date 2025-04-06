@@ -73,4 +73,76 @@ class LeadTest < ActiveSupport::TestCase
     assert lead.valid?
     assert_not lead.newsletter
   end
+  
+  test "should validate valid phone formats" do
+    valid_phones = [
+      "+1 555-123-4567",
+      "555-123-4567",
+      "(555) 123-4567",
+      "5551234567",
+      "+44 20 1234 5678",
+      "+1-555-123-4567"
+    ]
+    
+    valid_phones.each do |phone|
+      lead = Lead.new(
+        first_name: "John",
+        last_name: "Doe",
+        email: "john.doe@example.com",
+        company: "Acme Corp",
+        phone: phone
+      )
+      assert lead.valid?, "#{phone} should be a valid phone number"
+    end
+  end
+  
+  test "should not validate with invalid phone format" do
+    invalid_phones = [
+      "abc-def-ghij",
+      "phone number",
+      "555@123@4567"
+    ]
+    
+    invalid_phones.each do |phone|
+      lead = Lead.new(
+        first_name: "John",
+        last_name: "Doe",
+        email: "john.doe@example.com",
+        company: "Acme Corp",
+        phone: phone
+      )
+      assert_not lead.valid?, "#{phone} should be an invalid phone number"
+      assert_includes lead.errors[:phone], "format is invalid"
+    end
+  end
+  
+  test "should correctly identify complete leads" do
+    # Complete lead with all required info
+    complete_lead = Lead.new(
+      first_name: "John",
+      last_name: "Doe",
+      email: "john.doe@example.com",
+      company: "Acme Corp"
+    )
+    
+    assert complete_lead.complete_lead?
+    assert_not complete_lead.initial_capture_only?
+    
+    # Partial lead with only email
+    partial_lead = Lead.new(
+      email: "john.doe@example.com"
+    )
+    
+    assert_not partial_lead.complete_lead?
+    assert partial_lead.initial_capture_only?
+    
+    # Partial lead with some but not all fields
+    incomplete_lead = Lead.new(
+      email: "john.doe@example.com",
+      first_name: "John"
+    )
+    
+    assert_not incomplete_lead.complete_lead?
+    assert incomplete_lead.initial_capture_only?
+  end
 end
