@@ -270,7 +270,7 @@ GEM
     parser (3.3.7.1)
       ast (~> 2.4.1)
       racc
-    posthog-ruby (2.7.2)
+    posthog-ruby (2.8.0)
       concurrent-ruby (~> 1)
     postmark (1.25.1)
       json
