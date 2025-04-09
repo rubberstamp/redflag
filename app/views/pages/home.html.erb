@@ -1,15 +1,30 @@
+<% content_for :layout_override do %>
+<style>
+  nav.bg-slate-800 {
+    display: none !important;
+  }
+  
+  main .mx-auto.max-w-7xl {
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: none !important;
+  }
+</style>
+<% end %>
+
 <div class="min-h-screen bg-gray-50">
   <!-- Hero Section -->
-  <div class="bg-red-900 text-white py-12 md:py-20">
+  <div class="bg-gradient-to-r from-slate-800 to-slate-700 text-white py-12 md:py-20">
     <div class="container mx-auto px-6 max-w-5xl">
       <div class="flex flex-col md:flex-row items-center justify-between">
         <div class="md:w-1/2 mb-10 md:mb-0">
           <div class="mb-3">
-            <span class="bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">Advanced Fraud Detection for Businesses</span>
+            <span class="bg-red-600 bg-opacity-80 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">Advanced Fraud Detection for Businesses</span>
           </div>
           <h1 class="text-4xl md:text-5xl font-bold mb-4">Detect fraud, waste, and abuse in your business</h1>
-          <p class="text-xl md:text-2xl mb-6 text-red-50">Scan your financial transactions for potential red flags in minutes</p>
-          <p class="text-lg mb-8 text-red-50">Our tools help businesses identify potentially fraudulent activity before it impacts your bottom line.</p>
+          <p class="text-xl md:text-2xl mb-6 text-gray-200">Scan your financial transactions for potential red flags in minutes</p>
+          <p class="text-lg mb-8 text-gray-300">Our tools help businesses identify potentially fraudulent activity before it impacts your bottom line.</p>
           <!-- Initial Email Capture Form -->
           <div class="bg-white rounded-lg shadow-md overflow-hidden w-full md:max-w-md mb-4">
             <div class="px-6 py-4">
@@ -21,7 +36,7 @@
           </div>
           
           <div class="flex flex-wrap gap-4 mt-4">
-            <a href="<%= analysis_sample_report_path %>" class="inline-flex items-center border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-red-900 transition duration-300">
+            <a href="<%= analysis_sample_report_path %>" class="inline-flex items-center border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-slate-800 transition duration-300">
               <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15 12L9 8V16L15 12Z" fill="currentColor"/>
               </svg>
@@ -31,21 +46,21 @@
         </div>
         <div class="md:w-1/2 flex justify-center">
           <div class="relative w-full max-w-md">
-            <div class="absolute -top-6 -right-6 bg-yellow-400 text-red-900 text-sm font-bold px-4 py-1 rounded-full shadow-lg transform rotate-3 z-10">
+            <div class="absolute -top-6 -right-6 bg-yellow-400 text-slate-800 text-sm font-bold px-4 py-1 rounded-full shadow-lg transform rotate-3 z-10">
               New AI Detection!
             </div>
             <div class="bg-white rounded-xl shadow-2xl overflow-hidden">
-              <div class="p-6 bg-gradient-to-br from-red-800 to-red-900 text-white">
+              <div class="p-6 bg-gradient-to-br from-slate-700 to-slate-800 text-white">
                 <div class="flex justify-between items-center mb-6">
                   <h3 class="text-xl font-semibold">Fraud Risk Analysis</h3>
-                  <span class="px-3 py-1 bg-red-700 rounded-full text-sm">Real-time</span>
+                  <span class="px-3 py-1 bg-red-600 bg-opacity-80 rounded-full text-sm">Real-time</span>
                 </div>
-                <div class="bg-red-800 bg-opacity-50 rounded-lg p-4 mb-4">
+                <div class="bg-slate-600 bg-opacity-50 rounded-lg p-4 mb-4">
                   <div class="flex justify-between items-center mb-2">
-                    <span class="text-red-100">Risk Assessment</span>
+                    <span class="text-gray-200">Risk Assessment</span>
                     <span class="font-bold text-xl">Medium</span>
                   </div>
-                  <div class="w-full bg-red-700 rounded-full h-2">
+                  <div class="w-full bg-slate-500 rounded-full h-2">
                     <div class="bg-yellow-400 h-2 rounded-full" style="width: 60%"></div>
                   </div>
                 </div>
@@ -235,19 +250,19 @@
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="bg-white p-6 rounded-lg shadow-md text-center">
-          <div class="text-red-600 text-4xl font-bold mb-2">5%</div>
+          <div class="text-slate-700 text-4xl font-bold mb-2">5%</div>
           <p class="text-lg font-semibold text-gray-800 mb-2">Revenue Lost to Fraud</p>
           <p class="text-gray-600">Organizations typically lose 5% of annual revenue to fraud, waste, and abuse according to the ACFE's 2024 Report<sup>1</sup>.</p>
         </div>
         
         <div class="bg-white p-6 rounded-lg shadow-md text-center">
-          <div class="text-red-600 text-4xl font-bold mb-2">30%</div>
+          <div class="text-slate-700 text-4xl font-bold mb-2">30%</div>
           <p class="text-lg font-semibold text-gray-800 mb-2">Operational Waste</p>
           <p class="text-gray-600">Up to 30% of business spending may be wasteful according to research by the American Productivity & Quality Center<sup>2</sup>.</p>
         </div>
         
         <div class="bg-white p-6 rounded-lg shadow-md text-center">
-          <div class="text-red-600 text-4xl font-bold mb-2">14</div>
+          <div class="text-slate-700 text-4xl font-bold mb-2">14</div>
           <p class="text-lg font-semibold text-gray-800 mb-2">Months Before Detection</p>
           <p class="text-gray-600">Financial abuse schemes typically continue for 14 months before detection, increasing potential losses<sup>3</sup>.</p>
         </div>
@@ -378,8 +393,8 @@
               </li>
             </ul>
           </div>
-          <div class="mt-auto p-6 bg-red-50">
-            <a href="#" class="w-full block text-center py-3 px-4 bg-red-800 rounded-lg font-semibold text-white hover:bg-red-700 transition duration-300"
+          <div class="mt-auto p-6 bg-slate-50">
+            <a href="#" class="w-full block text-center py-3 px-4 bg-red-600 bg-opacity-90 rounded-lg font-semibold text-white hover:bg-red-700 transition duration-300"
                onclick="document.getElementById('initial-lead-form').scrollIntoView({behavior: 'smooth'}); return false;">
               Choose Standard
             </a>
@@ -450,47 +465,47 @@
   </div>
 
   <!-- Call To Action Section -->
-  <div id="risk-assessment" class="py-16 bg-gradient-to-r from-red-900 to-red-800 text-white">
+  <div id="risk-assessment" class="py-16 bg-gradient-to-r from-slate-800 to-slate-700 text-white">
     <div class="container mx-auto px-6 max-w-5xl text-center">
-      <div class="inline-block bg-red-700 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-4">
+      <div class="inline-block bg-red-600 bg-opacity-80 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-4">
         Start Your Free Fraud Risk Assessment Today
       </div>
       <h2 class="text-4xl font-bold mb-6">Protect Your Business From Financial Fraud</h2>
-      <p class="text-xl mb-8 text-red-100 max-w-3xl mx-auto">Get your comprehensive fraud risk assessment report in minutes. No credit card required.</p>
+      <p class="text-xl mb-8 text-gray-200 max-w-3xl mx-auto">Get your comprehensive fraud risk assessment report in minutes. No credit card required.</p>
       
       <!-- ROI Calculator -->
-      <div class="bg-red-800 rounded-lg p-6 max-w-xl mx-auto mb-8 text-left" data-controller="roi-calculator">
+      <div class="bg-slate-700 rounded-lg p-6 max-w-xl mx-auto mb-8 text-left" data-controller="roi-calculator">
         <h3 class="text-xl font-bold mb-4 text-white">Potential Cost of Waste, Fraud or Abuse (WFA)</h3>
-        <p class="text-red-100 mb-4">According to the Association of Certified Fraud Examiners, businesses lose an average of 5% of revenue to waste, fraud or abuse (WFA) each year.</p>
+        <p class="text-gray-300 mb-4">According to the Association of Certified Fraud Examiners, businesses lose an average of 5% of revenue to waste, fraud or abuse (WFA) each year.</p>
         
-        <div class="bg-red-700 rounded-lg p-4 mb-6">
+        <div class="bg-slate-600 rounded-lg p-4 mb-6">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label class="block text-sm font-medium text-red-100 mb-1">Annual Revenue</label>
+              <label class="block text-sm font-medium text-gray-200 mb-1">Annual Revenue</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <span class="text-gray-300">$</span>
                 </div>
-                <input type="text" class="block w-full pl-7 pr-3 py-2 rounded-md bg-red-600 text-white border border-red-500 focus:ring-red-400 focus:border-red-400" 
+                <input type="text" class="block w-full pl-7 pr-3 py-2 rounded-md bg-slate-500 text-white border border-slate-400 focus:ring-red-400 focus:border-red-400" 
                        placeholder="1,000,000" 
                        value="1000000"
                        data-roi-calculator-target="revenue">
               </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-red-100 mb-1">WFA %</label>
-              <input type="text" class="block w-full px-3 py-2 rounded-md bg-red-600 text-white border border-red-500 focus:ring-red-400 focus:border-red-400" 
+              <label class="block text-sm font-medium text-gray-200 mb-1">WFA %</label>
+              <input type="text" class="block w-full px-3 py-2 rounded-md bg-slate-500 text-white border border-slate-400 focus:ring-red-400 focus:border-red-400" 
                      placeholder="5" 
                      value="5"
                      data-roi-calculator-target="percent">
             </div>
             <div>
-              <label class="block text-sm font-medium text-red-100 mb-1">Annual Loss</label>
+              <label class="block text-sm font-medium text-gray-200 mb-1">Annual Loss</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <span class="text-gray-300">$</span>
                 </div>
-                <input type="text" class="block w-full pl-7 pr-3 py-2 rounded-md bg-red-600 text-white border border-red-500 focus:ring-red-400 focus:border-red-400" 
+                <input type="text" class="block w-full pl-7 pr-3 py-2 rounded-md bg-slate-500 text-white border border-slate-400 focus:ring-red-400 focus:border-red-400" 
                        placeholder="Result" 
                        value="50,000" 
                        readonly
@@ -498,16 +513,16 @@
               </div>
             </div>
           </div>
-          <div class="text-center text-red-100">
+          <div class="text-center text-gray-200">
             <p class="text-lg font-bold">RedFlag could help save your business <span data-roi-calculator-target="monthly">$4,166</span> per month</p>
           </div>
         </div>
         
         <div class="flex justify-between items-center">
-          <div class="text-red-100">
+          <div class="text-gray-300">
             <p>Even a 1% reduction in fraud can lead to significant savings</p>
           </div>
-          <a href="#" class="inline-flex items-center px-4 py-2 bg-white text-red-900 rounded font-medium hover:bg-red-50"
+          <a href="#" class="inline-flex items-center px-4 py-2 bg-red-600 bg-opacity-90 text-white rounded font-medium hover:bg-red-700"
              onclick="document.getElementById('initial-lead-form').scrollIntoView({behavior: 'smooth'}); return false;">
             Get Started
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -519,9 +534,9 @@
       
       <!-- Data Sources -->
       <div class="text-center">
-        <p class="text-red-100 mb-4">Choose your preferred data source after sign-up:</p>
+        <p class="text-gray-300 mb-4">Choose your preferred data source after sign-up:</p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="#" class="inline-flex items-center bg-white text-red-900 px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-gray-100 transition duration-300"
+          <a href="#" class="inline-flex items-center bg-red-600 bg-opacity-90 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-red-700 transition duration-300"
              onclick="document.getElementById('initial-lead-form').scrollIntoView({behavior: 'smooth'}); return false;">
             <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M13 5L21 12L13 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -530,7 +545,7 @@
             QuickBooks Data
           </a>
           
-          <a href="#" class="inline-flex items-center bg-white text-red-900 px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-gray-100 transition duration-300"
+          <a href="#" class="inline-flex items-center bg-red-600 bg-opacity-90 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-red-700 transition duration-300"
              onclick="document.getElementById('initial-lead-form').scrollIntoView({behavior: 'smooth'}); return false;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -540,7 +555,7 @@
         </div>
       </div>
       
-      <div class="mt-8 text-red-200 flex flex-wrap justify-center items-center gap-6">
+      <div class="mt-8 text-gray-300 flex flex-wrap justify-center items-center gap-6">
         <div class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
             <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
@@ -660,20 +675,20 @@
   </div>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12">
+  <footer class="bg-slate-800 text-white py-12">
     <div class="container mx-auto px-6 max-w-5xl">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div class="md:col-span-1">
           <h3 class="text-2xl font-bold">RedFlag</h3>
-          <p class="text-gray-400 mt-2">Advanced financial fraud detection for business</p>
+          <p class="text-gray-300 mt-2">Advanced financial fraud detection for business</p>
           <div class="mt-4 flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-white">
+            <a href="#" class="text-gray-300 hover:text-white">
               <span class="sr-only">Twitter</span>
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
               </svg>
             </a>
-            <a href="#" class="text-gray-400 hover:text-white">
+            <a href="#" class="text-gray-300 hover:text-white">
               <span class="sr-only">LinkedIn</span>
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
@@ -685,40 +700,40 @@
         <div>
           <h3 class="text-sm font-semibold uppercase tracking-wider">Product</h3>
           <ul class="mt-4 space-y-2">
-            <li><a href="/features" class="text-gray-400 hover:text-white">Features</a></li>
-            <li><a href="/security" class="text-gray-400 hover:text-white">Security</a></li>
-            <li><a href="/pricing" class="text-gray-400 hover:text-white">Pricing</a></li>
-            <li><a href="/enterprise" class="text-gray-400 hover:text-white">Enterprise</a></li>
+            <li><a href="/features" class="text-gray-300 hover:text-white">Features</a></li>
+            <li><a href="/security" class="text-gray-300 hover:text-white">Security</a></li>
+            <li><a href="/pricing" class="text-gray-300 hover:text-white">Pricing</a></li>
+            <li><a href="/enterprise" class="text-gray-300 hover:text-white">Enterprise</a></li>
           </ul>
         </div>
         
         <div>
           <h3 class="text-sm font-semibold uppercase tracking-wider">Resources</h3>
           <ul class="mt-4 space-y-2">
-            <li><a href="/documentation" class="text-gray-400 hover:text-white">Documentation</a></li>
-            <li><a href="/case-studies" class="text-gray-400 hover:text-white">Case Studies</a></li>
-            <li><a href="/blog" class="text-gray-400 hover:text-white">Blog</a></li>
-            <li><a href="/support" class="text-gray-400 hover:text-white">Support</a></li>
+            <li><a href="/documentation" class="text-gray-300 hover:text-white">Documentation</a></li>
+            <li><a href="/case-studies" class="text-gray-300 hover:text-white">Case Studies</a></li>
+            <li><a href="/blog" class="text-gray-300 hover:text-white">Blog</a></li>
+            <li><a href="/support" class="text-gray-300 hover:text-white">Support</a></li>
           </ul>
         </div>
         
         <div>
           <h3 class="text-sm font-semibold uppercase tracking-wider">Company</h3>
           <ul class="mt-4 space-y-2">
-            <li><a href="/about" class="text-gray-400 hover:text-white">About</a></li>
-            <li><a href="/careers" class="text-gray-400 hover:text-white">Careers</a></li>
-            <li><a href="/contact" class="text-gray-400 hover:text-white">Contact</a></li>
-            <li><a href="/partners" class="text-gray-400 hover:text-white">Partners</a></li>
+            <li><a href="/about" class="text-gray-300 hover:text-white">About</a></li>
+            <li><a href="/careers" class="text-gray-300 hover:text-white">Careers</a></li>
+            <li><a href="/contact" class="text-gray-300 hover:text-white">Contact</a></li>
+            <li><a href="/partners" class="text-gray-300 hover:text-white">Partners</a></li>
           </ul>
         </div>
       </div>
       
-      <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-        <p class="text-gray-400">© 2025 RedFlag, Inc. All rights reserved.</p>
+      <div class="mt-12 pt-8 border-t border-slate-700 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-300">© 2025 RedFlag, Inc. All rights reserved.</p>
         <div class="mt-4 md:mt-0 flex space-x-6">
-          <a href="/privacy-policy" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
-          <a href="/terms-of-service" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
-          <a href="/cookie-policy" class="text-gray-400 hover:text-white text-sm">Cookie Policy</a>
+          <a href="/privacy-policy" class="text-gray-300 hover:text-white text-sm">Privacy Policy</a>
+          <a href="/terms-of-service" class="text-gray-300 hover:text-white text-sm">Terms of Service</a>
+          <a href="/cookie-policy" class="text-gray-300 hover:text-white text-sm">Cookie Policy</a>
         </div>
       </div>
     </div>

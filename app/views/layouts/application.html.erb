@@ -9,6 +9,7 @@
     <%= csp_meta_tag %>
 
     <%= yield :head %>
+    <%= yield :layout_override %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
@@ -30,7 +31,7 @@
 
   <body class="h-full">
     <div class="min-h-full">
-      <nav class="bg-red-800" data-controller="navbar">
+      <nav class="bg-slate-800" data-controller="navbar">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
@@ -39,10 +40,10 @@
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
-                  <%= link_to "Home", root_path, class: "text-white hover:bg-red-700 rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Home", root_path, class: "text-white hover:bg-slate-700 rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
                 </div>
               </div>
             </div>
@@ -54,7 +55,7 @@
             <div class="-mr-2 flex md:hidden">
               <!-- Mobile menu button -->
               <button type="button" 
-                      class="relative inline-flex items-center justify-center rounded-md bg-red-800 p-2 text-gray-200 hover:bg-red-700 hover:text-white focus:outline-none" 
+                      class="relative inline-flex items-center justify-center rounded-md bg-slate-800 p-2 text-gray-200 hover:bg-slate-700 hover:text-white focus:outline-none" 
                       aria-controls="mobile-menu" 
                       aria-expanded="false"
                       data-action="click->navbar#toggleMenu">
@@ -72,9 +73,9 @@
         <div class="md:hidden hidden" id="mobile-menu" data-navbar-target="mobileMenu">
           <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             <%= link_to "Home", root_path, class: "text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-red-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
           </div>
         </div>
       </nav>
