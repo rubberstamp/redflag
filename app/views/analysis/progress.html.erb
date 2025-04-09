@@ -67,7 +67,7 @@
       <div id="error-info" class="hidden text-center">
         <p id="error-message" class="text-red-600 font-medium mb-6">An error occurred during analysis.</p>
         <a href="<%= session[:import_source] == 'csv' ? new_import_path : quickbooks_start_analysis_path %>" class="inline-block bg-red-900 text-white px-6 py-2 rounded font-medium hover:bg-red-800">
-          Try Again
+          Try Different Import
         </a>
       </div>
     </div>
@@ -100,6 +100,9 @@
       fetch('<%= session[:import_source] == 'csv' ? status_imports_path : quickbooks_analysis_status_path %>')
         .then(response => response.json())
         .then(data => {
+          // Log data for debugging
+          console.log('Status data:', data);
+          
           // Update progress bar
           const progressBar = document.getElementById('progress-bar');
           const progressText = document.getElementById('progress-text');
@@ -111,7 +114,8 @@
           
           // Check if analysis is complete
           if (data.progress === 100) {
-            if (data.success) {
+            // Handle case where success is true (not null, undefined or false)
+            if (data.success === true) {
               // Analysis completed successfully
               document.getElementById('loading-animation').classList.add('hidden');
               document.getElementById('completed-animation').classList.remove('hidden');
@@ -137,12 +141,19 @@
               // Clear status check interval
               clearInterval(statusCheckInterval);
             } else {
-              // Analysis failed
+              // Analysis failed or completed with error/no data
               document.getElementById('loading-animation').classList.add('hidden');
               document.getElementById('error-animation').classList.remove('hidden');
               document.getElementById('error-info').classList.remove('hidden');
-              document.getElementById('status-title').textContent = 'Analysis Failed';
-              document.getElementById('error-message').textContent = data.message;
+              document.getElementById('status-title').textContent = 'Analysis Completed';
+              
+              // Check if we have a specific error message
+              if (data.message && data.message.includes("No transactions")) {
+                document.getElementById('error-message').textContent = 
+                  'No transactions found in the selected date range. Please try a different date range or file.';
+              } else {
+                document.getElementById('error-message').textContent = data.message || 'Analysis completed but no results were found.';
+              }
               
               // Clear status check interval
               clearInterval(statusCheckInterval);
