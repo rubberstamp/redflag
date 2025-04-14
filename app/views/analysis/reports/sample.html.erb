@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gray-50">
   <!-- Header -->
   <header class="bg-red-900 text-white shadow-md">
-    <div class="container mx-auto px-6 py-6 max-w-7xl flex justify-between items-center">
+    <div class="container mx-auto px-6 py-6 max-w-5xl flex justify-between items-center">
       <div>
         <h1 class="text-3xl font-bold">RedFlag</h1>
         <p class="text-red-100">Sample Risk Report</p>
@@ -14,7 +14,7 @@
 
   <!-- Breadcrumbs -->
   <div class="bg-white border-b">
-    <div class="container mx-auto px-6 py-2 max-w-7xl">
+    <div class="container mx-auto px-6 py-2 max-w-5xl">
       <nav class="text-sm">
         <%= link_to "Home", root_path, class: "text-gray-500 hover:text-red-900" %> 
         <span class="text-gray-400 mx-2">/</span> 
@@ -23,8 +23,8 @@
     </div>
   </div>
 
-  <!-- Report Summary -->
-  <div class="container mx-auto px-6 py-8 max-w-7xl">
+  <!-- Report Content Container -->
+  <div class="container mx-auto px-6 py-8 max-w-5xl">
     <div class="flex flex-col md:flex-row justify-between items-start mb-8">
       <div>
         <h2 class="text-2xl font-bold text-gray-800">Analysis Report for <%= @report_data[:account_name] %></h2>

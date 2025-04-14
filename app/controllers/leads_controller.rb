@@ -29,6 +29,15 @@ class LeadsController < ApplicationController
         email: @lead.email
       })
       
+      # Also track this conversion with Google Ads (for ESG Thank You Page)
+      # The actual conversion tag will be rendered on the client side via gtag
+      # This is just to mark this event for tracking in analytics
+      track_event('google_ads_conversion', {
+        lead_id: @lead.id,
+        email: @lead.email,
+        conversion_id: 'AW-977435889/OQUGCL799cQZEPH5idID'
+      })
+      
       # Create an analysis session ID to track the user's progress
       session[:analysis_session_id] ||= SecureRandom.hex(10)
       

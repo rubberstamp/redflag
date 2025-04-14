@@ -46,6 +46,10 @@ export default class extends Controller {
 
       if (response.ok) {
         if (data.success) {
+          // Fire GTM conversion event for ESG Thank You Page
+          if (typeof gtag === 'function') {
+            gtag('event', 'conversion', {'send_to': 'AW-977435889/OQUGCL799cQZEPH5idID'});
+          }
           // Redirect to the choose import page
           window.location.href = data.redirect_url || "/leads/choose_import"
         } else {
