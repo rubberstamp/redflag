@@ -22,6 +22,17 @@
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-977435889">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-977435889');
+    </script>
+    
     <!-- PostHog Analytics -->
     <script>
       !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
@@ -31,7 +42,7 @@
 
   <body class="h-full">
     <div class="min-h-full">
-      <nav class="bg-slate-800" data-controller="navbar">
+      <nav class="bg-[#005C88]" data-controller="navbar">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
@@ -40,10 +51,10 @@
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
-                  <%= link_to "Home", root_path, class: "text-white hover:bg-slate-700 rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Home", root_path, class: "text-white hover:bg-[#00486D] rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
                 </div>
               </div>
             </div>
@@ -55,7 +66,7 @@
             <div class="-mr-2 flex md:hidden">
               <!-- Mobile menu button -->
               <button type="button" 
-                      class="relative inline-flex items-center justify-center rounded-md bg-slate-800 p-2 text-gray-200 hover:bg-slate-700 hover:text-white focus:outline-none" 
+                      class="relative inline-flex items-center justify-center rounded-md bg-[#005C88] p-2 text-gray-200 hover:bg-[#00486D] hover:text-white focus:outline-none" 
                       aria-controls="mobile-menu" 
                       aria-expanded="false"
                       data-action="click->navbar#toggleMenu">
@@ -73,9 +84,9 @@
         <div class="md:hidden hidden" id="mobile-menu" data-navbar-target="mobileMenu">
           <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             <%= link_to "Home", root_path, class: "text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-slate-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
           </div>
         </div>
       </nav>
@@ -85,7 +96,7 @@
           <% if flash.any? %>
             <div class="mb-4">
               <% flash.each do |key, value| %>
-                <div class="<%= key == 'notice' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700' %> px-4 py-3 rounded relative border" role="alert">
+                <div class="<%= key == 'notice' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-[#FFF0EC] border-[#F75123] text-[#DB370A]' %> px-4 py-3 rounded relative border" role="alert">
                   <span class="block sm:inline"><%= value %></span>
                 </div>
               <% end %>
