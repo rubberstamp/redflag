@@ -39,7 +39,7 @@
     </script>
   </head>
 
-  <body class="h-full">
+  <body data-controller="layout" class="h-full">
     <div class="min-h-full">
       <nav class="bg-[#005C88]" data-controller="navbar">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -50,10 +50,12 @@
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
-                  <%= link_to "Home", root_path, class: "text-white hover:bg-[#00486D] rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
-                  <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <% unless current_page?(root_path) %>
+                    <%= link_to "Home", root_path, class: "text-white hover:bg-[#00486D] rounded-md px-3 py-2 text-sm font-medium" %>
+                    <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                    <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                    <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+                  <% end %>
                 </div>
               </div>
             </div>
@@ -64,17 +66,19 @@
             </div>
             <div class="-mr-2 flex md:hidden">
               <!-- Mobile menu button -->
-              <button type="button" 
-                      class="relative inline-flex items-center justify-center rounded-md bg-[#005C88] p-2 text-gray-200 hover:bg-[#00486D] hover:text-white focus:outline-none" 
-                      aria-controls="mobile-menu" 
-                      aria-expanded="false"
-                      data-action="click->navbar#toggleMenu">
-                <span class="absolute -inset-0.5"></span>
-                <span class="sr-only">Open main menu</span>
-                <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-              </button>
+              <% unless current_page?(root_path) %>
+                <button type="button" 
+                        class="relative inline-flex items-center justify-center rounded-md bg-[#005C88] p-2 text-gray-200 hover:bg-[#00486D] hover:text-white focus:outline-none" 
+                        aria-controls="mobile-menu" 
+                        aria-expanded="false"
+                        data-action="click->navbar#toggleMenu">
+                  <span class="absolute -inset-0.5"></span>
+                  <span class="sr-only">Open main menu</span>
+                  <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg>
+                </button>
+              <% end %>
             </div>
           </div>
         </div>
@@ -82,10 +86,12 @@
         <!-- Mobile menu, show/hide based on menu state -->
         <div class="md:hidden hidden" id="mobile-menu" data-navbar-target="mobileMenu">
           <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-            <%= link_to "Home", root_path, class: "text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
-            <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <% unless current_page?(root_path) %>
+              <%= link_to "Home", root_path, class: "text-white block rounded-md px-3 py-2 text-base font-medium" %>
+              <%= link_to "CSV Import", new_import_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+              <%= link_to "QuickBooks Import", quickbooks_start_analysis_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+              <%= link_to "Sample Report", analysis_sample_report_path, class: "text-gray-200 hover:bg-[#00486D] hover:text-white block rounded-md px-3 py-2 text-base font-medium" %>
+            <% end %>
           </div>
         </div>
       </nav>
