@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RedFlag Marketing Plan & Go‑to‑Market Strategy</title>
+  <style>
+    /* Brand variables based on BRAND_GUIDELINES.md */
+    :root {
+      --red-dark:   #7f1d1d; /* primary brand */
+      --red-medium: #991b1b; /* accents & links */
+      --red-light:  #ef4444; /* highlights */
+      --gray-50:    #f9fafb; /* light section bg */
+      --gray-100:   #f3f4f6; /* table header bg */
+      --gray-800:   #1f2937; /* body text */
+    }
+
+    /* Base */
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--gray-800);
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: var(--gray-50);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      color: var(--red-dark);
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 0;
+      border-bottom: 3px solid var(--red-light);
+      padding-bottom: 0.3em;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      border-bottom: 2px solid var(--red-light);
+      padding-bottom: 0.2em;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+    }
+
+    p {
+      margin: 0 0 1em;
+    }
+
+    a {
+      color: var(--red-medium);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--gray-100);
+      font-weight: 600;
+    }
+
+    /* Lists */
+    ul, ol {
+      margin: 0 0 1.5em 0;
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.5em;
+    }
+
+    /* Components */
+    .meta {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .callout {
+      background-color: #fff0ec;
+      border-left: 4px solid var(--red-medium);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 0.25rem;
+    }
+
+    .callout strong {
+      color: var(--red-dark);
+      display: block;
+      margin-bottom: 0.5em;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--red-light);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 0.5rem;
+    }
+
+    .links {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .links h3 {
+      margin-top: 0;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.9rem;
+      color: #6b7280;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>RedFlag Marketing Plan & Strategy</h1>
+    <div class="meta">Updated: April 2025 | Version 2.0</div>
+
+    <div class="callout">
+      <strong>Executive Summary</strong>
+      <p>RedFlag is an AI-powered platform that continuously monitors financial data to detect fraud, waste, and abuse. Our go-to-market strategy focuses on small-to-mid-sized businesses (10-250 employees) that use QuickBooks and have limited internal audit resources. Through a combination of self-serve free assessments, accounting partner channels, and focused outbound efforts, we aim to establish RedFlag as the essential financial watchdog for growing businesses.</p>
+    </div>
+
+    <h2>1. Market Opportunity</h2>
+    <p>The financial fraud detection market represents a significant untapped opportunity for a solution tailored to SMBs:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Segment</th>
+          <th>TAM</th>
+          <th>SAM</th>
+          <th>SOM (Year 3)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>US QuickBooks Online subscribers</td>
+          <td>6 million</td>
+          <td>1.1 million (with ≥$1M revenue)</td>
+          <td>35,000</td>
+        </tr>
+        <tr>
+          <td>Global SMBs using QBO</td>
+          <td>10 million</td>
+          <td>1.8 million</td>
+          <td>60,000</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>At a blended <strong>$180 ARR/customer</strong>, a 35,000 customer base equals a <strong>$6.3M ARR</strong> opportunity within three years.</p>
+
+    <h2>2. Target Personas</h2>
+    
+    <h3>Primary Segments</h3>
+    <ul>
+      <li><strong>Finance Leaders (10-50 FTEs)</strong> - CFOs, Controllers, Finance Directors with limited oversight resources seeking peace of mind</li>
+      <li><strong>Accounting Firms</strong> - CPAs and advisory firms looking to offer value-added services to clients</li>
+      <li><strong>Multi-Entity Companies</strong> - Businesses with 3+ QuickBooks entities requiring consolidated oversight</li>
+      <li><strong>High-Risk Industries</strong> - Construction, non-profits, retail with higher fraud exposure</li>
+    </ul>
+
+    <h3>Psychographic Characteristics</h3>
+    <ul>
+      <li>Risk-aware but not overly risk-averse</li>
+      <li>Technology-receptive but not necessarily tech-savvy</li>
+      <li>Values peace of mind and compliance</li>
+      <li>Frustrated by manual financial review processes</li>
+      <li>Seeks to demonstrate financial governance to stakeholders</li>
+    </ul>
+
+    <h2>3. Positioning & Messaging</h2>
+    
+    <div class="callout">
+      <strong>Core Positioning</strong>
+      <p>For finance teams that need to sleep at night, RedFlag is the always-on financial watchdog that catches fraud before it drains cash—unlike traditional audits that look months backward—because RedFlag continuously scans every transaction in real time.</p>
+    </div>
+
+    <h3>Key Value Propositions</h3>
+    <ul>
+      <li><strong>Peace of Mind:</strong> "Sleep better knowing your finances are protected 24/7"</li>
+      <li><strong>Time Savings:</strong> "5-minute setup, continuous protection without manual effort"</li>
+      <li><strong>Cost Prevention:</strong> "The average business loses 5% to fraud annually. What's your risk?"</li>
+      <li><strong>Ease of Use:</strong> "Set-and-forget protection that works seamlessly with QuickBooks"</li>
+      <li><strong>Intelligence:</strong> "AI detects patterns that human review misses"</li>
+    </ul>
+
+    <h2>4. Pricing & Packaging</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Monthly</th>
+          <th>Key Features</th>
+          <th>Ideal For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Free Assessment</td>
+          <td>$0 (one-time)</td>
+          <td>6 months history, 14-day dashboard access</td>
+          <td>Lead generation</td>
+        </tr>
+        <tr>
+          <td>Standard</td>
+          <td>$99</td>
+          <td>1 QBO company, 12 months history, email alerts</td>
+          <td>SMBs 10-49 FTEs</td>
+        </tr>
+        <tr>
+          <td>Professional</td>
+          <td>$249</td>
+          <td>Up to 3 companies, 24 months, API, Slack alerts</td>
+          <td>Multi-entity firms</td>
+        </tr>
+        <tr>
+          <td>Enterprise</td>
+          <td>Custom</td>
+          <td>Unlimited entities, SAML SSO, dedicated CSM</td>
+          <td>PE-backed roll-ups</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>5. Acquisition Strategy</h2>
+
+    <h3>Channel Mix</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th>Year 1 Target</th>
+          <th>Key Tactics</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Direct/Self-serve</td>
+          <td>70% of customers</td>
+          <td>SEM, content marketing, LinkedIn ads</td>
+        </tr>
+        <tr>
+          <td>Accounting Partners</td>
+          <td>25% of customers</td>
+          <td>Commission program, enablement, co-marketing</td>
+        </tr>
+        <tr>
+          <td>Outbound Sales</td>
+          <td>5% of customers</td>
+          <td>Targeted outreach to high-potential prospects</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Free Assessment Funnel</h3>
+    <ol>
+      <li>User provides email address and connects QuickBooks or uploads CSV</li>
+      <li>AI analysis runs and generates previews of key findings</li>
+      <li>User completes lead form (name, phone, company size) to access full report</li>
+      <li>Based on severity, user is offered CFO consultation or proceeds directly to report</li>
+      <li>14-day dashboard access with conversion prompts to paid subscription</li>
+      <li>Nurture sequence highlights value of continuous monitoring</li>
+    </ol>
+
+    <h2>6. Marketing Tactics</h2>
+
+    <h3>Primary Marketing Activities</h3>
+    <ul>
+      <li><strong>Content Marketing:</strong> Educational blog content, whitepapers, and guides on fraud detection</li>
+      <li><strong>Digital Advertising:</strong> Google Search, LinkedIn sponsored content, retargeting</li>
+      <li><strong>Webinars & Events:</strong> Monthly educational webinars, quarterly virtual roundtables</li>
+      <li><strong>Partner Marketing:</strong> Co-marketing with accounting firms, referral program</li>
+      <li><strong>Email Marketing:</strong> Nurture sequences, monthly newsletters, feature updates</li>
+    </ul>
+
+    <h3>Key Content Assets</h3>
+    <ul>
+      <li>"The Ultimate Guide to Financial Fraud Detection" (lead magnet)</li>
+      <li>"Fraud Risk Assessment Toolkit" (interactive spreadsheet)</li>
+      <li>"The State of Financial Fraud Report 2025" (annual report)</li>
+      <li>"Industry-Specific Fraud Prevention Playbooks" (vertical guides)</li>
+    </ul>
+
+    <h2>7. Launch Phases</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Timing</th>
+          <th>Goals</th>
+          <th>Key Activities</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Alpha</td>
+          <td>May '25</td>
+          <td>10 design partners / feedback</td>
+          <td>User interviews, fine-tune detection rules, SOC 2 kickoff</td>
+        </tr>
+        <tr>
+          <td>Beta</td>
+          <td>July '25</td>
+          <td>100 free assessments, 20 paid conversions</td>
+          <td>Launch website, content hub, LinkedIn ads, weekly office hours</td>
+        </tr>
+        <tr>
+          <td>GA</td>
+          <td>Oct '25</td>
+          <td>$30k MRR, 3 partner agreements</td>
+          <td>Press release, QBO App Store listing, partner portal live</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>8. Success Metrics</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>KPI</th>
+          <th>Year 1 Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Top Funnel</td>
+          <td>Free assessments / month</td>
+          <td>2,500</td>
+        </tr>
+        <tr>
+          <td>Conversion</td>
+          <td>Assessment → Paid conversion</td>
+          <td>8%</td>
+        </tr>
+        <tr>
+          <td>Retention</td>
+          <td>Logo churn</td>
+          <td>< 3% / month</td>
+        </tr>
+        <tr>
+          <td>Revenue</td>
+          <td>ARR</td>
+          <td>$1.9M</td>
+        </tr>
+        <tr>
+          <td>Efficiency</td>
+          <td>CAC payback</td>
+          <td>≤ 8 months</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>9. Budget Overview (Year 1)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Allocation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Digital Advertising</td>
+          <td>$90,000</td>
+        </tr>
+        <tr>
+          <td>Content Production</td>
+          <td>$40,000</td>
+        </tr>
+        <tr>
+          <td>Events & Webinars</td>
+          <td>$25,000</td>
+        </tr>
+        <tr>
+          <td>Partner Marketing</td>
+          <td>$15,000</td>
+        </tr>
+        <tr>
+          <td>Tools & Technology</td>
+          <td>$18,000</td>
+        </tr>
+        <tr>
+          <td><strong>Total</strong></td>
+          <td><strong>$188,000</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="links">
+      <h3>Related Documents</h3>
+      <ul>
+        <li><a href="GTM_STRATEGY_ACTION_PLAN.md">Detailed GTM Strategy & Action Plan</a></li>
+        <li><a href="MARKETING_CALENDAR_6MONTHS.md">6-Month Marketing Calendar</a></li>
+        <li><a href="DIGITAL_ADVERTISING_STRATEGY.md">Digital Advertising Strategy</a></li>
+        <li><a href="CONTENT_MARKETING_STRATEGY.md">Content Marketing Strategy</a></li>
+        <li><a href="MARKETING_ANALYTICS_FRAMEWORK.md">Marketing Analytics Framework</a></li>
+        <li><a href="GTM_MARKETING_PLAN.html">Comprehensive GTM Plan</a></li>
+        <li><a href="MARKETINGPLAN.md">Original Marketing Plan</a></li>
+        <li><a href="display_ad_titles.md">Display Ad Title Options</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      © 2025 RedFlag Inc. — Confidential & Proprietary
+    </footer>
+  </div>
+</body>
+</html>
