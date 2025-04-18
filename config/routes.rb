@@ -58,6 +58,9 @@ Rails.application.routes.draw do
   get "leads/thank-you", to: "pages#lead_thank_you", as: :leads_thank_you
   get "enterprise", to: "pages#enterprise"
   
+  # Admin pages
+  get "admin/landing-pages", to: "pages#landing_pages", as: :admin_landing_pages
+  
   # Product pages
   get "features", to: "pages#features"
   get "security", to: "pages#security"
@@ -78,6 +81,13 @@ Rails.application.routes.draw do
   get "privacy-policy", to: "pages#privacy_policy"
   get "terms-of-service", to: "pages#terms_of_service"
   get "cookie-policy", to: "pages#cookie_policy"
+  
+  # Landing pages for A/B testing
+  namespace :landing_pages do
+    get "cfo", to: "variants#cfo", as: :cfo
+    get "small_business", to: "variants#small_business", as: :small_business
+    get "quickbooks", to: "variants#quickbooks", as: :quickbooks
+  end
   
   # Lead capture and management
   resources :leads, only: [:index, :create]

@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  include AnalyticsTracking
+  
   def home
   end
   
@@ -64,6 +66,12 @@ class PagesController < ApplicationController
   
   def cookie_policy
     # Cookie policy page
+  end
+  
+  # Admin pages
+  def landing_pages
+    # Admin page to list all landing page variants
+    # This is used internally to manage and track landing pages
   end
   
   def lead_thank_you
