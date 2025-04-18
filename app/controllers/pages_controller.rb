@@ -12,6 +12,12 @@ class PagesController < ApplicationController
     # Static enterprise page
   end
   
+  # Landing page test route
+  def landing_page_test
+    # This is a special route that will use feature flags to redirect to the appropriate landing page
+    # The actual redirection happens client-side with the feature_flags_controller.js
+  end
+  
   # Product pages
   def features
     # Features page

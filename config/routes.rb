@@ -61,6 +61,9 @@ Rails.application.routes.draw do
   # Admin pages
   get "admin/landing-pages", to: "pages#landing_pages", as: :admin_landing_pages
   
+  # Landing page testing with feature flags
+  get "landing_page_test", to: "pages#landing_page_test"
+  
   # Product pages
   get "features", to: "pages#features"
   get "security", to: "pages#security"
