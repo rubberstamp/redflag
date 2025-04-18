@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RedFlag – Go‑to‑Market (GTM) Plan</title>
+  <style>
+    /* --- Typography & Layout --- */
+    :root {
+      /* Brand palette from BRAND_GUIDELINES.md */
+      --red-dark:   #7f1d1d; /* primary headers */
+      --red-medium: #991b1b; /* buttons, accents */
+      --red-light:  #ef4444; /* highlights */
+      --gray-50:    #f9fafb;
+      --gray-100:   #f3f4f6;
+      --gray-500:   #6b7280;
+      --gray-800:   #1f2937;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      color: var(--gray-800);
+      background: var(--gray-50);
+    }
+    .container {
+      max-width: 960px;
+      padding: 2.5rem 1.25rem;
+      margin: 0 auto;
+      background: #ffffff;
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--red-dark);
+      margin-top: 1.6em;
+      line-height: 1.25;
+    }
+    h1 { font-size: 2.75rem; margin-bottom: .4rem; }
+    h2 { font-size: 1.75rem; border-bottom: 2px solid var(--red-light); padding-bottom: .25rem; }
+    h3 { font-size: 1.35rem; }
+    h4 { font-size: 1.1rem; margin-top: 1.1em; }
+
+    p, li { font-size: 1rem; }
+    li { margin-bottom: .4em; }
+    ul { margin: .6em 0 1.2em 1.25em; padding: 0; }
+    a { color: var(--red-medium); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* --- Tables --- */
+    table { width: 100%; border-collapse: collapse; margin: 1.2em 0; font-size: .95rem; }
+    th, td { border: 1px solid #e5e7eb; padding: .65rem; text-align: left; }
+    th { background: var(--gray-100); font-weight: 600; }
+
+    /* --- Section helper --- */
+    .section { margin-top: 3rem; }
+
+    /* --- Callouts --- */
+    .callout {
+      border-left: 4px solid var(--red-medium);
+      background: #fef2f2;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: .25rem;
+    }
+    .small { font-size: .9rem; color: var(--gray-500); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>RedFlag Go‑to‑Market Plan</h1>
+    <p class="small">Version 1.0 – <time datetime="2025-04-16">April 16 2025</time></p>
+
+    <div class="section" id="executive-summary">
+      <h2>1. Executive Summary</h2>
+      <p>RedFlag is an AI‑powered platform that continuously monitors QuickBooks data to detect waste, fraud, and abuse. Our GTM strategy targets <strong>small‑to‑mid‑market businesses (10–250 FTEs)</strong> that rely on QuickBooks Online and have limited internal audit resources. We will leverage a self‑serve free assessment funnel, channel partnerships with accountants, and a focused outbound motion to establish RedFlag as <em>the</em> always‑on financial watchdog for growing companies.</p>
+    </div>
+
+    <div class="section" id="market-opportunity">
+      <h2>2. Market Opportunity</h2>
+      <table>
+        <thead>
+          <tr><th>Segment</th><th>TAM</th><th>SAM</th><th>SOM (Year 3)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>US QuickBooks Online subscribers</td><td>6 M</td><td>1.1 M (with ≥$1 M revenue)</td><td>35 k</td></tr>
+          <tr><td>Global SMBs using QBO</td><td>10 M</td><td>1.8 M</td><td>60 k</td></tr>
+        </tbody>
+      </table>
+      <p>At a blended <strong>$180 ARR / seat</strong>, a 35 k customer base equals a <strong>$6.3 M ARR</strong> opportunity within three years.</p>
+    </div>
+
+    <div class="section" id="personas">
+      <h2>3. Target Personas</h2>
+      <h3>Primary</h3>
+      <ul>
+        <li><strong>The Vigilant CFO</strong> – Finance leaders responsible for risk mitigation and audit readiness.</li>
+        <li><strong>The Time‑Strapped Controller</strong> – Accounting managers juggling month‑end close deadlines.</li>
+      </ul>
+      <h3>Secondary</h3>
+      <ul>
+        <li>Fractional / virtual CFOs servicing multiple SMB clients.</li>
+        <li>Accounting firms seeking value‑added advisory revenue.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="positioning">
+      <h2>4. Positioning & Messaging</h2>
+      <div class="callout">
+        <strong>Positioning Statement</strong><br>
+        For finance teams that need to <em>sleep at night</em>, RedFlag is the always‑on financial watchdog that <strong>catches fraud before it drains cash</strong>—unlike traditional audits that look months backward—because RedFlag continuously scans every transaction in real time.
+      </div>
+      <h3>Core Messages</h3>
+      <ul>
+        <li>Prevent losses, don’t just detect them after the fact.</li>
+        <li>Set‑up in five minutes via secure QuickBooks OAuth.</li>
+        <li>AI trained on billions of dollars in transactions—far beyond human pattern recognition.</li>
+        <li>Flat monthly pricing; cheaper than one hour of forensic accounting.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="pricing">
+      <h2>5. Pricing & Packaging</h2>
+      <table>
+        <thead>
+          <tr><th>Plan</th><th>Monthly</th><th>Key Limits</th><th>Ideal For</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Free Assessment</td><td>$0 (one‑time)</td><td>6 months history, 14‑day dashboard</td><td>Lead generation</td></tr>
+          <tr><td>Standard</td><td>$99</td><td>1 QBO company, 12 months history, email alerts</td><td>SMBs 10‑49 FTEs</td></tr>
+          <tr><td>Professional</td><td>$249</td><td>Up to 3 companies, 24 months, API, Slack alerts</td><td>Multi‑entity firms</td></tr>
+          <tr><td>Enterprise</td><td>Custom</td><td>Unlimited entities, SAML SSO, dedicated CSM</td><td>PE‑backed roll‑ups</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section" id="channel-strategy">
+      <h2>6. Channel Strategy</h2>
+      <h3>6.1 Self‑Serve Funnel</h3>
+      <ul>
+        <li>SEO & SEM for keywords like “QuickBooks fraud detection”.</li>
+        <li>Content magnets: Fraud ROI calculator, free playbook.</li>
+        <li>14‑day in‑product trial of paid features.</li>
+      </ul>
+      <h3>6.2 Partner Program</h3>
+      <ul>
+        <li>Accounting & fractional CFO firms—25% rev‑share.</li>
+        <li>Co‑branded security one‑pagers to reassure clients.</li>
+        <li>Quarterly enablement webinars + MDF fund.</li>
+      </ul>
+      <h3>6.3 Outbound Motion</h3>
+      <ul>
+        <li>Small SDR team targeting 200 high‑risk verticals (Construction, Non‑profits).</li>
+        <li>Intent data (Bombora) + QBO App Store install lists.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="launch-phases">
+      <h2>7. Launch Phases</h2>
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>Timing</th><th>Goals</th><th>Key Activities</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alpha</td><td>May ’25</td><td>10 design partners / feedback</td><td>User interviews, fine‑tune detection rules, SOC 2 kickoff</td>
+          </tr>
+          <tr>
+            <td>Beta</td><td>July ’25</td><td>100 free assessments, 20 paid conversions</td><td>Launch website, content hub, LinkedIn ads, weekly office hours</td>
+          </tr>
+          <tr>
+            <td>GA</td><td>Oct ’25</td><td>$30 k MRR, 3 partner agreements</td><td>Press release, QBO App Store listing, partner portal live</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section" id="demand-gen">
+      <h2>8. Demand Generation Tactics</h2>
+      <h3>Always‑On</h3>
+      <ul>
+        <li>LinkedIn & Google Ads ($7k/mo).</li>
+        <li>Monthly thought‑leadership webinars with an ex‑FBI fraud examiner.</li>
+        <li>Quarterly “State of SMB Fraud” report for PR backlinks.</li>
+      </ul>
+      <h3>Product‑Led</h3>
+      <ul>
+        <li>In‑app upgrade nudges triggered by detected high‑severity flags.</li>
+        <li>Email sequence (Day 0, 2, 5, 14) with case studies + timed discounts.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="sales-enablement">
+      <h2>9. Sales Enablement</h2>
+      <ul>
+        <li>1‑page battlecard vs. manual audits & legacy tools (AuditFile, BlackLine).</li>
+        <li>ROI calculator spreadsheet for finance justification.</li>
+        <li>Deck templates for partner demos.</li>
+        <li>30‑second product explainer video.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="metrics">
+      <h2>10. Success Metrics</h2>
+      <table>
+        <thead>
+          <tr><th>Funnel Stage</th><th>KPI</th><th>Year‑1 Target</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Top</td><td>Free assessments / month</td><td>2 500</td></tr>
+          <tr><td>Middle</td><td>Assessment ➜ Paid conversion</td><td>8 %</td></tr>
+          <tr><td>Bottom</td><td>Churn (Logo)</td><td>&lt; 3 % / mo</td></tr>
+          <tr><td>Revenue</td><td>ARR</td><td>$1.9 M</td></tr>
+          <tr><td>Efficiency</td><td>CAC payback</td><td>≤ 8 months</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section" id="risks">
+      <h2>11. Key Risks & Mitigations</h2>
+      <ul>
+        <li><strong>Security distrust:</strong> Emphasize SOC 2 progress, third‑party pen‑tests, and read‑only OAuth.</li>
+        <li><strong>False positives:</strong> Feedback loop for training models, human‑in‑the‑loop escalation.</li>
+        <li><strong>Partner channel conflict:</strong> Deal registration + territory carve‑outs.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="budget">
+      <h2>12. Budget Overview (Year 1)</h2>
+      <table>
+        <thead><tr><th>Category</th><th>Allocation</th></tr></thead>
+        <tbody>
+          <tr><td>Paid media</td><td>$90 k</td></tr>
+          <tr><td>Content & design</td><td>$40 k</td></tr>
+          <tr><td>Events & webinars</td><td>$25 k</td></tr>
+          <tr><td>Partner MDF</td><td>$15 k</td></tr>
+          <tr><td>Tools (CRM, marketing ops)</td><td>$18 k</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>$188 k</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section" id="appendix">
+      <h2>13. Appendix</h2>
+      <p>See also: <a href="MARKETINGPLAN.md">Detailed Marketing Plan (Markdown)</a> and <a href="MARKETING_PLAN_SUMMARY.html">High‑level summary</a>.</p>
+    </div>
+
+    <footer class="small" style="margin-top:4rem;text-align:center;">
+      © 2025 RedFlag Inc. — Confidential & Proprietary
+    </footer>
+  </div>
+</body>
+</html>

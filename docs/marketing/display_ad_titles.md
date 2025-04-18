@@ -34,3 +34,27 @@
 - "Trust Your Books Again with RedFlag"
 - "Protect Your Business from Financial Abuse"
 - "Feel Confident in Your Financial Data"
+
+
+## Google Ads Dynamic Ad Titles and Descriptions
+
+### Title 1
+Title: "AI Fraud Detection"
+Desc: "Automate your accounting fraud detection with AI"
+
+### Title 2
+Title: "5-Minute Financial Audit"
+Desc: "Quickly detect financial waste and fraud with AI"
+
+### Title 3
+Title: "Accounting Waste Detection"
+Desc: "Use AI to detect financial waste in your books"
+
+### Title 4
+Title: "Secure AI Fraud Detection"
+Desc: "Detect financial fraud with secure AI technology"
+
+### Title 5
+Title: "Find Hidden Waste"
+Desc: "Use AI to find hidden waste and fraud in your financials"
+
